@@ -9,7 +9,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/savedFragment"
+        android:id="@+id/favoritesFragment"
         android:icon="@drawable/ic_bookmarks"
         android:title="@string/favorites"
         app:showAsAction="always" />
@@ -25,7 +25,5 @@
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom" />
-
-
 
 </menu>

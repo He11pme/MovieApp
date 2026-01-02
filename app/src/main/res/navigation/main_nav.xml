@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="io.github.he11pme.movieapp.fragments.search.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="io.github.he11pme.movieapp.fragments.favorites.FavoritesFragment"
+        android:label="@string/favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/randomFragment"
+        android:name="io.github.he11pme.movieapp.fragments.random.RandomFragment"
+        android:label="@string/surprise_me"
+        tools:layout="@layout/fragment_random" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="io.github.he11pme.movieapp.fragments.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="io.github.he11pme.movieapp.fragments.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/detailInfoFragment"
+        android:name="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment"
+        android:label=""
+        tools:layout="@layout/fragment_detail_info" />
+
+</navigation>
