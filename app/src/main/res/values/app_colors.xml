@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="background">@color/gray_50</color>
+    <color name="foreground">@color/gray_100</color>
+    <color name="foreground_variant">@color/blue_gray_50</color>
+    <color name="on_foreground">@color/gray_900</color>
+    <color name="container_on_foreground_variant">@color/blue_gray_100</color>
+    <color name="primary_item">@color/blue_700</color>
+    <color name="secondary_item">@color/gray_700</color>
+
+    <color name="background_toolbar">@color/background</color>
+    <color name="menu_toolbar">@color/on_foreground</color>
+
+    <color name="background_bottom_navigation">@color/foreground_variant</color>
+    <color name="background_active_item">@color/container_on_foreground_variant</color>
+    <color name="active_item_bottom_navigation">@color/primary_item</color>
+    <color name="inactive_item_bottom_navigation">@color/secondary_item</color>
+
+    <color name="background_search_bar">@color/foreground</color>
+    <color name="background_search_view">@color/foreground</color>
+
+</resources>

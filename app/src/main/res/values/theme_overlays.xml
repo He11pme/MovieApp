@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.ThemeOverlay.MovieApp.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary"/>
+    <style name="ThemeOverlay.MovieApp.Toolbar" parent="Base.ThemeOverlay.MovieApp.Toolbar">
+        <item name="colorPrimary">@color/background_toolbar</item>
+        <item name="colorOnPrimary">@color/menu_toolbar</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.MovieApp.SearchBar" parent="ThemeOverlay.Material3.Search"/>
+    <style name="ThemeOverlay.MovieApp.SearchBar" parent="Base.ThemeOverlay.MovieApp.SearchBar">
+        <item name="colorSurfaceContainerHigh">@color/background_search_bar</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.MovieApp.SearchView" parent="ThemeOverlay.Material3.Search"/>
+    <style name="ThemeOverlay.MovieApp.SearchView" parent="Base.ThemeOverlay.MovieApp.SearchView">
+        <item name="colorSurfaceContainerHigh">@color/background_search_view</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.MovieApp.BottomAppBar" parent="ThemeOverlay.Material3.BottomAppBar.Legacy"/>
+    <style name="ThemeOverlay.MovieApp.BottomAppBar" parent="Base.ThemeOverlay.MovieApp.BottomAppBar">
+        <item name="colorSurfaceContainer">@color/background_bottom_navigation</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.MovieApp.BottomNavigationView" parent="ThemeOverlay.Material3.BottomNavigationView"/>
+    <style name="ThemeOverlay.MovieApp.BottomNavigationView" parent="Base.ThemeOverlay.MovieApp.BottomNavigationView">
+        <item name="colorSecondaryContainer">@color/background_active_item</item>
+        <item name="colorOnSecondaryContainer">@color/active_item_bottom_navigation</item>
+        <item name="colorOnSurface">@color/active_item_bottom_navigation</item>
+        <item name="colorOnSurfaceVariant">@color/inactive_item_bottom_navigation</item>
+    </style>
+
+</resources>

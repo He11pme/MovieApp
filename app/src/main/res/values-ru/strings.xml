@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Поиск</string>
+    <string name="favorites">Сохраненные</string>
+    <string name="surprise_me">Удиви меня</string>
+    <string name="settings">Настройки</string>
+    <string name="profile">Профиль</string>
+    <string name="search_bar_hint">Фильмы, сериалы, персоны</string>
+</resources>
