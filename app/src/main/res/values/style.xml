@@ -28,4 +28,25 @@
     </style>
     <style name="Widget.MovieApp.BottomNavigationView" parent="Base.Widget.MovieApp.BottomNavigationView"/>
 
+    <style name="Base.Widget.MovieApp.Poster" parent="">
+        <item name="layout_constraintDimensionRatio">0.667</item>
+    </style>
+    <style name="Widget.MovieApp.Poster" parent="Base.Widget.MovieApp.Poster"/>
+
+    <style name="Base.Widget.MovieApp.Vote" parent="">
+        <item name="android:background">@color/background_vote_view</item>
+    </style>
+    <style name="Widget.MovieApp.Vote.Medium" parent="Base.Widget.MovieApp.Vote">
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.VoteMedium</item>
+    </style>
+
+    <style name="Base.Widget.MovieApp.TitleCard" parent=""/>
+    <style name="Widget.MovieApp.TitleCard" parent="Base.Widget.MovieApp.TitleCard">
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.TitleCardMedium</item>
+    </style>
+
 </resources>
