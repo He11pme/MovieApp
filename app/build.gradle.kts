@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -23,6 +24,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val tmdbApiKey: String =
+            gradleLocalProperties(rootDir, providers)
+                .getProperty("TMDB_API_KEY")
+                ?: throw Exception("TMDB_API_KEY is missing. Add it to local.properties: TMDB_API_KEY=your_token")
+
+        buildConfigField(
+            "String",
+            "TMDB_API_KEY",
+            "\"$tmdbApiKey\""
+        )
     }
 
     buildTypes {
@@ -44,6 +56,7 @@ android {
         }
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
