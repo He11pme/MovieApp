@@ -9,4 +9,9 @@
         <item name="android:textColor">@color/title_card</item>
     </style>
 
+    <style name="TextAppearance.MovieApp.TitleSelection" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/title_selection</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

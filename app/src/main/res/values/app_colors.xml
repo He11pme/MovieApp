@@ -26,5 +26,6 @@
     <color name="background_vote_view">@color/primary_container</color>
     <color name="text_vote">@color/on_primary_container</color>
     <color name="title_card">@color/on_background</color>
+    <color name="title_selection">@color/on_background</color>
 
 </resources>
