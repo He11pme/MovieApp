@@ -1,0 +1,169 @@
+[
+  {
+    "priority": 1,
+    "titles": {
+      "ru": "Популярное",
+      "en": "Popular"
+    },
+    "type": {
+      "type": "popular"
+    }
+  },
+  {
+    "priority": 2,
+    "titles": {
+      "ru": "Сейчас в кино",
+      "en": "Now playing"
+    },
+    "type": {
+      "type": "now_playing"
+    }
+  },
+  {
+    "titles": {
+      "ru": "Боевики",
+      "en": "Action"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 28, "name": "Боевик" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Приключения",
+      "en": "Adventure"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 12, "name": "Приключение" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Мультфильмы",
+      "en": "Animation"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 16, "name": "Мультфильм" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Комедии",
+      "en": "Comedy"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 35, "name": "Комедия" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Криминал",
+      "en": "Crime"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 80, "name": "Криминал" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Драмы",
+      "en": "Drama"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 18, "name": "Драма" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Ужасы",
+      "en": "Horror"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 27, "name": "Ужас" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Фантастика",
+      "en": "Science Fiction"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 878, "name": "Фантастика" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Фэнтези",
+      "en": "Fantasy"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 14, "name": "Фэнтези" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Мюзиклы и Комедии",
+      "en": "Musicals & Comedy"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 10402, "name": "Музыка" },
+        { "id": 35, "name": "Комедия" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Триллеры и Криминал",
+      "en": "Thrillers & Crime"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 53, "name": "Триллер" },
+        { "id": 80, "name": "Криминал" }
+      ]
+    }
+  },
+  {
+    "titles": {
+      "ru": "Семейные мультфильмы",
+      "en": "Family Animation"
+    },
+    "type": {
+      "type": "by_genres",
+      "genres": [
+        { "id": 16, "name": "Мультфильм" },
+        { "id": 10751, "name": "Семейный" }
+      ]
+    }
+  }
+]

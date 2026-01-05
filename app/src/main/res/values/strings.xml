@@ -6,4 +6,5 @@
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
     <string name="search_bar_hint">Movies, TV series, person</string>
+    <string name="title_not_found">Title not found</string>
 </resources>
