@@ -2,19 +2,21 @@ package io.github.he11pme.movieapp.fragments.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.model.SelectionState
 import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.repository.AppRepository
-import io.github.he11pme.movieapp.repository.MovieCollectionsDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(collectionsDataSource: MovieCollectionsDataSource) : ViewModel() {
-    private val appRepository = AppRepository(collectionsDataSource)
-
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val repository: AppRepository
+) : ViewModel() {
     private var availableSelection: List<Selection> = emptyList()
 
     private val _selectionsState = MutableStateFlow<List<Selection>>(emptyList())
@@ -33,7 +35,7 @@ class SearchViewModel(collectionsDataSource: MovieCollectionsDataSource) : ViewM
      * @return true if successful or false on failure
      */
     private fun fetchAvailableSelections(): Boolean {
-        appRepository.getCollections().apply {
+        repository.getCollections().apply {
             onSuccess { availableSelection = it }
             onFailure { return false }
         }
@@ -56,7 +58,7 @@ class SearchViewModel(collectionsDataSource: MovieCollectionsDataSource) : ViewM
 
     private fun loadMoviesForSelection(selection: Selection) {
         viewModelScope.launch {
-            val result = appRepository.getSelectionMovies(selection.type)
+            val result = repository.getSelectionMovies(selection.type)
 
             updateSelectionStateById(selection.id) {
                 result.fold(

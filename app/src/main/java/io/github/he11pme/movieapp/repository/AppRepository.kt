@@ -1,5 +1,6 @@
 package io.github.he11pme.movieapp.repository
 
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.model.Genre
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.model.MovieDetails
@@ -7,8 +8,10 @@ import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.model.SelectionType
 import io.github.he11pme.movieapp.network.TMDbApi
 import java.lang.Exception
+import javax.inject.Inject
 
-class AppRepository(
+@ActivityRetainedScoped
+class AppRepository @Inject constructor(
     private val collectionsDataSource: MovieCollectionsDataSource
 ) {
 
