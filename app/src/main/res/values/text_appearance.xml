@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.MovieApp.VoteMedium" parent="TextAppearance.Material3.LabelMedium">
+    <style name="TextAppearance.MovieApp.VoteMedium" parent="TextAppearance.Material3.LabelLarge">
         <item name="android:textColor">@color/text_vote</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.MovieApp.TitleCardMedium" parent="TextAppearance.Material3.BodyMedium">
