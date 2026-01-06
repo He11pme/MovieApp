@@ -6,14 +6,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.SelectionMoviesBinding
+import io.github.he11pme.movieapp.fragments.search.carousel.CarouselAdapter
 import io.github.he11pme.movieapp.fragments.search.decoration.ItemOffsetsDecoration
 import io.github.he11pme.movieapp.fragments.search.decoration.StartLinearSnapHelper
-import io.github.he11pme.movieapp.model.Movie
+import io.github.he11pme.movieapp.model.Identifiable
 import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.model.SelectionState
+import io.github.he11pme.movieapp.model.ShowAllMoviesButton
 
 class ContentAdapter(
-    val toMovieDetails: (movieId: Int) -> Unit
+    private val toMovieDetails: (movieId: Int) -> Unit,
+    private val toSelections: (selectionId: String) -> Unit
 ) :
     ListAdapter<Selection, ContentAdapter.ViewHolder>(ContentDiffCallback()) {
     override fun onCreateViewHolder(
@@ -38,7 +41,7 @@ class ContentAdapter(
 
     inner class ViewHolder(private val binding: SelectionMoviesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val adapter = CarouselAdapter(toMovieDetails)
+        val adapter = CarouselAdapter(toMovieDetails, toSelections)
         fun bind(selection: Selection) {
             try {
                 binding.titleSelection.text = selection.getLocaleTitle()
@@ -47,14 +50,17 @@ class ContentAdapter(
                     binding.titleSelection.context.getString(R.string.title_not_found)
             }
 
+            binding.showAll.setOnClickListener { toSelections(selection.id) }
+
             if (selection.state is SelectionState.Loaded)
                 setupSelection(
                     rv = binding.rvSelection,
+                    selectionId = selection.id,
                     movies = selection.state.movies
                 )
         }
 
-        private fun setupSelection(rv: RecyclerView, movies: List<Movie>) {
+        private fun setupSelection(rv: RecyclerView, selectionId: String, movies: List<Identifiable>) {
 
             if (rv.adapter == null) rv.adapter = adapter
 
@@ -62,7 +68,11 @@ class ContentAdapter(
 
             if (rv.itemDecorationCount == 0) rv.addItemDecoration(ItemOffsetsDecoration())
 
-            adapter.submitList(movies)
+            adapter.submitList(
+                movies.toMutableList().also {
+                    it.add(ShowAllMoviesButton(selectionId))
+                }
+            )
         }
 
     }

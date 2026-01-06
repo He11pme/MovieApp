@@ -15,4 +15,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextAppearance.MovieApp.AccentText" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/primary_item</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.MovieApp.AccentText.Colorless">
+        <item name="android:textColor">@color/on_background</item>
+    </style>
+
 </resources>

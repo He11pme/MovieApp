@@ -8,4 +8,6 @@
     <string name="search_bar_hint">Фильмы, сериалы, персоны</string>
     <string name="title_not_found">Название отсутствует</string>
     <string name="poster">Постер</string>
+    <string name="all_movies">Все</string>
+    <string name="show_all">Показать все</string>
 </resources>

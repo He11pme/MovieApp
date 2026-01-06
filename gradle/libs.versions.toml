@@ -35,6 +35,8 @@ navigation = "2.9.6"
 
 lottie = "6.7.1"
 
+adapterdelegates4KotlinDsl = "4.3.2"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -74,6 +76,8 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
+
+adapterdelegates4-kotlin-dsl = { group = "com.hannesdorfmann", name = "adapterdelegates4-kotlin-dsl", version.ref = "adapterdelegates4KotlinDsl" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

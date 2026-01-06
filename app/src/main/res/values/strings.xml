@@ -8,4 +8,6 @@
     <string name="search_bar_hint">Movies, TV series, person</string>
     <string name="title_not_found">Title not found</string>
     <string name="poster">Poster</string>
+    <string name="all_movies">All</string>
+    <string name="show_all">Show all</string>
 </resources>

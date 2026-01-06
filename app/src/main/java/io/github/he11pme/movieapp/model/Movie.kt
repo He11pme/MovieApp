@@ -21,10 +21,12 @@ data class Movie(
     val overview: String,
     @SerialName("vote_average")
     private val _vote: Double
-) {
+): Identifiable {
     val vote: Double
         get() = "%.1f".format(Locale.US, _vote).toDouble()
     val posterUrl: (PosterSizes) -> String = {
         "https://image.tmdb.org/t/p/${it.size}$posterPath"
     }
+
+    override fun getIdentifier() = id.toString()
 }

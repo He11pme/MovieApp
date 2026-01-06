@@ -1,20 +1,26 @@
-package io.github.he11pme.movieapp.fragments.search
+package io.github.he11pme.movieapp.fragments.search.carousel
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
 import io.github.he11pme.movieapp.databinding.MovieItemMediumBinding
+import io.github.he11pme.movieapp.model.Identifiable
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.model.PosterSizes
 
-class CarouselAdapter(val toMovieDetails: (movieId: Int) -> Unit) :
-    ListAdapter<Movie, CarouselAdapter.ViewHolder>(CarouselDiffCallback()) {
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
+class MovieCardDelegateAdapter(private val toMovieDetails: (movieId: Int) -> Unit) :
+    AbsListItemAdapterDelegate<Movie, Identifiable, MovieCardDelegateAdapter.ViewHolder>() {
+    override fun isForViewType(
+        item: Identifiable,
+        items: List<Identifiable?>,
+        position: Int
+    ): Boolean {
+        return item is Movie
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         return ViewHolder(
             MovieItemMediumBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -25,10 +31,11 @@ class CarouselAdapter(val toMovieDetails: (movieId: Int) -> Unit) :
     }
 
     override fun onBindViewHolder(
+        item: Movie,
         holder: ViewHolder,
-        position: Int
+        payloads: List<Any?>
     ) {
-        holder.bind(getItem(position))
+        holder.bind(item)
     }
 
     inner class ViewHolder(private val binding: MovieItemMediumBinding) :

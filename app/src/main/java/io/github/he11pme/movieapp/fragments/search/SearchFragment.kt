@@ -19,7 +19,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModels()
-    private val adapter = ContentAdapter(::toMovieDetails)
+    private val adapter = ContentAdapter(::toMovieDetails, ::toSelection)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,4 +68,5 @@ class SearchFragment : Fragment() {
     }
 
     private fun toMovieDetails(movieId: Int) {}
+    private fun toSelection(selectionId: String) {}
 }

@@ -102,6 +102,8 @@ dependencies {
 
     implementation(libs.lottie)
 
+    implementation(libs.adapterdelegates4.kotlin.dsl)
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
