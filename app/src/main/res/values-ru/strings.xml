@@ -13,4 +13,11 @@
     <string name="add_to_favorites">Добавить в избранное</string>
     <string name="download">Скачать</string>
     <string name="share">Поделиться</string>
+    <string name="text_for_share">
+        Нашел интересный фильм в MovieApp:\n
+        🎬\"%1$s\"\n
+        ⭐%2$.1f/10\n
+        📝%3$s
+    </string>
+    <string name="functionality_will_be_added_later">Функционал будет добавлен позже</string>
 </resources>

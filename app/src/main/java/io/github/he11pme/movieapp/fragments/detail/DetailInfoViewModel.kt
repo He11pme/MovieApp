@@ -8,14 +8,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.model.MovieDetails
 import io.github.he11pme.movieapp.repository.AppRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailInfoViewModel @Inject constructor(val repository: AppRepository, val appBarManager: AppBarManager) : ViewModel() {
+class DetailInfoViewModel @Inject constructor(
+    val repository: AppRepository,
+    val appBarManager: AppBarManager
+) : ViewModel() {
 
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> get() = _state
+
+    private val _actions = MutableSharedFlow<Action>()
+    val actions: Flow<Action> get() = _actions
 
     private var movie: MovieDetails? = null
 
@@ -43,10 +51,36 @@ class DetailInfoViewModel @Inject constructor(val repository: AppRepository, val
         appBarManager.updateTitleAppBar(if (collapseRatio > 0.75f) movie?.title ?: "" else "")
     }
 
+    fun onFavoriteBtnClicked() {}
+    fun onShareBtnClicked() = shareMovie()
+
+    private fun shareMovie() {
+        movie?.let {
+            viewModelScope.launch {
+                _actions.emit(Action.ShareMovie(it))
+            }
+        }
+    }
+
+    fun onDownloadBtnClicked() = downloadMovie()
+
+    private fun downloadMovie() {
+        movie?.let {
+            viewModelScope.launch {
+                _actions.emit(Action.DownloadMovie(it))
+            }
+        }
+    }
+
     sealed interface State {
         object Loading : State
         data class Error(val error: Int) : State
         data class Loaded(val movieDetails: MovieDetails): State
+    }
+
+    sealed interface Action {
+        data class ShareMovie(val movie: MovieDetails): Action
+        data class DownloadMovie(val movie: MovieDetails): Action
     }
 
 }

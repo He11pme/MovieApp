@@ -12,5 +12,12 @@
     <string name="show_all">Show all</string>
     <string name="add_to_favorites">Add to favorites</string>
     <string name="download">Download</string>
-    <string name="share">Share</string>
+    <string name="share">Share To:</string>
+    <string name="text_for_share">
+        Found the interesting movie on MovieApp:\n
+        🎬\"%1$s\"\n
+        ⭐%2$.1f/10\n
+        📝%3$s
+    </string>
+    <string name="functionality_will_be_added_later">The functionality will be added later</string>
 </resources>

@@ -1,18 +1,20 @@
 package io.github.he11pme.movieapp.fragments.detail
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.R
@@ -22,7 +24,6 @@ import io.github.he11pme.movieapp.model.MovieDetails
 import io.github.he11pme.movieapp.model.PosterSizes
 import io.github.he11pme.movieapp.utils.EmptyRequestListener
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -34,9 +35,6 @@ class DetailInfoFragment : Fragment() {
     private var transitionName = ""
     private val foregroundItems = mutableListOf<View>()
     private val viewModel: DetailInfoViewModel by viewModels()
-
-    @Inject
-    lateinit var appBarManager: AppBarManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +65,7 @@ class DetailInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailInfoBinding.inflate(layoutInflater, container, false)
+        binding.viewModel = viewModel
 
         bindToAppBarManager()
         setTransitionNames()
@@ -74,15 +73,36 @@ class DetailInfoFragment : Fragment() {
         setupViews()
         postponeEnterTransition()
         bindToViewModel()
-        handleAppBarScroll()
 
         return binding.root
     }
 
     private fun bindToAppBarManager() {
+        bindAppBarState()
+        bindMenuActions()
+    }
+
+    private fun bindMenuActions() {
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                appBarManager.appBarState.collect(::handleAppBarState)
+                viewModel.appBarManager.menuActions.collect(::handleMenuActions)
+            }
+        }
+    }
+
+    private fun handleMenuActions(action: AppBarManager.MenuAction) {
+        when (action) {
+            AppBarManager.MenuAction.DownloadBtnClicked -> viewModel.onDownloadBtnClicked()
+            AppBarManager.MenuAction.FavoriteBtnClicked -> viewModel.onFavoriteBtnClicked()
+            AppBarManager.MenuAction.ShareBtnClicked -> viewModel.onShareBtnClicked()
+            else -> {}
+        }
+    }
+
+    private fun bindAppBarState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.appBarManager.appBarState.collect(::handleAppBarState)
             }
         }
     }
@@ -97,6 +117,7 @@ class DetailInfoFragment : Fragment() {
 
     private fun bindToViewModel() {
         bindState()
+        bindAction()
     }
 
     private fun bindState() {
@@ -117,6 +138,44 @@ class DetailInfoFragment : Fragment() {
 
     }
 
+    private fun bindAction() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.actions.collect(::handleAction)
+            }
+        }
+    }
+
+    private fun handleAction(action: DetailInfoViewModel.Action) {
+        when (action) {
+            is DetailInfoViewModel.Action.ShareMovie -> shareMovie(action.movie)
+            is DetailInfoViewModel.Action.DownloadMovie -> downloadMovie()
+        }
+    }
+
+    private fun shareMovie(movie: MovieDetails) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.text_for_share, movie.title, movie.vote, movie.overview)
+            )
+            type = "text/plain"
+        }
+
+        startActivity(Intent.createChooser(intent, getString(R.string.share)))
+    }
+
+    private fun downloadMovie() {
+        Snackbar.make(
+            binding.detailInfoMain,
+            getString(R.string.functionality_will_be_added_later),
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun navigateBack() = requireActivity().onBackPressedDispatcher.onBackPressed()
+
     private fun fillListOfForegroundItems() {
         foregroundItems.addAll(
             listOf(
@@ -128,14 +187,15 @@ class DetailInfoFragment : Fragment() {
                 binding.favoriteBtn,
                 binding.shareBtn,
                 binding.backBtn,
-                binding.bottomBackground,
-                binding.headerBackground
+                binding.bottomBackground
             )
         )
     }
 
     private fun setupViews() {
         foregroundItems.forEach { prepareViewForAnimation(it) }
+        binding.backBtn.setOnClickListener { navigateBack() }
+        handleAppBarScroll()
     }
 
     private fun setDataAboutMovie(movie: MovieDetails) {
@@ -185,6 +245,7 @@ class DetailInfoFragment : Fragment() {
         v.visibility = View.GONE
         v.alpha = 0f
     }
+
     private fun enterAnimationForView(v: View) {
         v.translationY = 50f
         v.visibility = View.VISIBLE
