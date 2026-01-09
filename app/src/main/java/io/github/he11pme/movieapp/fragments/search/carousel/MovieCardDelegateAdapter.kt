@@ -1,6 +1,7 @@
 package io.github.he11pme.movieapp.fragments.search.carousel
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -9,8 +10,9 @@ import io.github.he11pme.movieapp.databinding.MovieItemMediumBinding
 import io.github.he11pme.movieapp.model.Identifiable
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.model.PosterSizes
+import java.util.UUID
 
-class MovieCardDelegateAdapter(private val toMovieDetails: (movieId: Int) -> Unit) :
+class MovieCardDelegateAdapter(private val toMovieDetails: (sharedView: View, movieId: Int) -> Unit) :
     AbsListItemAdapterDelegate<Movie, Identifiable, MovieCardDelegateAdapter.ViewHolder>() {
     override fun isForViewType(
         item: Identifiable,
@@ -50,7 +52,11 @@ class MovieCardDelegateAdapter(private val toMovieDetails: (movieId: Int) -> Uni
                 .load(movie.posterUrl(PosterSizes.MEDIUM))
                 .into(binding.posterMovieItem)
 
-            binding.root.setOnClickListener { toMovieDetails(movie.id) }
+            // There may be multiple Views displaying the same movie on the screen.
+            // Therefore, a random transitionName is generated and passed explicitly
+            binding.posterMovieItem.transitionName = UUID.randomUUID().toString()
+
+            binding.root.setOnClickListener { toMovieDetails(binding.posterMovieItem,movie.id) }
 
         }
 

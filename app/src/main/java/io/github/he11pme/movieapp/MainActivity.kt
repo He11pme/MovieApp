@@ -4,32 +4,51 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
+import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var appBarManager: AppBarManager
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.contentContainer) as NavHostFragment).navController
     }
 
+    private var currentMenuRes: Int = 0
+    private var currentMenuProvider: MenuProvider? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setSupportActionBar(binding.toolbar)
+        bindToAppBarManager()
         fixHeightToolbar()
         configureSystemBars()
         setInsets()
@@ -39,13 +58,67 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    private fun bindToAppBarManager() {
+        bindAppBarState()
+        bindMenuActions()
+    }
+
+    private fun bindAppBarState() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                appBarManager.appBarState.collect(::handleAppBarState)
+            }
+        }
+    }
+
+    private fun bindMenuActions() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                appBarManager.menuActions.collect(::handleMenuActions)
+            }
+        }
+    }
+
+    private fun handleMenuActions(action: AppBarManager.MenuAction) {
+        when (action) {
+            AppBarManager.MenuAction.ToProfileClicked -> {
+                navController.navigate(R.id.profileFragment)
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun handleAppBarState(appBarState: AppBarManager.AppBarState) {
+        binding.appBar.apply {
+            visibility = appBarState.visibilityAppBar
+            alpha = appBarState.alphaAppBar
+        }
+
+        if (appBarState.menuAppBar != currentMenuRes) {
+            currentMenuRes = appBarState.menuAppBar
+            setupMenu(appBarState.menuAppBar)
+        }
+
+        binding.toolbar.apply {
+            appBarState.heightToolbar?.let { layoutParams.height = it }
+            title = appBarState.titleToolbar
+        }
+        binding.searchBar.apply {
+            visibility = appBarState.visibilitySearchBar
+        }
+        binding.bottomAppBar.apply {
+            visibility = appBarState.visibilityBottomAppBar
+        }
+        (binding.contentContainer.layoutParams as CoordinatorLayout.LayoutParams).behavior =
+            appBarState.scrollingViewBehavior
+    }
+
     // Fixed height of toolbar when a SearchBar is present,
     // to prevent size changes and visual "jank"
     // during navigation between fragments
     private fun fixHeightToolbar() {
-        binding.toolbar.post {
-            binding.toolbar.layoutParams.height = binding.toolbar.height
-        }
+        binding.toolbar.post { appBarManager.fixHeightToolbar(binding.toolbar.height) }
     }
 
     private fun configureSystemBars() {
@@ -96,32 +169,57 @@ class MainActivity : AppCompatActivity() {
     private fun observeDestinationChanges() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
-            binding.searchBar.visibility =
-                if (destination.id == R.id.searchFragment) View.VISIBLE else View.GONE
-
-            binding.bottomAppBar.visibility = when (destination.id) {
-                R.id.profileFragment, R.id.detailInfoFragment -> View.GONE
-                else -> View.VISIBLE
+            when (destination.id) {
+                R.id.searchFragment -> appBarManager.setSearchBar()
+                R.id.detailInfoFragment -> appBarManager.setPosterBar()
+                R.id.profileFragment -> appBarManager.setProfileBar(destination.label ?: "")
+                else -> appBarManager.setDefaultBar(destination.label ?: "")
             }
 
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.app_bar_menu, menu)
-        return true
-    }
+    private fun setupMenu(@MenuRes menuRes: Int) {
+        currentMenuProvider?.let { removeMenuProvider(it) }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle navigation manually to ensure the Up button works correctly
-        return when (item.itemId) {
-            R.id.profileFragment -> {
-                navController.navigate(R.id.profileFragment)
-                true
+        val menuProvider = object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(menuRes, menu)
             }
 
-            else -> super.onOptionsItemSelected(item)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+
+                    R.id.profileFragment -> {
+                        dispatchMenuAction(AppBarManager.MenuAction.ToProfileClicked)
+                    }
+
+                    R.id.shareBtn -> {
+                        dispatchMenuAction(AppBarManager.MenuAction.ShareBtnClicked)
+                    }
+
+                    R.id.downloadBtn -> {
+                        dispatchMenuAction(AppBarManager.MenuAction.DownloadBtnClicked)
+                    }
+
+                    R.id.favoriteBtn -> {
+                        dispatchMenuAction(AppBarManager.MenuAction.FavoriteBtnClicked)
+                    }
+
+                    else -> false
+                }
+            }
+
+            private fun dispatchMenuAction(action: AppBarManager.MenuAction): Boolean {
+                lifecycleScope.launch { appBarManager.dispatchMenuAction(action) }
+                return true
+            }
+
         }
+
+        currentMenuProvider = menuProvider
+        addMenuProvider(menuProvider, this, Lifecycle.State.RESUMED)
     }
 
 }

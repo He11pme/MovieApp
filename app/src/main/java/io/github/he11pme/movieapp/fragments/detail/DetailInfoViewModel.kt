@@ -1,7 +1,52 @@
 package io.github.he11pme.movieapp.fragments.detail
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.he11pme.movieapp.managers.AppBarManager
+import io.github.he11pme.movieapp.model.MovieDetails
+import io.github.he11pme.movieapp.repository.AppRepository
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailInfoViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+@HiltViewModel
+class DetailInfoViewModel @Inject constructor(val repository: AppRepository, val appBarManager: AppBarManager) : ViewModel() {
+
+    private val _state = MutableLiveData<State>()
+    val state: LiveData<State> get() = _state
+
+    private var movie: MovieDetails? = null
+
+    fun loadDetails(movieId: Int) {
+        _state.value = State.Loading
+        viewModelScope.launch {
+            tryLoadDetails(movieId).apply {
+                onSuccess { handleSuccessLoadMovie(it) }
+                onFailure {  }
+            }
+        }
+    }
+
+    private fun handleSuccessLoadMovie(details: MovieDetails) {
+        movie = details
+        _state.value = State.Loaded(details)
+    }
+
+    private suspend fun tryLoadDetails(movieId: Int): Result<MovieDetails> =
+        repository.getMovieById(movieId)
+
+    fun onAppBarScrolled(collapseRatio: Float) {
+        if (collapseRatio > 0.25f) appBarManager.showAppBar() else appBarManager.hideAppBar()
+        appBarManager.updateAlphaAppBar(collapseRatio)
+        appBarManager.updateTitleAppBar(if (collapseRatio > 0.75f) movie?.title ?: "" else "")
+    }
+
+    sealed interface State {
+        object Loading : State
+        data class Error(val error: Int) : State
+        data class Loaded(val movieDetails: MovieDetails): State
+    }
+
 }

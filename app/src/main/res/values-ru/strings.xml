@@ -10,4 +10,7 @@
     <string name="poster">Постер</string>
     <string name="all_movies">Все</string>
     <string name="show_all">Показать все</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="download">Скачать</string>
+    <string name="share">Поделиться</string>
 </resources>

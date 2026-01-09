@@ -2,6 +2,8 @@
 <resources>
 
     <color name="background">@color/gray_900</color>
+    <color name="background_50">#80212121</color>
+    <color name="background_85">#D9212121</color>
     <color name="on_background">@color/gray_200</color>
     <color name="foreground">@color/gray_800</color>
     <color name="foreground_variant">@color/blue_gray_900</color>

@@ -10,4 +10,7 @@
     <string name="poster">Poster</string>
     <string name="all_movies">All</string>
     <string name="show_all">Show all</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="download">Download</string>
+    <string name="share">Share</string>
 </resources>

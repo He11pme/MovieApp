@@ -1,10 +1,11 @@
 package io.github.he11pme.movieapp.fragments.search.carousel
 
+import android.view.View
 import io.github.he11pme.movieapp.model.Identifiable
 import io.github.he11pme.movieapp.utils.ListDelegationAdapterDiff
 
 class CarouselAdapter(
-    toMovieDetails: (movieId: Int) -> Unit,
+    toMovieDetails: (sharedView: View, movieId: Int) -> Unit,
     toSelections: (selectionId: String) -> Unit
 ) : ListDelegationAdapterDiff<Identifiable>(CarouselDiffCallback()) {
 

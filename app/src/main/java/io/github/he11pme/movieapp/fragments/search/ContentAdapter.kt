@@ -1,6 +1,7 @@
 package io.github.he11pme.movieapp.fragments.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import io.github.he11pme.movieapp.model.SelectionState
 import io.github.he11pme.movieapp.model.ShowAllMoviesButton
 
 class ContentAdapter(
-    private val toMovieDetails: (movieId: Int) -> Unit,
+    private val toMovieDetails: (sharedView: View, movieId: Int) -> Unit,
     private val toSelections: (selectionId: String) -> Unit
 ) :
     ListAdapter<Selection, ContentAdapter.ViewHolder>(ContentDiffCallback()) {

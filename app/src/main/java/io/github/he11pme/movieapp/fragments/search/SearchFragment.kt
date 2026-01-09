@@ -9,7 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
 import io.github.he11pme.movieapp.model.Selection
 import kotlinx.coroutines.launch
@@ -32,7 +35,6 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
-
         setupViews()
         bindToViewModel()
 
@@ -67,6 +69,18 @@ class SearchFragment : Fragment() {
         adapter.submitList(selections)
     }
 
-    private fun toMovieDetails(movieId: Int) {}
+    private fun toMovieDetails(sharedPoster: View, movieId: Int) {
+        val extras = FragmentNavigator.Extras.Builder()
+            .addSharedElement(sharedPoster, sharedPoster.transitionName)
+            .build()
+
+        val bundle = Bundle().apply {
+            putString("transitionName", sharedPoster.transitionName)
+            putInt("movieId", movieId)
+        }
+
+        binding.root.findNavController().navigate(R.id.detailInfoFragment, bundle, null, extras)
+    }
+
     private fun toSelection(selectionId: String) {}
 }

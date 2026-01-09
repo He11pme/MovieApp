@@ -2,6 +2,7 @@ package io.github.he11pme.movieapp.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 @Serializable
 data class MovieDetails(
@@ -15,11 +16,18 @@ data class MovieDetails(
     val releaseDate: String,
     val runtime: Int,
     @SerialName("vote_average")
-    val vote: Double,
+    val _vote: Double,
     val genres: List<Genre>,
     @SerialName("production_countries")
     val countries: List<Country>
-)
+) {
+    val vote: Double
+        get() = "%.1f".format(Locale.US, _vote).toDouble()
+
+    val posterUrl: (PosterSizes) -> String = {
+        "https://image.tmdb.org/t/p/${it.size}$posterPath"
+    }
+}
 
 @Serializable
 data class Country(

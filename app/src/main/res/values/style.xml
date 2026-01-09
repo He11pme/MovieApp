@@ -77,5 +77,28 @@
         <item name="iconSize">24dp</item>
 
     </style>
+    <style name="Widget.MovieApp.IconButton.Filled.Medium.Elevated">
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="Base.Widget.MovieApp.TitleHeadline" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.HeadlineText</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="Widget.MovieApp.TitleHeadline" parent="Base.Widget.MovieApp.TitleHeadline"/>
+
+    <style name="Base.Widget.MovieApp.Tagline" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.Tagline</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="Widget.MovieApp.Tagline" parent="Base.Widget.MovieApp.Tagline"/>
+
+    <style name="Base.Widget.MovieApp.Parameters" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.Parameters</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="Widget.MovieApp.Parameters" parent="Base.Widget.MovieApp.Parameters"/>
+
+
 
 </resources>
