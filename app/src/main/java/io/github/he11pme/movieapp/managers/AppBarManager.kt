@@ -101,6 +101,10 @@ class AppBarManager @Inject constructor() {
         _appBarState.update { it.copy(titleToolbar = title) }
     }
 
+    fun updateFavoriteState(isFavorite: Boolean) {
+        _appBarState.update { it.copy(isFavorite = isFavorite) }
+    }
+
     data class AppBarState(
         val visibilityAppBar: Int = View.VISIBLE,
         val alphaAppBar: Float = 1f,
@@ -113,7 +117,11 @@ class AppBarManager @Inject constructor() {
 
         val visibilityBottomAppBar: Int = View.VISIBLE,
 
-        val scrollingViewBehavior: AppBarLayout.ScrollingViewBehavior? = AppBarLayout.ScrollingViewBehavior()
+        // Behavior for the content placed under the AppBar
+        val scrollingViewBehavior: AppBarLayout.ScrollingViewBehavior? = AppBarLayout.ScrollingViewBehavior(),
+
+        // Flag indicating which favorite icon should be shown in the menu
+        val isFavorite: Boolean = false
     )
 
     sealed interface MenuAction {

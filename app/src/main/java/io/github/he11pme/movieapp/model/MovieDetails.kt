@@ -27,6 +27,8 @@ data class MovieDetails(
     val posterUrl: (PosterSizes) -> String = {
         "https://image.tmdb.org/t/p/${it.size}$posterPath"
     }
+
+    var isFavorite: Boolean = false
 }
 
 @Serializable

@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.model.SelectionState
 import io.github.he11pme.movieapp.model.Selection
-import io.github.he11pme.movieapp.repository.AppRepository
+import io.github.he11pme.movieapp.data.repository.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

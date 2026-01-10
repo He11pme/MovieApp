@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.network
+package io.github.he11pme.movieapp.data.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import io.github.he11pme.movieapp.BuildConfig
@@ -11,6 +11,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.Locale
 
@@ -69,7 +70,7 @@ interface TMDbApiService {
      */
     @GET("movie/{movie_id}")
     suspend fun getMovieById(
-        @retrofit2.http.Path("movie_id") movieId: Int,
+        @Path("movie_id") movieId: Int,
         @Query("append_to_response") append: String = "credits,videos,images,similar,recommendations"
     ): MovieDetails
 

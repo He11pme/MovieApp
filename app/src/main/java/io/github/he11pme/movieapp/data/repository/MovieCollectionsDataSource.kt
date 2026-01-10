@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.repository
+package io.github.he11pme.movieapp.data.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

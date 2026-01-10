@@ -1,5 +1,6 @@
 package io.github.he11pme.movieapp.fragments.detail
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -150,7 +151,38 @@ class DetailInfoFragment : Fragment() {
         when (action) {
             is DetailInfoViewModel.Action.ShareMovie -> shareMovie(action.movie)
             is DetailInfoViewModel.Action.DownloadMovie -> downloadMovie()
+            DetailInfoViewModel.Action.AddFavorite -> addFavorite()
+            DetailInfoViewModel.Action.RemoveFavorite -> removeFavorite()
         }
+    }
+
+    private fun addFavorite() {
+        toggleFavorite(
+            getString(R.string.movie_added_to_favorites),
+            true
+        )
+    }
+
+    private fun removeFavorite() {
+        toggleFavorite(
+            getString(R.string.movie_removed_from_favorites),
+            false
+        )
+    }
+
+    private fun toggleFavorite(text: String, isFavorite: Boolean) {
+        Snackbar.make(
+            binding.detailInfoMain,
+            text,
+            Snackbar.LENGTH_SHORT
+        ).show()
+        setIconFavoriteBtn(isFavorite)
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setIconFavoriteBtn(isFavorite: Boolean) {
+        binding.favoriteBtn.icon =
+            requireContext().getDrawable(if (isFavorite) ID_DRAWABLE_FAVORITE else ID_DRAWABLE_UNFAVORITE)
     }
 
     private fun shareMovie(movie: MovieDetails) {
@@ -220,6 +252,7 @@ class DetailInfoFragment : Fragment() {
         binding.parametersText.text = compoundParameters()
         binding.overviewText.text = movie.overview
         binding.voteText.text = movie.vote.toString()
+        setIconFavoriteBtn(movie.isFavorite)
 
     }
 
@@ -277,6 +310,11 @@ class DetailInfoFragment : Fragment() {
         view.alpha = 1f - collapseRatio.pow(2)
         view.scaleX = 1f - collapseRatio.pow(2)
         view.scaleY = 1f - collapseRatio.pow(2)
+    }
+
+    companion object {
+        val ID_DRAWABLE_FAVORITE = R.drawable.ic_favorite
+        val ID_DRAWABLE_UNFAVORITE = R.drawable.ic_favorite_outline
     }
 
 }

@@ -20,4 +20,6 @@
         📝%3$s
     </string>
     <string name="functionality_will_be_added_later">Функционал будет добавлен позже</string>
+    <string name="movie_added_to_favorites">Фильм добавлен в избранное</string>
+    <string name="movie_removed_from_favorites">Фильм удален из избранного</string>
 </resources>

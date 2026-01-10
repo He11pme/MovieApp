@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.model.MovieDetails
-import io.github.he11pme.movieapp.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailInfoViewModel @Inject constructor(
-    val repository: AppRepository,
+    private val repository: AppRepository,
     val appBarManager: AppBarManager
 ) : ViewModel() {
 
@@ -51,7 +51,29 @@ class DetailInfoViewModel @Inject constructor(
         appBarManager.updateTitleAppBar(if (collapseRatio > 0.75f) movie?.title ?: "" else "")
     }
 
-    fun onFavoriteBtnClicked() {}
+    fun onFavoriteBtnClicked() = toggleFavorite()
+
+    private fun toggleFavorite() {
+        movie?.let {
+            viewModelScope.launch {
+                if (repository.toggleFavorite(it.id)) addFavorite()
+                else removeFavorite()
+
+                appBarManager.updateFavoriteState(it.isFavorite)
+            }
+        }
+    }
+
+    private suspend fun removeFavorite() {
+        _actions.emit(Action.RemoveFavorite)
+        movie?.isFavorite = false
+    }
+
+    private suspend fun addFavorite() {
+        _actions.emit(Action.AddFavorite)
+        movie?.isFavorite = true
+    }
+
     fun onShareBtnClicked() = shareMovie()
 
     private fun shareMovie() {
@@ -81,6 +103,9 @@ class DetailInfoViewModel @Inject constructor(
     sealed interface Action {
         data class ShareMovie(val movie: MovieDetails): Action
         data class DownloadMovie(val movie: MovieDetails): Action
+
+        object RemoveFavorite: Action
+        object AddFavorite: Action
     }
 
 }

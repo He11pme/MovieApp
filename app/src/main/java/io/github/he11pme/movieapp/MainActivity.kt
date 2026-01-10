@@ -22,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
+import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
 import kotlinx.coroutines.launch
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
 
     private var currentMenuRes: Int = 0
     private var currentMenuProvider: MenuProvider? = null
+    private var favoriteItemMenu: MenuItem? = null
+    private var currentFlagFavorite = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,6 +103,8 @@ class MainActivity : AppCompatActivity() {
             setupMenu(appBarState.menuAppBar)
         }
 
+        favoriteItemMenu?.let { toggleFavoriteMenu(appBarState.isFavorite, it) }
+
         binding.toolbar.apply {
             appBarState.heightToolbar?.let { layoutParams.height = it }
             title = appBarState.titleToolbar
@@ -112,6 +117,17 @@ class MainActivity : AppCompatActivity() {
         }
         (binding.contentContainer.layoutParams as CoordinatorLayout.LayoutParams).behavior =
             appBarState.scrollingViewBehavior
+    }
+
+    private fun toggleFavoriteMenu(isFavorite: Boolean, item: MenuItem) {
+        if (isFavorite == currentFlagFavorite) return
+
+        item.setIcon(
+            if (isFavorite) DetailInfoFragment.ID_DRAWABLE_FAVORITE
+            else DetailInfoFragment.ID_DRAWABLE_UNFAVORITE
+        )
+
+        currentFlagFavorite = !currentFlagFavorite
     }
 
     // Fixed height of toolbar when a SearchBar is present,
@@ -186,6 +202,8 @@ class MainActivity : AppCompatActivity() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(menuRes, menu)
+
+                favoriteItemMenu = menu.findItem(R.id.favoriteBtn)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
