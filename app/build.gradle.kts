@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.devtoolsKsp)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.safe.args)
 }
 
 android {

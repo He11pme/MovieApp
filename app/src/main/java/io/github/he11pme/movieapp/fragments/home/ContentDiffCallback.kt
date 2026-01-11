@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.search
+package io.github.he11pme.movieapp.fragments.home
 
 import androidx.recyclerview.widget.DiffUtil
 import io.github.he11pme.movieapp.model.Selection

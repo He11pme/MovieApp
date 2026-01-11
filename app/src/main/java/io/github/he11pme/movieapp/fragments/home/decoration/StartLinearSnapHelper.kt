@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.search.decoration
+package io.github.he11pme.movieapp.fragments.home.decoration
 
 import android.view.View
 import androidx.recyclerview.widget.LinearSnapHelper

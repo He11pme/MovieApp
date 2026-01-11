@@ -12,16 +12,17 @@ data class MovieResponse(
     @SerialName("results")
     val movies: List<Movie>
 )
+
 @Serializable
 data class Movie(
     val id: Int,
     val title: String,
     @SerialName("poster_path")
-    private val posterPath: String,
+    private val posterPath: String = "",
     val overview: String,
     @SerialName("vote_average")
-    private val _vote: Double
-): Identifiable {
+    private val _vote: Double = 0.0
+) : Identifiable {
     val vote: Double
         get() = "%.1f".format(Locale.US, _vote).toDouble()
     val posterUrl: (PosterSizes) -> String = {

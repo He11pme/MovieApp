@@ -4,38 +4,45 @@
     <style name="Base.Widget.MovieApp.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ThemeOverlay.MovieApp.Toolbar</item>
     </style>
-    <style name="Widget.MovieApp.Toolbar" parent="Base.Widget.MovieApp.Toolbar"/>
+
+    <style name="Widget.MovieApp.Toolbar" parent="Base.Widget.MovieApp.Toolbar" />
 
     <style name="Base.Widget.MovieApp.SearchBar" parent="Widget.Material3.SearchBar">
         <item name="materialThemeOverlay">@style/ThemeOverlay.MovieApp.SearchBar</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.M3.Sys.Shape.Corner.Small</item>
     </style>
-    <style name="Widget.MovieApp.SearchBar" parent="Base.Widget.MovieApp.SearchBar"/>
+
+    <style name="Widget.MovieApp.SearchBar" parent="Base.Widget.MovieApp.SearchBar" />
 
     <style name="Base.Widget.MovieApp.SearchView" parent="Widget.Material3.SearchView">
         <item name="materialThemeOverlay">@style/ThemeOverlay.MovieApp.SearchView</item>
     </style>
-    <style name="Widget.MovieApp.SearchView" parent="Base.Widget.MovieApp.SearchView"/>
+
+    <style name="Widget.MovieApp.SearchView" parent="Base.Widget.MovieApp.SearchView" />
 
     <style name="Base.Widget.MovieApp.BottomAppBar" parent="Widget.Material3.BottomAppBar.Legacy">
         <item name="materialThemeOverlay">@style/ThemeOverlay.MovieApp.BottomAppBar</item>
     </style>
-    <style name="Widget.MovieApp.BottomAppBar" parent="Base.Widget.MovieApp.BottomAppBar"/>
+
+    <style name="Widget.MovieApp.BottomAppBar" parent="Base.Widget.MovieApp.BottomAppBar" />
 
     <style name="Base.Widget.MovieApp.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="itemGravity">center</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.MovieApp.BottomNavigationView</item>
     </style>
-    <style name="Widget.MovieApp.BottomNavigationView" parent="Base.Widget.MovieApp.BottomNavigationView"/>
+
+    <style name="Widget.MovieApp.BottomNavigationView" parent="Base.Widget.MovieApp.BottomNavigationView" />
 
     <style name="Base.Widget.MovieApp.Poster" parent="">
         <item name="layout_constraintDimensionRatio">0.667</item>
     </style>
-    <style name="Widget.MovieApp.Poster" parent="Base.Widget.MovieApp.Poster"/>
+
+    <style name="Widget.MovieApp.Poster" parent="Base.Widget.MovieApp.Poster" />
 
     <style name="Base.Widget.MovieApp.Vote" parent="">
         <item name="android:background">@color/background_vote_view</item>
     </style>
+
     <style name="Widget.MovieApp.Vote.Medium" parent="Base.Widget.MovieApp.Vote">
         <item name="android:paddingStart">4dp</item>
         <item name="android:paddingTop">1dp</item>
@@ -44,7 +51,8 @@
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.VoteMedium</item>
     </style>
 
-    <style name="Base.Widget.MovieApp.TitleCard" parent=""/>
+    <style name="Base.Widget.MovieApp.TitleCard" parent="" />
+
     <style name="Widget.MovieApp.TitleCard" parent="Base.Widget.MovieApp.TitleCard">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.TitleCardMedium</item>
     </style>
@@ -52,15 +60,18 @@
     <style name="Base.Widget.MovieApp.TitleSelection" parent="">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.TitleSelection</item>
     </style>
-    <style name="Widget.MovieApp.TitleSelection" parent="Base.Widget.MovieApp.TitleSelection"/>
+
+    <style name="Widget.MovieApp.TitleSelection" parent="Base.Widget.MovieApp.TitleSelection" />
 
     <style name="Base.Widget.MovieApp.AccentText" parent="">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.AccentText</item>
     </style>
-    <style name="Widget.MovieApp.AccentText" parent="Base.Widget.MovieApp.AccentText"/>
+
+    <style name="Widget.MovieApp.AccentText" parent="Base.Widget.MovieApp.AccentText" />
 
     <style name="Widget.MovieApp.AccentText.Colorless">
-        <item name="android:textAppearance">@style/TextAppearance.MovieApp.AccentText.Colorless</item>
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.AccentText.Colorless
+        </item>
     </style>
 
     <style name="Widget.MovieApp.IconButton.Filled" parent="Widget.Material3.Button.IconButton.Filled">
@@ -70,6 +81,7 @@
         <item name="iconTint">@color/on_foreground</item>
 
     </style>
+
     <style name="Widget.MovieApp.IconButton.Filled.Medium">
 
         <item name="android:layout_width">56dp</item>
@@ -77,28 +89,31 @@
         <item name="iconSize">24dp</item>
 
     </style>
+
     <style name="Widget.MovieApp.IconButton.Filled.Medium.Elevated">
-        <item name="android:elevation">8dp</item>
+        <item name="android:elevation">4dp</item>
     </style>
 
     <style name="Base.Widget.MovieApp.TitleHeadline" parent="">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.HeadlineText</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="Widget.MovieApp.TitleHeadline" parent="Base.Widget.MovieApp.TitleHeadline"/>
+
+    <style name="Widget.MovieApp.TitleHeadline" parent="Base.Widget.MovieApp.TitleHeadline" />
 
     <style name="Base.Widget.MovieApp.Tagline" parent="">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.Tagline</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="Widget.MovieApp.Tagline" parent="Base.Widget.MovieApp.Tagline"/>
+
+    <style name="Widget.MovieApp.Tagline" parent="Base.Widget.MovieApp.Tagline" />
 
     <style name="Base.Widget.MovieApp.Parameters" parent="">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.Parameters</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="Widget.MovieApp.Parameters" parent="Base.Widget.MovieApp.Parameters"/>
 
+    <style name="Widget.MovieApp.Parameters" parent="Base.Widget.MovieApp.Parameters" />
 
 
 </resources>

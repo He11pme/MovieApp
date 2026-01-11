@@ -5,48 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigator
-import dagger.hilt.android.AndroidEntryPoint
-import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
-import io.github.he11pme.movieapp.model.Selection
+import io.github.he11pme.movieapp.model.Movie
+import io.github.he11pme.movieapp.utils.SearchItemOffsetsDecoration
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private val viewModel: SearchViewModel by viewModels()
-    private val adapter = ContentAdapter(::toMovieDetails, ::toSelection)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.initHomeScreen()
-    }
+    private val viewModel: SearchViewModel by activityViewModels()
+    private val searchAdapter = SearchAdapter(::toMovieDetails)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+
         setupViews()
         bindToViewModel()
 
         return binding.root
-    }
-
-    private fun setupViews() {
-        setupRvContent()
-    }
-
-    private fun setupRvContent() {
-        binding.rvContent.adapter = adapter
     }
 
     private fun bindToViewModel() {
@@ -56,31 +39,27 @@ class SearchFragment : Fragment() {
     private fun bindState() {
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bindSelectionState()
+                bindSearchState()
             }
         }
     }
 
-    private suspend fun bindSelectionState() {
-        viewModel.selectionsState.collect(::handleSelectionState)
+    private suspend fun bindSearchState() {
+        viewModel.searchState.collect(::handleSearchState)
     }
 
-    private fun handleSelectionState(selections: List<Selection>) {
-        adapter.submitList(selections)
+    private fun handleSearchState(movies: List<Movie>) {
+        searchAdapter.submitList(movies)
     }
 
-    private fun toMovieDetails(sharedPoster: View, movieId: Int) {
-        val extras = FragmentNavigator.Extras.Builder()
-            .addSharedElement(sharedPoster, sharedPoster.transitionName)
-            .build()
-
-        val bundle = Bundle().apply {
-            putString("transitionName", sharedPoster.transitionName)
-            putInt("movieId", movieId)
-        }
-
-        binding.root.findNavController().navigate(R.id.detailInfoFragment, bundle, null, extras)
+    private fun setupViews() {
+        setupSearchRv()
     }
 
-    private fun toSelection(selectionId: String) {}
+    private fun setupSearchRv() {
+        binding.searchRv.adapter = searchAdapter
+        binding.searchRv.addItemDecoration(SearchItemOffsetsDecoration())
+    }
+
+    private fun toMovieDetails(sharedPoster: View, movieId: Int) {}
 }

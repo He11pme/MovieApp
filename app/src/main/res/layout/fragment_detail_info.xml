@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background">
 
     <data>
 
@@ -134,8 +135,8 @@
                         app:layout_constraintTop_toTopOf="@+id/posterDetail" />
 
                     <TextView
-                        style="@style/Widget.MovieApp.TitleHeadline"
                         android:id="@+id/titleText"
+                        style="@style/Widget.MovieApp.TitleHeadline"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
@@ -147,8 +148,8 @@
                         tools:text="FIGHT CLUB" />
 
                     <TextView
-                        style="@style/Widget.MovieApp.Tagline"
                         android:id="@+id/taglineText"
+                        style="@style/Widget.MovieApp.Tagline"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -161,8 +162,8 @@
                         tools:text="Mischief. Mayhem. Soap." />
 
                     <TextView
-                        style="@style/Base.Widget.MovieApp.Parameters"
                         android:id="@+id/parametersText"
+                        style="@style/Base.Widget.MovieApp.Parameters"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"

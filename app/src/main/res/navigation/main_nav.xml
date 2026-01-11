@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/searchFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="io.github.he11pme.movieapp.fragments.search.SearchFragment"
+        android:id="@+id/homeFragment"
+        android:name="io.github.he11pme.movieapp.fragments.home.HomeFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
     <fragment

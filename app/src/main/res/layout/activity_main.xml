@@ -70,6 +70,13 @@
         android:hint="@string/search_bar_hint"
         app:layout_anchor="@id/searchBar">
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/searchFragmentContainer"
+            android:name="io.github.he11pme.movieapp.fragments.search.SearchFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
     </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

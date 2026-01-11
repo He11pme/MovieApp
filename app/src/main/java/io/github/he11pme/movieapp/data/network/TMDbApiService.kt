@@ -74,6 +74,13 @@ interface TMDbApiService {
         @Query("append_to_response") append: String = "credits,videos,images,similar,recommendations"
     ): MovieDetails
 
+    @GET("search/movie")
+    suspend fun findMovieByTitle(
+        @Query("query") title: String = "",
+        @Query("page") page: Int = 1,
+        @Query("region") region: String = Locale.getDefault().country
+    ): MovieResponse
+
 }
 
 object TMDbApi {

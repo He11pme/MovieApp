@@ -1,93 +1,74 @@
 package io.github.he11pme.movieapp.fragments.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.he11pme.movieapp.model.Movie
-import io.github.he11pme.movieapp.model.SelectionState
-import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.data.repository.AppRepository
+import io.github.he11pme.movieapp.data.repository.SearchRepository
+import io.github.he11pme.movieapp.model.Movie
+import io.github.he11pme.movieapp.model.SelectionType
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: AppRepository
+    private val searchRepository: SearchRepository,
+    private val appRepository: AppRepository
 ) : ViewModel() {
-    private var availableSelection: List<Selection> = emptyList()
 
-    private val _selectionsState = MutableStateFlow<List<Selection>>(emptyList())
-    val selectionsState = _selectionsState.asStateFlow()
+    private val _searchState = MutableStateFlow<List<Movie>>(emptyList())
+    val searchState = _searchState.asStateFlow()
 
-    fun initHomeScreen() {
-        if (!fetchAvailableSelections()) return
+    private val _query = MutableStateFlow("")
+    val query = _query.asStateFlow()
 
-        setAllSelectionsInLoadingState()
-
-        loadMoviesForAllSelections()
-    }
-
-    /**
-     * Loads available movie selections
-     * @return true if successful or false on failure
-     */
-    private fun fetchAvailableSelections(): Boolean {
-        repository.getCollections().apply {
-            onSuccess { availableSelection = it }
-            onFailure { return false }
-        }
-        return true
-    }
-
-    private fun setAllSelectionsInLoadingState() {
-        _selectionsState.value = availableSelection
-            .sortedBy { it.priority }
-            .map {
-                if (it.state != SelectionState.Loading) {
-                    it.copy(state = SelectionState.Loading)
-                } else it
-            }
-    }
-
-    private fun loadMoviesForAllSelections() {
-        availableSelection.forEach { loadMoviesForSelection(it) }
-    }
-
-    private fun loadMoviesForSelection(selection: Selection) {
+    init {
         viewModelScope.launch {
-            val result = repository.getSelectionMovies(selection.type)
-
-            updateSelectionStateById(selection.id) {
-                result.fold(
-                    onSuccess = { movies ->
-                        markSelectionAsLoaded(it, movies)
-                    },
-                    onFailure = { e ->
-                        markSelectionAsError(it, e.message.toString())
-                    }
-                )
-            }
+            query
+                .debounce(300)
+                .distinctUntilChanged()
+                .flatMapLatest { title -> searchMovie(title) }
+                .collect { movies -> _searchState.value = movies }
         }
     }
 
-    private fun updateSelectionStateById(id: String, doUpdate: (Selection) -> Selection) {
-        _selectionsState.update { selections ->
-            selections.map {
-                if (it.id == id) doUpdate(it)
-                else it
+    private fun searchMovie(title: String) = flow {
+        searchRepository.findMovie(title).apply {
+            onSuccess {
+                if (it.isNotEmpty()) {
+                    emit(it)
+                    return@onSuccess
+                }
+                emit(getPopularMovies())
+            }
+            onFailure { e ->
+                emit(emptyList())
             }
         }
+
     }
 
-    private fun markSelectionAsLoaded(selection: Selection, movies: List<Movie>): Selection {
-        return selection.copy(state = SelectionState.Loaded(movies))
+    private suspend fun getPopularMovies(): List<Movie> {
+        return appRepository.getSelectionMovies(SelectionType.Popular).fold(
+            onSuccess = { it },
+            onFailure = { emptyList() }
+        )
     }
 
-    private fun markSelectionAsError(selection: Selection, message: String): Selection {
-        return selection.copy(state = SelectionState.Error(message))
+    fun onQueryChanged(text: String) {
+        Log.d("SEARCH", "query: $text")
+        _query.value = text
     }
+
 
 }

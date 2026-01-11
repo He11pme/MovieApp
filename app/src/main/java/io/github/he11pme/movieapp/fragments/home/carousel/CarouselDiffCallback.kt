@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.search.carousel
+package io.github.he11pme.movieapp.fragments.home.carousel
 
 import androidx.recyclerview.widget.DiffUtil
 import io.github.he11pme.movieapp.model.Identifiable

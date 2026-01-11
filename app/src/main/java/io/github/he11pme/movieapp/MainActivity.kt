@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -14,6 +15,7 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -23,6 +25,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
 import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
+import io.github.he11pme.movieapp.fragments.search.SearchViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
 import kotlinx.coroutines.launch
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.contentContainer) as NavHostFragment).navController
     }
+    private val searchViewModel: SearchViewModel by viewModels()
 
     private var currentMenuRes: Int = 0
     private var currentMenuProvider: MenuProvider? = null
@@ -57,6 +61,10 @@ class MainActivity : AppCompatActivity() {
         setInsets()
         setupViews()
         observeDestinationChanges()
+
+        binding.searchView.editText.doOnTextChanged { s: CharSequence?, _, _, _ ->
+            searchViewModel.onQueryChanged(s.toString())
+        }
 
         setContentView(binding.root)
     }
@@ -168,7 +176,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupToolbar() {
         val appBarConfig = AppBarConfiguration(
             setOf(
-                R.id.searchFragment,
+                R.id.homeFragment,
                 R.id.favoritesFragment,
                 R.id.randomFragment,
                 R.id.settingsFragment
@@ -186,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
             when (destination.id) {
-                R.id.searchFragment -> appBarManager.setSearchBar()
+                R.id.homeFragment -> appBarManager.setSearchBar()
                 R.id.detailInfoFragment -> appBarManager.setPosterBar()
                 R.id.profileFragment -> appBarManager.setProfileBar(destination.label ?: "")
                 else -> appBarManager.setDefaultBar(destination.label ?: "")

@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.search
+package io.github.he11pme.movieapp.fragments.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.SelectionMoviesBinding
-import io.github.he11pme.movieapp.fragments.search.carousel.CarouselAdapter
-import io.github.he11pme.movieapp.fragments.search.decoration.ItemOffsetsDecoration
-import io.github.he11pme.movieapp.fragments.search.decoration.StartLinearSnapHelper
+import io.github.he11pme.movieapp.fragments.home.carousel.CarouselAdapter
+import io.github.he11pme.movieapp.fragments.home.decoration.ItemOffsetsDecoration
+import io.github.he11pme.movieapp.fragments.home.decoration.StartLinearSnapHelper
 import io.github.he11pme.movieapp.model.Identifiable
 import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.model.SelectionState
