@@ -10,9 +10,11 @@ import io.github.he11pme.movieapp.databinding.MovieItemMediumBinding
 import io.github.he11pme.movieapp.model.Identifiable
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.model.PosterSizes
-import java.util.UUID
 
-class MovieCardDelegateAdapter(private val toMovieDetails: (sharedView: View, movieId: Int) -> Unit) :
+class MovieCardDelegateAdapter(
+    private val selectionId: String,
+    private val toMovieDetails: (sharedView: View, movieId: Int) -> Unit
+) :
     AbsListItemAdapterDelegate<Movie, Identifiable, MovieCardDelegateAdapter.ViewHolder>() {
     override fun isForViewType(
         item: Identifiable,
@@ -52,9 +54,7 @@ class MovieCardDelegateAdapter(private val toMovieDetails: (sharedView: View, mo
                 .load(movie.posterUrl(PosterSizes.MEDIUM))
                 .into(binding.posterMovieItem)
 
-            // There may be multiple Views displaying the same movie on the screen.
-            // Therefore, a random transitionName is generated and passed explicitly
-            binding.posterMovieItem.transitionName = UUID.randomUUID().toString()
+            binding.posterMovieItem.transitionName = "$selectionId::${movie.id}"
 
             binding.root.setOnClickListener { toMovieDetails(binding.posterMovieItem,movie.id) }
 

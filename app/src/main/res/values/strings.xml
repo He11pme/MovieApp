@@ -22,4 +22,5 @@
     <string name="functionality_will_be_added_later">The functionality will be added later</string>
     <string name="movie_added_to_favorites">Movie added to favorites</string>
     <string name="movie_removed_from_favorites">Movie removed from favorites</string>
+    <string name="double_tap_for_exit">Double tap for exit</string>
 </resources>

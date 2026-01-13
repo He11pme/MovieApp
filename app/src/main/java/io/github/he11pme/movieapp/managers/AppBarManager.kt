@@ -18,28 +18,51 @@ class AppBarManager @Inject constructor() {
     private val _appBarState = MutableStateFlow(AppBarState())
     val appBarState = _appBarState.asStateFlow()
 
-    private val _menuActions = MutableSharedFlow<MenuAction>()
+    private val _menuAppBarState = MutableStateFlow(MenuAppBarState())
+    val menuAppBarState = _menuAppBarState.asStateFlow()
 
+    private val _menuActions = MutableSharedFlow<MenuAction>()
     val menuActions: Flow<MenuAction> get() = _menuActions
     private var isFixHeightToolbar = false
 
+    var isLockAppBar = false
+    var bufferBarState: MutableList<(() -> Unit)> = mutableListOf()
+
+    fun lockAppBar() {
+        if (isLockAppBar) Log.e(TAG, "AppBar already is lock")
+        else isLockAppBar = true
+    }
+
+    fun unlockAppBar() {
+        if (isLockAppBar) {
+            isLockAppBar = false
+            bufferBarState.forEach { it() }
+            bufferBarState.clear()
+        } else Log.e(TAG, "AppBar already is unlock")
+    }
+
+
     fun setDefaultBar(title: CharSequence) {
-        _appBarState.update {
+        updateAppBarState {
             it.copy(
                 visibilityAppBar = View.VISIBLE,
                 alphaAppBar = 1f,
-                menuAppBar = R.menu.app_bar_menu,
                 visibilitySearchBar = View.GONE,
                 titleToolbar = title.toString(),
                 visibilityBottomAppBar = View.VISIBLE,
                 scrollingViewBehavior = AppBarLayout.ScrollingViewBehavior()
             )
         }
+
+        _menuAppBarState.update { it.copy(
+            menuAppBar = R.menu.app_bar_menu,
+            isFavorite = false
+        )}
     }
 
     fun setSearchBar(title: CharSequence = "") {
         setDefaultBar(title)
-        _appBarState.update {
+        updateAppBarState {
             it.copy(
                 visibilitySearchBar = View.VISIBLE,
             )
@@ -48,25 +71,36 @@ class AppBarManager @Inject constructor() {
 
     fun setPosterBar(title: CharSequence = "") {
         setDefaultBar(title)
-        _appBarState.update {
+        updateAppBarState {
             it.copy(
                 visibilityAppBar = View.GONE,
                 alphaAppBar = 0f,
-                menuAppBar = R.menu.detail_info_menu,
                 visibilitySearchBar = View.GONE,
                 visibilityBottomAppBar = View.GONE,
                 scrollingViewBehavior = null
             )
         }
+        _menuAppBarState.update { it.copy(
+            menuAppBar = R.menu.detail_info_menu
+        )}
     }
 
     fun setProfileBar(title: CharSequence = "") {
         setDefaultBar(title)
-        _appBarState.update {
+        updateAppBarState {
             it.copy(
                 visibilityBottomAppBar = View.GONE
             )
         }
+    }
+
+    private fun updateAppBarState(doUpdate: (AppBarState) -> AppBarState) {
+        setNewStateBar { _appBarState.update(doUpdate) }
+    }
+
+    private fun setNewStateBar(doSet: () -> Unit) {
+        if (isLockAppBar) bufferBarState.add(doSet)
+        else doSet()
     }
 
     suspend fun dispatchMenuAction(action: MenuAction) {
@@ -102,13 +136,12 @@ class AppBarManager @Inject constructor() {
     }
 
     fun updateFavoriteState(isFavorite: Boolean) {
-        _appBarState.update { it.copy(isFavorite = isFavorite) }
+        _menuAppBarState.update { it.copy(isFavorite = isFavorite) }
     }
 
     data class AppBarState(
         val visibilityAppBar: Int = View.VISIBLE,
         val alphaAppBar: Float = 1f,
-        val menuAppBar: Int = R.menu.app_bar_menu,
 
         val titleToolbar: String = "",
         val heightToolbar: Int? = null,
@@ -119,6 +152,11 @@ class AppBarManager @Inject constructor() {
 
         // Behavior for the content placed under the AppBar
         val scrollingViewBehavior: AppBarLayout.ScrollingViewBehavior? = AppBarLayout.ScrollingViewBehavior(),
+
+    )
+
+    data class MenuAppBarState(
+        val menuAppBar: Int = R.menu.app_bar_menu,
 
         // Flag indicating which favorite icon should be shown in the menu
         val isFavorite: Boolean = false

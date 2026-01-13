@@ -38,7 +38,8 @@ class DetailInfoViewModel @Inject constructor(
     }
 
     private fun handleSuccessLoadMovie(details: MovieDetails) {
-        movie = details
+        movie = details.also { appBarManager.updateFavoriteState(it.isFavorite) }
+
         _state.value = State.Loaded(details)
     }
 

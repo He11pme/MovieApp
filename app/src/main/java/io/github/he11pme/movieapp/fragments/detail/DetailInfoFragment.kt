@@ -8,11 +8,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -34,13 +37,16 @@ class DetailInfoFragment : Fragment() {
     private lateinit var binding: FragmentDetailInfoBinding
     private var movieId = -1
     private var transitionName = ""
+    private var source = Source.CONTENT
     private val foregroundItems = mutableListOf<View>()
     private val viewModel: DetailInfoViewModel by viewModels()
+    val args: DetailInfoFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         getArgs()
+        handleBack()
 
         viewModel.loadDetails(movieId)
 
@@ -50,14 +56,30 @@ class DetailInfoFragment : Fragment() {
             scrimColor = Color.TRANSPARENT
         }
 
+        sharedElementReturnTransition = MaterialContainerTransform().apply {
+            drawingViewId =
+                if (source == Source.CONTENT) R.id.contentContainer else R.id.searchFragmentContainer
+            duration = 250
+            scrimColor = Color.TRANSPARENT
+        }
+
     }
 
     private fun getArgs() {
-        arguments?.let {
-            movieId = it.getInt("movieId", -1)
-            transitionName = it.getString("transitionName", "")
-        } ?: run {
-            throw RuntimeException("Required arguments not found")
+
+        movieId = args.movieId
+        if (movieId == -1) throw RuntimeException("Movie id is required")
+
+        transitionName = args.transitionName
+        if (transitionName.isEmpty()) throw RuntimeException("Transition name is required")
+
+        source = args.source
+
+    }
+
+    private fun handleBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            navigateBack()
         }
     }
 
@@ -68,7 +90,7 @@ class DetailInfoFragment : Fragment() {
         binding = FragmentDetailInfoBinding.inflate(layoutInflater, container, false)
         binding.viewModel = viewModel
 
-        bindToAppBarManager()
+        if (source != Source.SEARCH) bindToAppBarManager()
         setTransitionNames()
         fillListOfForegroundItems()
         setupViews()
@@ -76,6 +98,17 @@ class DetailInfoFragment : Fragment() {
         bindToViewModel()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Lock is necessary to prevent the app bar from changing when the fragment is closed
+        if (source != Source.SEARCH) viewModel.appBarManager.lockAppBar()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (source != Source.SEARCH) viewModel.appBarManager.unlockAppBar()
     }
 
     private fun bindToAppBarManager() {
@@ -206,7 +239,7 @@ class DetailInfoFragment : Fragment() {
         ).show()
     }
 
-    private fun navigateBack() = requireActivity().onBackPressedDispatcher.onBackPressed()
+    private fun navigateBack() = findNavController().navigateUp()
 
     private fun fillListOfForegroundItems() {
         foregroundItems.addAll(
@@ -218,15 +251,26 @@ class DetailInfoFragment : Fragment() {
                 binding.downloadBtn,
                 binding.favoriteBtn,
                 binding.shareBtn,
-                binding.backBtn,
                 binding.bottomBackground
             )
         )
+        if (source != Source.SEARCH) foregroundItems.add(binding.backBtn)
     }
 
     private fun setupViews() {
+        binding.backBtn.visibility =
+            if (source == Source.SEARCH) View.INVISIBLE else View.VISIBLE
+
+        binding.headerBackground.visibility =
+            if (source == Source.SEARCH) View.GONE else View.VISIBLE
+
+        binding.toolbarDetail.visibility =
+            if (source == Source.SEARCH) View.GONE else View.INVISIBLE
+
         foregroundItems.forEach { prepareViewForAnimation(it) }
-        binding.backBtn.setOnClickListener { navigateBack() }
+
+        if (source != Source.SEARCH) binding.backBtn.setOnClickListener { navigateBack() }
+
         handleAppBarScroll()
     }
 
@@ -294,7 +338,7 @@ class DetailInfoFragment : Fragment() {
             val totalScroll = appBarLayout.totalScrollRange
             val collapseRatio = abs(verticalOffset) / totalScroll.toFloat()
 
-            viewModel.onAppBarScrolled(collapseRatio)
+            if (source != Source.SEARCH) viewModel.onAppBarScrolled(collapseRatio)
             applyScrollToForeground(collapseRatio)
         }
     }
@@ -315,6 +359,11 @@ class DetailInfoFragment : Fragment() {
     companion object {
         val ID_DRAWABLE_FAVORITE = R.drawable.ic_favorite
         val ID_DRAWABLE_UNFAVORITE = R.drawable.ic_favorite_outline
+
+        enum class Source {
+            SEARCH,
+            CONTENT
+        }
     }
 
 }

@@ -5,11 +5,30 @@
     android:id="@+id/main_nav"
     app:startDestination="@id/homeFragment">
 
+    <action
+        android:id="@+id/navigateFromGlobalToDetailInfoFragment"
+        app:destination="@id/detail_nav">
+
+        <argument
+            android:name="movieId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <argument
+            android:name="transitionName"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="source"
+            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source"
+            android:defaultValue="CONTENT" />
+
+    </action>
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="io.github.he11pme.movieapp.fragments.home.HomeFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="io.github.he11pme.movieapp.fragments.favorites.FavoritesFragment"
@@ -30,10 +49,7 @@
         android:name="io.github.he11pme.movieapp.fragments.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
-    <fragment
-        android:id="@+id/detailInfoFragment"
-        android:name="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment"
-        android:label=""
-        tools:layout="@layout/fragment_detail_info" />
+
+    <include app:graph="@navigation/detail_nav"/>
 
 </navigation>

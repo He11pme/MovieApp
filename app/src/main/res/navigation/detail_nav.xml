@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_nav"
+    app:startDestination="@id/detailInfoFragment">
+
+    <fragment
+        android:id="@+id/detailInfoFragment"
+        android:name="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment"
+        android:label=""
+        tools:layout="@layout/fragment_detail_info">
+
+        <argument
+            android:name="movieId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <argument
+            android:name="transitionName"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="source"
+            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source"
+            android:defaultValue="CONTENT" />
+
+    </fragment>
+</navigation>

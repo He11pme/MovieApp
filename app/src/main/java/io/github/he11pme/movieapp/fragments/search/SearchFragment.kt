@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
+import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.utils.SearchItemOffsetsDecoration
+import io.github.he11pme.movieapp.utils.extensions.hideKeyboard
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
@@ -28,6 +34,8 @@ class SearchFragment : Fragment() {
 
         setupViews()
         bindToViewModel()
+        postponeEnterTransition()
+        binding.searchRv.doOnPreDraw { startPostponedEnterTransition() }
 
         return binding.root
     }
@@ -57,9 +65,39 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupSearchRv() {
-        binding.searchRv.adapter = searchAdapter
-        binding.searchRv.addItemDecoration(SearchItemOffsetsDecoration())
+        binding.searchRv.apply {
+            adapter = searchAdapter
+
+            addItemDecoration(SearchItemOffsetsDecoration())
+
+            addOnScrollListener(hideKeyboardWhenRvScrolled())
+        }
     }
 
-    private fun toMovieDetails(sharedPoster: View, movieId: Int) {}
+    private fun hideKeyboardWhenRvScrolled(): RecyclerView.OnScrollListener {
+        return object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideKeyboard()
+                }
+            }
+        }
+    }
+
+
+    private fun toMovieDetails(sharedPoster: View, movieId: Int) {
+        val extras = FragmentNavigator.Extras.Builder()
+            .addSharedElement(sharedPoster, sharedPoster.transitionName)
+            .build()
+
+        val action = SearchFragmentDirections.navigateFromSearchFragmentToNavigation(
+            movieId = movieId,
+            transitionName = sharedPoster.transitionName,
+            source = DetailInfoFragment.Companion.Source.SEARCH
+        )
+
+        hideKeyboard()
+        findNavController().navigate(action, extras)
+    }
 }

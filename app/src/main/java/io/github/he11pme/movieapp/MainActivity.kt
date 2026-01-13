@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.MenuRes
@@ -22,6 +23,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
 import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
@@ -40,6 +42,10 @@ class MainActivity : AppCompatActivity() {
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.contentContainer) as NavHostFragment).navController
     }
+
+    private val navControllerSearch by lazy {
+        (supportFragmentManager.findFragmentById(R.id.searchFragmentContainer) as NavHostFragment).navController
+    }
     private val searchViewModel: SearchViewModel by viewModels()
 
     private var currentMenuRes: Int = 0
@@ -47,12 +53,16 @@ class MainActivity : AppCompatActivity() {
     private var favoriteItemMenu: MenuItem? = null
     private var currentFlagFavorite = false
 
+    private var backPressed = 0L
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        handleBack()
 
         setSupportActionBar(binding.toolbar)
         bindToAppBarManager()
@@ -62,32 +72,98 @@ class MainActivity : AppCompatActivity() {
         setupViews()
         observeDestinationChanges()
 
-        binding.searchView.editText.doOnTextChanged { s: CharSequence?, _, _, _ ->
-            searchViewModel.onQueryChanged(s.toString())
-        }
-
         setContentView(binding.root)
+    }
+
+    private fun handleBack() {
+        onBackPressedDispatcher.addCallback(this) {
+            if (hideSearchView()) return@addCallback
+
+            doubleClickForExit()
+        }
+    }
+
+    private fun doubleClickForExit() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            if (backPressed + TIME_INTERVAL > System.currentTimeMillis()) finish()
+            else Snackbar.make(
+                binding.contentContainer,
+                getString(R.string.double_tap_for_exit),
+                Snackbar.LENGTH_SHORT
+            ).show()
+
+            backPressed = System.currentTimeMillis()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun hideSearchView(): Boolean {
+        if (binding.searchView.isShowing) {
+            binding.searchView.hide()
+            return true
+        }
+        return false
     }
 
     private fun bindToAppBarManager() {
         bindAppBarState()
+        bindMenuState()
         bindMenuActions()
     }
 
     private fun bindAppBarState() {
+        collectState { appBarManager.appBarState.collect(::handleAppBarState) }
+    }
+
+    private fun collectState(doCollect: suspend () -> Unit) {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                appBarManager.appBarState.collect(::handleAppBarState)
+                doCollect()
             }
         }
     }
 
-    private fun bindMenuActions() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                appBarManager.menuActions.collect(::handleMenuActions)
-            }
+    private fun handleAppBarState(appBarState: AppBarManager.AppBarState) {
+        binding.appBar.apply {
+            visibility = appBarState.visibilityAppBar
+            alpha = appBarState.alphaAppBar
         }
+
+        binding.toolbar.apply {
+            appBarState.heightToolbar?.let { layoutParams.height = it }
+            title = appBarState.titleToolbar
+        }
+
+        binding.searchBar.apply {
+            visibility = appBarState.visibilitySearchBar
+        }
+
+        binding.bottomAppBar.apply {
+            visibility = appBarState.visibilityBottomAppBar
+        }
+
+        (binding.contentContainer.layoutParams as CoordinatorLayout.LayoutParams).behavior =
+            appBarState.scrollingViewBehavior
+    }
+
+    private fun bindMenuState() {
+
+        collectState { appBarManager.menuAppBarState.collect(::handleMenuState) }
+
+    }
+
+    private fun handleMenuState(menuState: AppBarManager.MenuAppBarState) {
+        if (menuState.menuAppBar != currentMenuRes) {
+            currentMenuRes = menuState.menuAppBar
+            setupMenu(menuState.menuAppBar)
+        }
+
+        favoriteItemMenu?.let { toggleFavoriteIcon(menuState.isFavorite, it) }
+    }
+
+    private fun bindMenuActions() {
+        collectState { appBarManager.menuActions.collect(::handleMenuActions) }
     }
 
     private fun handleMenuActions(action: AppBarManager.MenuAction) {
@@ -100,42 +176,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleAppBarState(appBarState: AppBarManager.AppBarState) {
-        binding.appBar.apply {
-            visibility = appBarState.visibilityAppBar
-            alpha = appBarState.alphaAppBar
-        }
-
-        if (appBarState.menuAppBar != currentMenuRes) {
-            currentMenuRes = appBarState.menuAppBar
-            setupMenu(appBarState.menuAppBar)
-        }
-
-        favoriteItemMenu?.let { toggleFavoriteMenu(appBarState.isFavorite, it) }
-
-        binding.toolbar.apply {
-            appBarState.heightToolbar?.let { layoutParams.height = it }
-            title = appBarState.titleToolbar
-        }
-        binding.searchBar.apply {
-            visibility = appBarState.visibilitySearchBar
-        }
-        binding.bottomAppBar.apply {
-            visibility = appBarState.visibilityBottomAppBar
-        }
-        (binding.contentContainer.layoutParams as CoordinatorLayout.LayoutParams).behavior =
-            appBarState.scrollingViewBehavior
-    }
-
-    private fun toggleFavoriteMenu(isFavorite: Boolean, item: MenuItem) {
-        if (isFavorite == currentFlagFavorite) return
-
+    private fun toggleFavoriteIcon(isFavorite: Boolean, item: MenuItem) {
         item.setIcon(
             if (isFavorite) DetailInfoFragment.ID_DRAWABLE_FAVORITE
             else DetailInfoFragment.ID_DRAWABLE_UNFAVORITE
         )
-
-        currentFlagFavorite = !currentFlagFavorite
     }
 
     // Fixed height of toolbar when a SearchBar is present,
@@ -171,6 +216,22 @@ class MainActivity : AppCompatActivity() {
     private fun setupViews() {
         setupToolbar()
         setupBottomNavigation()
+        setupSearchView()
+    }
+
+    private fun setupSearchView() {
+        fun tryHideDetailInfoFragment() {
+            if (navControllerSearch.currentDestination?.id == R.id.detailInfoFragment) {
+                navControllerSearch.popBackStack(R.id.searchFragment, false)
+            }
+        }
+
+        binding.searchView.editText.setOnClickListener { tryHideDetailInfoFragment() }
+
+        binding.searchView.editText.doOnTextChanged { s: CharSequence?, _, _, _ ->
+            searchViewModel.onQueryChanged(s.toString())
+            tryHideDetailInfoFragment()
+        }
     }
 
     private fun setupToolbar() {
@@ -246,6 +307,10 @@ class MainActivity : AppCompatActivity() {
 
         currentMenuProvider = menuProvider
         addMenuProvider(menuProvider, this, Lifecycle.State.RESUMED)
+    }
+
+    companion object {
+        const val TIME_INTERVAL = 2000
     }
 
 }

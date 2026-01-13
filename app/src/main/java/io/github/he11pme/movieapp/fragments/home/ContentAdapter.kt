@@ -42,8 +42,11 @@ class ContentAdapter(
 
     inner class ViewHolder(private val binding: SelectionMoviesBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val adapter = CarouselAdapter(toMovieDetails, toSelections)
+        lateinit var adapter: CarouselAdapter
         fun bind(selection: Selection) {
+            if (!::adapter.isInitialized) adapter =
+                CarouselAdapter(selection.id, toMovieDetails, toSelections)
+
             try {
                 binding.titleSelection.text = selection.getLocaleTitle()
             } catch (e: Exception) {
@@ -61,7 +64,11 @@ class ContentAdapter(
                 )
         }
 
-        private fun setupSelection(rv: RecyclerView, selectionId: String, movies: List<Identifiable>) {
+        private fun setupSelection(
+            rv: RecyclerView,
+            selectionId: String,
+            movies: List<Identifiable>
+        ) {
 
             if (rv.adapter == null) rv.adapter = adapter
 

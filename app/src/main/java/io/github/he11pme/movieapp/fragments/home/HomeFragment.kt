@@ -4,17 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.FragmentHomeBinding
 import io.github.he11pme.movieapp.model.Selection
+import io.github.he11pme.movieapp.model.SelectionState
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -26,7 +27,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewModel.initHomeScreen()
     }
 
@@ -34,10 +34,11 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        postponeEnterTransition()
+
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         setupViews()
         bindToViewModel()
-
         return binding.root
     }
 
@@ -67,19 +68,27 @@ class HomeFragment : Fragment() {
 
     private fun handleSelectionState(selections: List<Selection>) {
         adapter.submitList(selections)
+
+        if (isAllItemLoaded(selections)) {
+            binding.rvContent.doOnPreDraw { startPostponedEnterTransition() }
+        }
+
     }
+
+    private fun isAllItemLoaded(selections: List<Selection>): Boolean =
+        selections.all { selection -> selection.state is SelectionState.Loaded }
 
     private fun toMovieDetails(sharedPoster: View, movieId: Int) {
         val extras = FragmentNavigator.Extras.Builder()
             .addSharedElement(sharedPoster, sharedPoster.transitionName)
             .build()
 
-        val bundle = Bundle().apply {
-            putString("transitionName", sharedPoster.transitionName)
-            putInt("movieId", movieId)
-        }
+        val action = HomeFragmentDirections.navigateFromGlobalToDetailInfoFragment(
+            movieId = movieId,
+            transitionName = sharedPoster.transitionName
+        )
 
-        binding.root.findNavController().navigate(R.id.detailInfoFragment, bundle, null, extras)
+        findNavController().navigate(action, extras)
 
     }
 
