@@ -286,7 +286,7 @@ class DetailInfoFragment : Fragment() {
             val year = movie.releaseDate.take(4)
             val genres = movie.genres.take(3).joinToString(separator) { genre -> genre.name }
             val country = movie.countries.first().name
-            val runtime = "${movie.runtime} min"
+            val runtime = getString(R.string.runtime, movie.runtime)
 
             return "$year$separator$genres\n$country$separator$runtime"
         }

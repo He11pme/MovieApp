@@ -23,4 +23,5 @@
     <string name="movie_added_to_favorites">Фильм добавлен в избранное</string>
     <string name="movie_removed_from_favorites">Фильм удален из избранного</string>
     <string name="double_tap_for_exit">Нажмите еще раз, чтобы выйти</string>
+    <string name="runtime">%1$d мин</string>
 </resources>

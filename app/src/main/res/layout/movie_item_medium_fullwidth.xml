@@ -13,6 +13,8 @@
         style="@style/Widget.MovieApp.Poster"
         android:layout_width="80dp"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:contentDescription="@string/poster"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/tools_poster" />
@@ -23,11 +25,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/poster"
-        app:layout_constraintTop_toTopOf="@+id/poster"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Fight club" />
 
     <TextView
@@ -36,6 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_title_fav"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_fav"
@@ -44,15 +49,14 @@
     <TextView
         android:id="@+id/tv_small_description"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:justificationMode="inter_word"
         android:maxLines="3"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        app:layout_constraintBottom_toTopOf="@+id/tv_rating"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_tags"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_fav"
         app:layout_constraintTop_toBottomOf="@+id/tv_tags"
         tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion." />
 
@@ -61,8 +65,9 @@
         style="@style/Widget.MovieApp.AccentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/poster"
-        app:layout_constraintStart_toStartOf="@+id/tv_small_description"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_fav"
+        app:layout_constraintTop_toBottomOf="@+id/tv_small_description"
         tools:text="TMDb: 7.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

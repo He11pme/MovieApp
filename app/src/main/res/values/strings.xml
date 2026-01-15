@@ -23,4 +23,6 @@
     <string name="movie_added_to_favorites">Movie added to favorites</string>
     <string name="movie_removed_from_favorites">Movie removed from favorites</string>
     <string name="double_tap_for_exit">Double tap for exit</string>
+    <string name="runtime">%1$d min</string>
+    <string name="tmdb_vote" translatable="false">TMDb: %1$.1f</string>
 </resources>
