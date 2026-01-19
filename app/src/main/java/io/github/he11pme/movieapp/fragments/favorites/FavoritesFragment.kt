@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.FragmentFavoritesBinding
 import io.github.he11pme.movieapp.fragments.home.HomeFragmentDirections
@@ -29,7 +30,7 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.getFavoritesMovie()
+        viewModel.loadFavoriteMovies()
         postponeEnterTransition()
         binding = FragmentFavoritesBinding.inflate(layoutInflater, container, false)
 
@@ -44,10 +45,17 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setupFavoritesRv() {
+        val touchHelper = ItemTouchHelper(
+            FavoritesTouchHelperCallback { position ->
+                viewModel.movieSwiped(adapter.currentList[position])
+            }
+        )
+
         binding.favoritesRv.apply {
             adapter = this@FavoritesFragment.adapter
             addItemDecoration(SearchItemOffsetsDecoration())
             doOnPreDraw { startPostponedEnterTransition() }
+            touchHelper.attachToRecyclerView(this)
         }
     }
 

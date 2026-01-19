@@ -48,6 +48,10 @@ class AppRepository @Inject constructor(
         return favoriteMoviesDao.getAllFavorites().map { getMovieById(it.id) }
     }
 
+    suspend fun removeFavoriteById(movieId: Int) {
+        favoriteMoviesDao.removeFavorite(FavoriteMovieEntity(movieId))
+    }
+
     suspend fun getGenres(): Result<List<Genre>> {
         return safeApiCall { genres ?: api.getGenres().genres.also { genres = it } }
     }

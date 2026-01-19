@@ -23,33 +23,55 @@ class FavoritesViewModel @Inject constructor(
     private val _action = MutableSharedFlow<Action>()
     val action: Flow<Action> get() = _action
 
-    fun getFavoritesMovie() {
+    fun loadFavoriteMovies() {
         viewModelScope.launch {
-            val loadedMovies: MutableList<MovieDetails> = mutableListOf()
-
             _state.emit(State.Loading)
+            getFavoriteMovies()
+        }
+    }
 
-            appRepository.getAllFavorites().let { allResults ->
-                if (allResults.isEmpty()) {
-                    _state.emit(State.Empty)
-                    return@launch
-                }
+    private suspend fun getFavoriteMovies() {
+        val loadedMovies: MutableList<MovieDetails> = mutableListOf()
 
-                allResults.forEach { result ->
-                    result.apply {
-                        onSuccess { loadedMovies.add(it) }
-                        onFailure { _action.emit(Action.ErrorLoad(it)) }
-                    }
-                }
-
-                if (loadedMovies.isEmpty()) {
-                    _state.emit(State.Error("No movies hase been loaded"))
-                    return@launch
-                }
-
-                _state.emit(State.Loaded(loadedMovies))
-
+        appRepository.getAllFavorites().let { allResults ->
+            if (allResults.isEmpty()) {
+                _state.emit(State.Empty)
+                return
             }
+
+            allResults.forEach { result ->
+                result.apply {
+                    onSuccess { loadedMovies.add(it) }
+                    onFailure { _action.emit(Action.ErrorLoad(it)) }
+                }
+            }
+
+            if (loadedMovies.isEmpty()) {
+                _state.emit(State.Error("No movies hase been loaded"))
+                return
+            }
+
+            _state.emit(State.Loaded(loadedMovies))
+
+        }
+    }
+
+    fun movieSwiped(movie: MovieDetails) = removeFavoriteMovieById(movie.id)
+
+    private fun removeFavoriteMovieById(movieId: Int) {
+        viewModelScope.launch {
+            appRepository.removeFavoriteById(movieId)
+
+            (_state.value as? State.Loaded)?.let {
+                val updatedList = it.moviesDetails.filterNot { movie ->
+                    movie.id == movieId
+                }
+                _state.emit(
+                    if (updatedList.isEmpty()) State.Empty
+                    else State.Loaded(updatedList)
+                )
+            }
+
         }
     }
 
