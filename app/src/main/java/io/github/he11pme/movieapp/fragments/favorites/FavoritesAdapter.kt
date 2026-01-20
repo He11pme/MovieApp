@@ -40,18 +40,18 @@ class FavoritesAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieDetails) {
 
-            Glide.with(binding.poster)
+            Glide.with(binding.posterMovieItem)
                 .load(movie.posterUrl(PosterSizes.SMALL))
-                .into(binding.poster)
+                .into(binding.posterMovieItem)
 
-            binding.poster.transitionName = "poster_${movie.id}"
+            binding.posterMovieItem.transitionName = "poster_${movie.id}"
 
-            binding.tvTitleFav.text = movie.title
-            binding.tvRating.text = binding.root.context.getString(R.string.tmdb_vote, movie.vote)
-            binding.tvSmallDescription.text = movie.overview
-            binding.tvTags.text = compoundParameters(movie)
+            binding.titleMovieItem.text = movie.title
+            binding.voteMovieItem.text = binding.root.context.getString(R.string.tmdb_vote, movie.vote)
+            binding.overviewMovieItem.text = movie.overview
+            binding.parametersMovieItem.text = compoundParameters(movie)
 
-            binding.root.setOnClickListener { toMovieDetails(binding.poster, movie.id) }
+            binding.root.setOnClickListener { toMovieDetails(binding.posterMovieItem, movie.id) }
 
         }
 

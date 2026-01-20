@@ -57,8 +57,14 @@
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.TitleCardMedium</item>
     </style>
 
+    <style name="Widget.MovieApp.TitleCard.Fullwidth" parent="Base.Widget.MovieApp.TitleCard">
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.Title.Large.Fullwidth</item>
+    </style>
+
     <style name="Base.Widget.MovieApp.TitleSelection" parent="">
         <item name="android:textAppearance">@style/TextAppearance.MovieApp.TitleSelection</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Widget.MovieApp.TitleSelection" parent="Base.Widget.MovieApp.TitleSelection" />
@@ -114,6 +120,19 @@
     </style>
 
     <style name="Widget.MovieApp.Parameters" parent="Base.Widget.MovieApp.Parameters" />
+    <style name="Widget.MovieApp.Parameters.Fullwidth" >
+        <item name="android:gravity">start</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="Widget.MovieApp.Overview" parent="">
+
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:justificationMode">inter_word</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.BodySmall</item>
+
+    </style>
 
 
 </resources>

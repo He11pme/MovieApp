@@ -9,7 +9,7 @@
     android:paddingEnd="10dp">
 
     <ImageView
-        android:id="@+id/poster"
+        android:id="@+id/posterMovieItem"
         style="@style/Widget.MovieApp.Poster"
         android:layout_width="80dp"
         android:layout_height="0dp"
@@ -20,54 +20,45 @@
         tools:srcCompat="@drawable/tools_poster" />
 
     <TextView
-        android:id="@+id/tv_title_fav"
-        style="@style/Widget.MovieApp.TitleCard"
+        android:id="@+id/titleMovieItem"
+        style="@style/Widget.MovieApp.TitleCard.Fullwidth"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/poster"
+        app:layout_constraintStart_toEndOf="@+id/posterMovieItem"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Fight club" />
 
     <TextView
-        android:id="@+id/tv_tags"
-        style="@style/Widget.MovieApp.Parameters"
+        android:id="@+id/parametersMovieItem"
+        style="@style/Widget.MovieApp.Parameters.Fullwidth"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_title_fav"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title_fav"
+        app:layout_constraintStart_toStartOf="@+id/titleMovieItem"
+        app:layout_constraintTop_toBottomOf="@+id/titleMovieItem"
         tools:text="Drama • Thriller • Comedy • 139 min" />
 
     <TextView
-        android:id="@+id/tv_small_description"
+        android:id="@+id/overviewMovieItem"
+        style="@style/Widget.MovieApp.Overview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:ellipsize="end"
-        android:justificationMode="inter_word"
-        android:maxLines="3"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_title_fav"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tags"
+        app:layout_constraintStart_toStartOf="@+id/titleMovieItem"
+        app:layout_constraintTop_toBottomOf="@+id/parametersMovieItem"
         tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion." />
 
     <TextView
-        android:id="@+id/tv_rating"
+        android:id="@+id/voteMovieItem"
         style="@style/Widget.MovieApp.AccentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_title_fav"
-        app:layout_constraintTop_toBottomOf="@+id/tv_small_description"
+        app:layout_constraintStart_toStartOf="@+id/titleMovieItem"
+        app:layout_constraintTop_toBottomOf="@+id/overviewMovieItem"
         tools:text="TMDb: 7.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
