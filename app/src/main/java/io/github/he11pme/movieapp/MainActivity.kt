@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
 import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
+import io.github.he11pme.movieapp.fragments.home.HomeViewModel
 import io.github.he11pme.movieapp.fragments.search.SearchViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
@@ -47,16 +49,23 @@ class MainActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.searchFragmentContainer) as NavHostFragment).navController
     }
     private val searchViewModel: SearchViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private var currentMenuRes: Int = 0
     private var currentMenuProvider: MenuProvider? = null
     private var favoriteItemMenu: MenuItem? = null
-    private var currentFlagFavorite = false
 
     private var backPressed = 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val splashScreen = installSplashScreen()
+
+        splashScreen.setKeepOnScreenCondition {
+            !homeViewModel.isReady
+        }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 

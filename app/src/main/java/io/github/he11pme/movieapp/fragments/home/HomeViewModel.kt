@@ -19,6 +19,8 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private var availableSelection: List<Selection> = emptyList()
 
+    var isReady: Boolean = false
+
     private val _selectionsState = MutableStateFlow<List<Selection>>(emptyList())
     val selectionsState = _selectionsState.asStateFlow()
 
