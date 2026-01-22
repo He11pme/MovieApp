@@ -58,7 +58,8 @@
     </style>
 
     <style name="Widget.MovieApp.TitleCard.Fullwidth" parent="Base.Widget.MovieApp.TitleCard">
-        <item name="android:textAppearance">@style/TextAppearance.MovieApp.Title.Large.Fullwidth</item>
+        <item name="android:textAppearance">@style/TextAppearance.MovieApp.Title.Large.Fullwidth
+        </item>
     </style>
 
     <style name="Base.Widget.MovieApp.TitleSelection" parent="">
@@ -120,7 +121,8 @@
     </style>
 
     <style name="Widget.MovieApp.Parameters" parent="Base.Widget.MovieApp.Parameters" />
-    <style name="Widget.MovieApp.Parameters.Fullwidth" >
+
+    <style name="Widget.MovieApp.Parameters.Fullwidth">
         <item name="android:gravity">start</item>
         <item name="android:lines">1</item>
     </style>
@@ -131,6 +133,20 @@
         <item name="android:maxLines">3</item>
         <item name="android:justificationMode">inter_word</item>
         <item name="android:textAppearance">@style/TextAppearance.Material3.BodySmall</item>
+
+    </style>
+
+    <style name="Widget.MovieApp.SplashLottieAnimation" parent="">
+
+        <item name="android:layout_width">192dp</item>
+        <item name="android:layout_height">192dp</item>
+        <item name="android:layout_gravity">center</item>
+        <!--    Scale values are adjusted to match the SplashScreen icon size   -->
+        <item name="android:scaleX">1.5</item>
+        <item name="android:scaleY">1.5</item>
+        <!--    Animation size does not fully match the SplashScreen icon,
+                so the element is shifted by 8dp for visual alignment   -->
+        <item name="android:translationY">-8dp</item>
 
     </style>
 

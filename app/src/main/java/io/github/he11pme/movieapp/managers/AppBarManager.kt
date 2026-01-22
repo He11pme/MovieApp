@@ -23,7 +23,6 @@ class AppBarManager @Inject constructor() {
 
     private val _menuActions = MutableSharedFlow<MenuAction>()
     val menuActions: Flow<MenuAction> get() = _menuActions
-    private var isFixHeightToolbar = false
 
     var isLockAppBar = false
     var bufferBarState: MutableList<(() -> Unit)> = mutableListOf()
@@ -107,11 +106,9 @@ class AppBarManager @Inject constructor() {
         _menuActions.emit(action)
     }
 
-    fun fixHeightToolbar(height: Int) {
-        if (isFixHeightToolbar) Log.e(TAG, "Height of the toolbar is already fixed")
-        else {
+    fun updateHeightToolbar(height: Int) {
+        if (_appBarState.value.heightToolbar != height) {
             _appBarState.update { it.copy(heightToolbar = height) }
-            isFixHeightToolbar = true
         }
     }
 

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by viewModels()
     private val adapter = ContentAdapter(::toMovieDetails, ::toSelection)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +72,6 @@ class HomeFragment : Fragment() {
         if (isAllItemLoaded(selections)) {
             binding.rvContent.doOnPreDraw {
                 startPostponedEnterTransition()
-                viewModel.isReady = true
             }
         }
 

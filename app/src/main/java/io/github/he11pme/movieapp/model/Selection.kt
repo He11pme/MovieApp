@@ -5,12 +5,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.Locale
-import java.util.UUID
 
 @Serializable
 data class Selection(
-    @Transient
-    val id: String = UUID.randomUUID().toString(),
+    val id: String,
     val priority: Int = Int.MAX_VALUE,
     private val titles: Map<String, String>,
     val type: SelectionType,

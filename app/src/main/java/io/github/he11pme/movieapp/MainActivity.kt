@@ -28,7 +28,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
 import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
-import io.github.he11pme.movieapp.fragments.home.HomeViewModel
 import io.github.he11pme.movieapp.fragments.search.SearchViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
@@ -49,8 +48,6 @@ class MainActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.searchFragmentContainer) as NavHostFragment).navController
     }
     private val searchViewModel: SearchViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by viewModels()
-
     private var currentMenuRes: Int = 0
     private var currentMenuProvider: MenuProvider? = null
     private var favoriteItemMenu: MenuItem? = null
@@ -60,10 +57,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val splashScreen = installSplashScreen()
-
-        splashScreen.setKeepOnScreenCondition {
-            !homeViewModel.isReady
+        installSplashScreen().apply {
+            // Disables the default exit animation between the system SplashScreen
+            // and the app's custom SplashScreen
+            setOnExitAnimationListener { splashScreenViewProvider ->
+                splashScreenViewProvider.remove()
+            }
         }
 
         super.onCreate(savedInstanceState)
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         bindToAppBarManager()
-        fixHeightToolbar()
+
         configureSystemBars()
         setInsets()
         setupViews()
@@ -140,7 +139,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.toolbar.apply {
-            appBarState.heightToolbar?.let { layoutParams.height = it }
             title = appBarState.titleToolbar
         }
 
@@ -192,11 +190,8 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    // Fixed height of toolbar when a SearchBar is present,
-    // to prevent size changes and visual "jank"
-    // during navigation between fragments
-    private fun fixHeightToolbar() {
-        binding.toolbar.post { appBarManager.fixHeightToolbar(binding.toolbar.height) }
+    private fun updateHeightToolbar() {
+        binding.appBar.post { appBarManager.updateHeightToolbar(binding.appBar.height) }
     }
 
     private fun configureSystemBars() {
@@ -216,9 +211,10 @@ class MainActivity : AppCompatActivity() {
             v.updatePadding(bottom = 0)
         }
 
-        binding.toolbar.doOnApplyWindowInsets { v, insets ->
+        binding.appBar.doOnApplyWindowInsets { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updatePadding(top = systemBars.top)
+            updateHeightToolbar()
         }
     }
 
@@ -262,10 +258,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeDestinationChanges() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-
             when (destination.id) {
                 R.id.homeFragment -> appBarManager.setSearchBar()
-                R.id.detailInfoFragment -> appBarManager.setPosterBar()
+                R.id.detailInfoFragment, R.id.splashScreenFragment -> appBarManager.setPosterBar()
                 R.id.profileFragment -> appBarManager.setProfileBar(destination.label ?: "")
                 else -> appBarManager.setDefaultBar(destination.label ?: "")
             }

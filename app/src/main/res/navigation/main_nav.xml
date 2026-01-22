@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <action
         android:id="@+id/navigateFromGlobalToDetailInfoFragment"
@@ -19,8 +19,8 @@
             app:argType="string" />
         <argument
             android:name="source"
-            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source"
-            android:defaultValue="CONTENT" />
+            android:defaultValue="CONTENT"
+            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source" />
 
     </action>
 
@@ -50,6 +50,15 @@
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 
-    <include app:graph="@navigation/detail_nav"/>
+    <include app:graph="@navigation/detail_nav" />
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="io.github.he11pme.movieapp.fragments.splash.SplashScreenFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen">
+        <action
+            android:id="@+id/navigateFromSplashScreenFragmentToHomeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
 </navigation>

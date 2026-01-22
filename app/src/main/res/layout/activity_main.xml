@@ -22,11 +22,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--
+            Toolbar height is set to a fixed value.
+
+            64dp — usable (content) height of the toolbar
+            12dp top + 12dp bottom — internal paddings applied by MaterialToolbar
+
+            A fixed height (88dp) is used to prevent the Toolbar
+            from changing its size when the SearchBar is hidden or disabled
+        -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
+            android:layout_height="88dp"
             app:buttonGravity="center_vertical"
             app:titleCentered="true">
 

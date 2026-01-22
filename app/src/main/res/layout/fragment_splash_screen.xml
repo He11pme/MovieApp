@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.splash.SplashScreenFragment">
+
+    <!--    Width and height parameters are moved to a style
+        to ensure consistent sizing between both LottieAnimationView instances  -->
+    <com.airbnb.lottie.LottieAnimationView
+        style="@style/Widget.MovieApp.SplashLottieAnimation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/background_splash" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        style="@style/Widget.MovieApp.SplashLottieAnimation"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/foreground_splash" />
+
+</FrameLayout>
