@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.FragmentFavoritesBinding
 import io.github.he11pme.movieapp.fragments.home.HomeFragmentDirections
+import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.SearchItemOffsetsDecoration
 import kotlinx.coroutines.launch
 
@@ -54,7 +55,10 @@ class FavoritesFragment : Fragment() {
         binding.favoritesRv.apply {
             adapter = this@FavoritesFragment.adapter
             addItemDecoration(SearchItemOffsetsDecoration())
-            doOnPreDraw { startPostponedEnterTransition() }
+            doOnPreDraw {
+                startPostponedEnterTransition()
+                AnimationHelper.currentAnimation?.invoke(binding.root, requireActivity())
+            }
             touchHelper.attachToRecyclerView(this)
         }
     }

@@ -1,12 +1,12 @@
 package io.github.he11pme.movieapp.fragments.splash
 
 import android.annotation.SuppressLint
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.AppStartViewModel
 import io.github.he11pme.movieapp.R
+import io.github.he11pme.movieapp.utils.AnimationHelper
 import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
@@ -40,7 +41,10 @@ class SplashScreenFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 appStartViewModel.isReady.collect {
-                    if (it) findNavController().navigate(R.id.navigateFromSplashScreenFragmentToHomeFragment)
+                    if (it) {
+                        AnimationHelper.source = AnimationHelper.NavigationSource.SPLASH
+                        findNavController().navigate(R.id.navigateFromSplashScreenFragmentToHomeFragment)
+                    }
                 }
             }
         }

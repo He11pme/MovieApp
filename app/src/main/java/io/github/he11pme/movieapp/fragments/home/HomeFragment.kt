@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.FragmentHomeBinding
 import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.model.SelectionState
+import io.github.he11pme.movieapp.utils.AnimationHelper
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -70,11 +71,15 @@ class HomeFragment : Fragment() {
         adapter.submitList(selections)
 
         if (isAllItemLoaded(selections)) {
-            binding.rvContent.doOnPreDraw {
-                startPostponedEnterTransition()
-            }
+            binding.rvContent.doOnPreDraw { startEnterAnimation() }
         }
 
+    }
+
+    private fun startEnterAnimation() {
+        startPostponedEnterTransition()
+
+        AnimationHelper.currentAnimation?.invoke(binding.root, requireActivity())
     }
 
     private fun isAllItemLoaded(selections: List<Selection>): Boolean =

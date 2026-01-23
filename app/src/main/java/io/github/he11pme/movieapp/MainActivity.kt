@@ -30,6 +30,7 @@ import io.github.he11pme.movieapp.databinding.ActivityMainBinding
 import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
 import io.github.he11pme.movieapp.fragments.search.SearchViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
+import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -51,6 +52,14 @@ class MainActivity : AppCompatActivity() {
     private var currentMenuRes: Int = 0
     private var currentMenuProvider: MenuProvider? = null
     private var favoriteItemMenu: MenuItem? = null
+
+    // Для правильной анимации важен правильный порядок id (такой же как в bottomNavigation)
+    private val topLevelDestinationIds = listOf(
+        R.id.homeFragment,
+        R.id.favoritesFragment,
+        R.id.randomFragment,
+        R.id.settingsFragment
+    )
 
     private var backPressed = 0L
 
@@ -240,20 +249,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        val appBarConfig = AppBarConfiguration(
-            setOf(
-                R.id.homeFragment,
-                R.id.favoritesFragment,
-                R.id.randomFragment,
-                R.id.settingsFragment
-            )
-        )
+        val appBarConfig = AppBarConfiguration(topLevelDestinationIds.toSet())
         binding.toolbar.setupWithNavController(navController, appBarConfig)
 
     }
 
     private fun setupBottomNavigation() {
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            if (!topLevelDestinationIds.contains(it.itemId)) return@setOnItemSelectedListener false
+
+            AnimationHelper.source = AnimationHelper.NavigationSource.BOTTOM_NAV
+            AnimationHelper.position = topLevelDestinationIds.indexOf(it.itemId)
+
+            navController.navigate(it.itemId)
+            true
+        }
     }
 
     private fun observeDestinationChanges() {
