@@ -19,10 +19,12 @@ import io.github.he11pme.movieapp.fragments.home.HomeFragmentDirections
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.SearchItemOffsetsDecoration
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavoritesFragment : Fragment() {
-
+    @Inject
+    lateinit var animationHelper: AnimationHelper
     private lateinit var binding: FragmentFavoritesBinding
     private val viewModel: FavoritesViewModel by viewModels()
     private val adapter = FavoritesAdapter(::toMovieDetails)
@@ -57,7 +59,7 @@ class FavoritesFragment : Fragment() {
             addItemDecoration(SearchItemOffsetsDecoration())
             doOnPreDraw {
                 startPostponedEnterTransition()
-                AnimationHelper.currentAnimation?.invoke(binding.root, requireActivity())
+                animationHelper.currentAnimation?.invoke(binding.root, requireActivity())
             }
             touchHelper.attachToRecyclerView(this)
         }

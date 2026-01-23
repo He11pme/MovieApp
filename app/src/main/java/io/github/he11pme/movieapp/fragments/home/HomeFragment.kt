@@ -18,10 +18,13 @@ import io.github.he11pme.movieapp.model.Selection
 import io.github.he11pme.movieapp.model.SelectionState
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
+    @Inject
+    lateinit var animationHelper: AnimationHelper
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
     private val adapter = ContentAdapter(::toMovieDetails, ::toSelection)
@@ -79,7 +82,7 @@ class HomeFragment : Fragment() {
     private fun startEnterAnimation() {
         startPostponedEnterTransition()
 
-        AnimationHelper.currentAnimation?.invoke(binding.root, requireActivity())
+        animationHelper.currentAnimation?.invoke(binding.root, requireActivity())
     }
 
     private fun isAllItemLoaded(selections: List<Selection>): Boolean =

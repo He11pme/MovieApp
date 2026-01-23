@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var appBarManager: AppBarManager
+
+    @Inject
+    lateinit var animationHelper: AnimationHelper
+
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.contentContainer) as NavHostFragment).navController
     }
@@ -53,7 +57,8 @@ class MainActivity : AppCompatActivity() {
     private var currentMenuProvider: MenuProvider? = null
     private var favoriteItemMenu: MenuItem? = null
 
-    // Для правильной анимации важен правильный порядок id (такой же как в bottomNavigation)
+    // The order of destination IDs is important for correct animations
+    // and must match the order of items in the BottomNavigation
     private val topLevelDestinationIds = listOf(
         R.id.homeFragment,
         R.id.favoritesFragment,
@@ -260,8 +265,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             if (!topLevelDestinationIds.contains(it.itemId)) return@setOnItemSelectedListener false
 
-            AnimationHelper.source = AnimationHelper.NavigationSource.BOTTOM_NAV
-            AnimationHelper.position = topLevelDestinationIds.indexOf(it.itemId)
+            animationHelper.source = AnimationHelper.NavigationSource.BOTTOM_NAV
+            animationHelper.position = topLevelDestinationIds.indexOf(it.itemId)
 
             navController.navigate(it.itemId)
             true

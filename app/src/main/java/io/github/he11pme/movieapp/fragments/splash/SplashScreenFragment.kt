@@ -16,10 +16,14 @@ import io.github.he11pme.movieapp.AppStartViewModel
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashScreenFragment : Fragment() {
+
+    @Inject
+    lateinit var animationHelper: AnimationHelper
     private val appStartViewModel: AppStartViewModel by viewModels()
 
     override fun onCreateView(
@@ -42,7 +46,7 @@ class SplashScreenFragment : Fragment() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 appStartViewModel.isReady.collect {
                     if (it) {
-                        AnimationHelper.source = AnimationHelper.NavigationSource.SPLASH
+                        animationHelper.source = AnimationHelper.NavigationSource.SPLASH
                         findNavController().navigate(R.id.navigateFromSplashScreenFragmentToHomeFragment)
                     }
                 }

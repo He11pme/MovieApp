@@ -4,15 +4,21 @@ import android.app.Activity
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateDecelerateInterpolator
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.util.concurrent.Executors
+import javax.inject.Inject
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-object AnimationHelper {
-
+@ActivityRetainedScoped
+class AnimationHelper @Inject constructor() {
+    private val menuItems = 4
     var source: NavigationSource? = null
     var position: Int = 1
-    private const val menuItems = 4
+        set(value) {
+            field = if (value in 0..<menuItems) value else 0
+        }
+
     val currentAnimation: ((View, Activity) -> Unit)?
         get() {
             val currentSource = source
