@@ -7,7 +7,7 @@
     tools:context=".fragments.splash.SplashScreenFragment">
 
     <!--    Width and height parameters are moved to a style
-        to ensure consistent sizing between both LottieAnimationView instances  -->
+            to ensure consistent sizing between both LottieAnimationView instances  -->
     <com.airbnb.lottie.LottieAnimationView
         style="@style/Widget.MovieApp.SplashLottieAnimation"
         app:lottie_autoPlay="true"
@@ -18,5 +18,14 @@
         style="@style/Widget.MovieApp.SplashLottieAnimation"
         app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/foreground_splash" />
+
+    <!--    Placeholder is used to prevent visual flickering
+            of the foreground_splash animation during startup  -->
+    <ImageView
+        style="@style/Widget.MovieApp.SplashLottieAnimation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:src="@drawable/placeholder_foreground_animation" />
 
 </FrameLayout>
