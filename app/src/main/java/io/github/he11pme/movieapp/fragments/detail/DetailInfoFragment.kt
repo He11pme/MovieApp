@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.core.transition.doOnEnd
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -54,6 +55,9 @@ class DetailInfoFragment : Fragment() {
             drawingViewId = R.id.detailInfoMain
             duration = 250
             scrimColor = Color.TRANSPARENT
+            doOnEnd {
+                foregroundItems.forEach { enterAnimationForView(it) }
+            }
         }
 
         sharedElementReturnTransition = MaterialContainerTransform().apply {
@@ -306,7 +310,7 @@ class DetailInfoFragment : Fragment() {
             .thumbnail(preloadPosterBuilder(sharedPosterUrl))
             .listener(EmptyRequestListener<Drawable>().apply {
                 doSimpleResourceReady = {
-                    foregroundItems.forEach { enterAnimationForView(it) }
+                    startPostponedEnterTransition()
                 }
             })
             .into(binding.posterDetail)
@@ -315,7 +319,6 @@ class DetailInfoFragment : Fragment() {
     private fun preloadPosterBuilder(sharedPosterUrl: String): RequestBuilder<Drawable?> {
         return Glide.with(binding.posterDetail)
             .load(sharedPosterUrl)
-            .also { startPostponedEnterTransition() }
     }
 
     private fun prepareViewForAnimation(v: View) {
