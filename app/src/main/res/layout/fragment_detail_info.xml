@@ -142,10 +142,21 @@
                         android:layout_marginBottom="10dp"
                         app:layout_collapseMode="parallax"
                         app:layout_collapseParallaxMultiplier="0.8"
-                        app:layout_constraintBottom_toTopOf="@+id/taglineText"
+                        app:layout_constraintBottom_toTopOf="@+id/rate"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:text="FIGHT CLUB" />
+
+                    <io.github.he11pme.movieapp.view.custom.StarRating
+                        android:id="@+id/rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toTopOf="@+id/taglineText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:sizeStar="24dp" />
 
                     <TextView
                         android:id="@+id/taglineText"

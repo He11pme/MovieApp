@@ -255,7 +255,8 @@ class DetailInfoFragment : Fragment() {
                 binding.downloadBtn,
                 binding.favoriteBtn,
                 binding.shareBtn,
-                binding.bottomBackground
+                binding.bottomBackground,
+                binding.rate
             )
         )
         if (source != Source.SEARCH) foregroundItems.add(binding.backBtn)
@@ -300,6 +301,7 @@ class DetailInfoFragment : Fragment() {
         binding.parametersText.text = compoundParameters()
         binding.overviewText.text = movie.overview
         binding.voteText.text = movie.vote.toString()
+        binding.rate.rate = movie.vote.toFloat()
         setIconFavoriteBtn(movie.isFavorite)
 
     }
