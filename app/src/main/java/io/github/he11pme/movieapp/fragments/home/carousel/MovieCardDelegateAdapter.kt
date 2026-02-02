@@ -46,9 +46,7 @@ class MovieCardDelegateAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-
-            binding.titleMovieItem.text = movie.title
-            binding.voteMovieItem.text = movie.vote.toString()
+            binding.movie = movie
 
             Glide.with(binding.root)
                 .load(movie.posterUrl(PosterSizes.MEDIUM))
@@ -56,7 +54,7 @@ class MovieCardDelegateAdapter(
 
             binding.posterMovieItem.transitionName = "$selectionId::${movie.id}"
 
-            binding.root.setOnClickListener { toMovieDetails(binding.posterMovieItem,movie.id) }
+            binding.root.setOnClickListener { toMovieDetails(binding.posterMovieItem, movie.id) }
 
         }
 
