@@ -37,9 +37,7 @@ class SearchAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
-
-            binding.titleMovie.text = movie.title
-            binding.voteMovie.text = movie.vote.toString()
+            binding.movie = movie
 
             binding.smallPoster.transitionName = "poster_${movie.id}"
             Glide.with(binding.smallPoster)
