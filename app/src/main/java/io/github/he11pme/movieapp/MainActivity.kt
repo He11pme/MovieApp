@@ -147,22 +147,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleAppBarState(appBarState: AppBarManager.AppBarState) {
-        binding.appBar.apply {
-            visibility = appBarState.visibilityAppBar
-            alpha = appBarState.alphaAppBar
-        }
-
-        binding.toolbar.apply {
-            title = appBarState.titleToolbar
-        }
-
-        binding.searchBar.apply {
-            visibility = appBarState.visibilitySearchBar
-        }
-
-        binding.bottomAppBar.apply {
-            visibility = appBarState.visibilityBottomAppBar
-        }
+        binding.appState = appBarState
 
         (binding.contentContainer.layoutParams as CoordinatorLayout.LayoutParams).behavior =
             appBarState.scrollingViewBehavior
