@@ -39,6 +39,7 @@ class FavoritesAdapter(
     inner class ViewHolder(private val binding: MovieItemMediumFullwidthBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieDetails) {
+            binding.movie = movie
 
             Glide.with(binding.posterMovieItem)
                 .load(movie.posterUrl(PosterSizes.SMALL))
@@ -46,9 +47,6 @@ class FavoritesAdapter(
 
             binding.posterMovieItem.transitionName = "poster_${movie.id}"
 
-            binding.titleMovieItem.text = movie.title
-            binding.voteMovieItem.text = binding.root.context.getString(R.string.tmdb_vote, movie.vote)
-            binding.overviewMovieItem.text = movie.overview
             binding.parametersMovieItem.text = compoundParameters(movie)
 
             binding.root.setOnClickListener { toMovieDetails(binding.posterMovieItem, movie.id) }
