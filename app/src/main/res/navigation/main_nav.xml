@@ -20,7 +20,7 @@
         <argument
             android:name="source"
             android:defaultValue="CONTENT"
-            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source" />
+            app:argType="io.github.he11pme.movieapp.fragments.detail.Source" />
 
     </action>
 

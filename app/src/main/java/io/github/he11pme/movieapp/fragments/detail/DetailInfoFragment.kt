@@ -93,6 +93,7 @@ class DetailInfoFragment : Fragment() {
     ): View {
         binding = FragmentDetailInfoBinding.inflate(layoutInflater, container, false)
         binding.viewModel = viewModel
+        binding.source = source
 
         if (source != Source.SEARCH) bindToAppBarManager()
         setTransitionNames()
@@ -166,6 +167,7 @@ class DetailInfoFragment : Fragment() {
 
         if (state is DetailInfoViewModel.State.Loaded) {
             val movieDetails = state.movieDetails
+            binding.movie = movieDetails
 
             setDataAboutMovie(movieDetails)
             loadPoster(
@@ -262,28 +264,14 @@ class DetailInfoFragment : Fragment() {
     }
 
     private fun setupViews() {
-        binding.backBtn.visibility =
-            if (source == Source.SEARCH) View.INVISIBLE else View.VISIBLE
-
-        binding.headerBackground.visibility =
-            if (source == Source.SEARCH) View.GONE else View.VISIBLE
-
-        binding.toolbarDetail.visibility =
-            if (source == Source.SEARCH) View.GONE else View.INVISIBLE
-
         foregroundItems.forEach { prepareViewForAnimation(it) }
 
-        if (source != Source.SEARCH) binding.backBtn.setOnClickListener { navigateBack() }
+        binding.backBtn.setOnClickListener { navigateBack() }
 
         handleAppBarScroll()
     }
 
     private fun setDataAboutMovie(movie: MovieDetails) {
-
-        fun setupTagline() {
-            if (movie.tagline.isEmpty()) binding.taglineText.visibility = View.GONE
-            else binding.taglineText.text = movie.tagline
-        }
 
         fun compoundParameters(): String {
             val separator = " • "
@@ -295,12 +283,7 @@ class DetailInfoFragment : Fragment() {
             return "$year$separator$genres\n$country$separator$runtime"
         }
 
-        binding.titleText.text = movie.title
-        setupTagline()
         binding.parametersText.text = compoundParameters()
-        binding.overviewText.text = movie.overview
-        binding.voteText.text = movie.vote.toString()
-        setIconFavoriteBtn(movie.isFavorite)
 
     }
 
@@ -363,10 +346,6 @@ class DetailInfoFragment : Fragment() {
         val ID_DRAWABLE_FAVORITE = R.drawable.ic_favorite
         val ID_DRAWABLE_UNFAVORITE = R.drawable.ic_favorite_outline
 
-        enum class Source {
-            SEARCH,
-            CONTENT
-        }
     }
 
 }

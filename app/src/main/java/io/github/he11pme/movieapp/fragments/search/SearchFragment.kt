@@ -14,7 +14,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
-import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
+import io.github.he11pme.movieapp.fragments.detail.Source
 import io.github.he11pme.movieapp.model.Movie
 import io.github.he11pme.movieapp.utils.SearchItemOffsetsDecoration
 import io.github.he11pme.movieapp.utils.extensions.hideKeyboard
@@ -94,7 +94,7 @@ class SearchFragment : Fragment() {
         val action = SearchFragmentDirections.navigateFromSearchFragmentToNavigation(
             movieId = movieId,
             transitionName = sharedPoster.transitionName,
-            source = DetailInfoFragment.Companion.Source.SEARCH
+            source = Source.SEARCH
         )
 
         hideKeyboard()
