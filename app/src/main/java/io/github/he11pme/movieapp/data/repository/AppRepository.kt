@@ -3,11 +3,11 @@ package io.github.he11pme.movieapp.data.repository
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.data.local.room.dao.FavoriteMoviesDao
 import io.github.he11pme.movieapp.data.local.room.entity.FavoriteMovieEntity
-import io.github.he11pme.movieapp.model.Genre
-import io.github.he11pme.movieapp.model.Movie
-import io.github.he11pme.movieapp.model.MovieDetails
-import io.github.he11pme.movieapp.model.Selection
-import io.github.he11pme.movieapp.model.SelectionType
+import io.github.he11pme.movieapp.data.network.dto.Genre
+import io.github.he11pme.movieapp.data.network.dto.Movie
+import io.github.he11pme.movieapp.data.network.dto.MovieDetails
+import io.github.he11pme.movieapp.data.local.assets.dto.Selection
+import io.github.he11pme.movieapp.data.local.assets.dto.SelectionType
 import io.github.he11pme.movieapp.data.network.TMDbApi
 import java.lang.Exception
 import javax.inject.Inject

@@ -3,7 +3,7 @@ package io.github.he11pme.movieapp.data.repository
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import io.github.he11pme.movieapp.model.Selection
+import io.github.he11pme.movieapp.data.local.assets.dto.Selection
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 

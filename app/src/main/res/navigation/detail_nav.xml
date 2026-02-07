@@ -21,7 +21,7 @@
             app:argType="string" />
         <argument
             android:name="source"
-            app:argType="io.github.he11pme.movieapp.fragments.detail.Source"
+            app:argType="io.github.he11pme.movieapp.view.rv.utils.enums.Source"
             android:defaultValue="CONTENT" />
 
     </fragment>

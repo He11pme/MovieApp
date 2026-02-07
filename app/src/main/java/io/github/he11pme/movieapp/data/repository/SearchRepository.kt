@@ -2,7 +2,7 @@ package io.github.he11pme.movieapp.data.repository
 
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.data.network.TMDbApi
-import io.github.he11pme.movieapp.model.Movie
+import io.github.he11pme.movieapp.data.network.dto.Movie
 import javax.inject.Inject
 
 @ActivityRetainedScoped

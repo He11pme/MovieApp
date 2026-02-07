@@ -8,7 +8,7 @@
 
         <import type="android.view.View" />
 
-        <import type="io.github.he11pme.movieapp.fragments.detail.Source" />
+        <import type="io.github.he11pme.movieapp.view.rv.utils.enums.Source" />
 
         <variable
             name="viewModel"
@@ -16,11 +16,11 @@
 
         <variable
             name="movie"
-            type="io.github.he11pme.movieapp.model.MovieDetails" />
+            type="io.github.he11pme.movieapp.data.network.dto.MovieDetails" />
 
         <variable
             name="source"
-            type="io.github.he11pme.movieapp.fragments.detail.Source" />
+            type="io.github.he11pme.movieapp.view.rv.utils.enums.Source" />
 
     </data>
 

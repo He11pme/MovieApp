@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="io.github.he11pme.movieapp.model.Movie" />
+            type="io.github.he11pme.movieapp.data.network.dto.Movie" />
 
     </data>
 

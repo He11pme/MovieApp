@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="io.github.he11pme.movieapp.model.MovieDetails" />
+            type="io.github.he11pme.movieapp.data.network.dto.MovieDetails" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

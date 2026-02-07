@@ -2,9 +2,9 @@ package io.github.he11pme.movieapp.data.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import io.github.he11pme.movieapp.BuildConfig
-import io.github.he11pme.movieapp.model.GenreResponse
-import io.github.he11pme.movieapp.model.MovieDetails
-import io.github.he11pme.movieapp.model.MovieResponse
+import io.github.he11pme.movieapp.data.network.dto.GenreResponse
+import io.github.he11pme.movieapp.data.network.dto.MovieDetails
+import io.github.he11pme.movieapp.data.network.dto.MovieResponse
 import io.github.he11pme.movieapp.utils.extensions.getFormatLocale
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
