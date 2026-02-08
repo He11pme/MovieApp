@@ -152,7 +152,9 @@ class StarRating @JvmOverloads constructor(
 
         canvas.drawBitmap(bitmap, 0f, 0f, null)
 
-        drawStarsAfterRating(canvas, fillPaint)
+        drawStarsAfterRating(canvas, fillPaint) {
+            it.clipRect(0f, 0f, ratingWidth, height.toFloat())
+        }
     }
 
     private fun drawStaticPicture() {
@@ -166,9 +168,10 @@ class StarRating @JvmOverloads constructor(
         isStaticPictureDrawn = true
     }
 
-    private fun drawStarsAfterRating(canvas: Canvas, paint: Paint) {
+    private fun drawStarsAfterRating(canvas: Canvas, paint: Paint, doSetUpCanvas: ((Canvas) -> Unit)? = null) {
         canvas.withTranslation(rateWidth + paddingRate, 0f) {
             withSave {
+                doSetUpCanvas?.invoke(this)
                 repeat(countStar) {
                     drawPath(scaledStarPath, paint)
                     translate((height + paddingStar), 0f)
