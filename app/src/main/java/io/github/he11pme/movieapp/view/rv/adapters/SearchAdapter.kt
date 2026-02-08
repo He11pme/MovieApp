@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import io.github.he11pme.movieapp.databinding.MovieItemSmallBinding
 import io.github.he11pme.movieapp.view.rv.diffcallbacks.MovieDiffCallback
-import io.github.he11pme.movieapp.data.network.dto.Movie
+import io.github.he11pme.movieapp.domain.models.Movie
 import io.github.he11pme.movieapp.view.rv.viewholders.MovieItemSmallViewHolder
 
 class SearchAdapter(

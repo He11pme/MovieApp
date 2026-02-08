@@ -18,6 +18,7 @@ import io.github.he11pme.movieapp.databinding.FragmentFavoritesBinding
 import io.github.he11pme.movieapp.fragments.home.HomeFragmentDirections
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.extensions.dp
+import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.rv.adapters.FavoritesAdapter
 import io.github.he11pme.movieapp.view.rv.utils.FavoritesTouchHelperCallback
 import io.github.he11pme.movieapp.view.rv.utils.ItemOffsetsDecoration
@@ -86,7 +87,7 @@ class FavoritesFragment : Fragment() {
 
     private fun handleFavoriteMoviesState(favorites: FavoritesViewModel.State) {
         if (favorites is FavoritesViewModel.State.Loaded) {
-            adapter.submitList(favorites.moviesDetails)
+            adapter.submitList(favorites.moviesDetails.map { it.toUi(requireContext()) })
         }
 
     }

@@ -3,10 +3,10 @@ package io.github.he11pme.movieapp.fragments.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.he11pme.movieapp.data.network.dto.Movie
-import io.github.he11pme.movieapp.data.local.assets.dto.SelectionState
-import io.github.he11pme.movieapp.data.local.assets.dto.Selection
 import io.github.he11pme.movieapp.data.repository.AppRepository
+import io.github.he11pme.movieapp.domain.models.Movie
+import io.github.he11pme.movieapp.domain.models.Selection
+import io.github.he11pme.movieapp.domain.models.SelectionState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

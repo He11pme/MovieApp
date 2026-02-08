@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import io.github.he11pme.movieapp.databinding.SelectionMoviesBinding
-import io.github.he11pme.movieapp.data.local.assets.dto.Selection
+import io.github.he11pme.movieapp.domain.models.Selection
 import io.github.he11pme.movieapp.view.rv.diffcallbacks.SelectionDiffCallback
 import io.github.he11pme.movieapp.view.rv.viewholders.SelectionMoviesViewHolder
 

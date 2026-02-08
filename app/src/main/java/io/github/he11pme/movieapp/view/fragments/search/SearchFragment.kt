@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
 import io.github.he11pme.movieapp.view.rv.utils.enums.Source
-import io.github.he11pme.movieapp.data.network.dto.Movie
+import io.github.he11pme.movieapp.domain.models.Movie
 import io.github.he11pme.movieapp.utils.extensions.dp
 import io.github.he11pme.movieapp.utils.extensions.hideKeyboard
 import io.github.he11pme.movieapp.view.rv.adapters.SearchAdapter

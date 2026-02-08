@@ -14,8 +14,8 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.FragmentHomeBinding
-import io.github.he11pme.movieapp.data.local.assets.dto.Selection
-import io.github.he11pme.movieapp.data.local.assets.dto.SelectionState
+import io.github.he11pme.movieapp.domain.models.Selection
+import io.github.he11pme.movieapp.domain.models.SelectionState
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.view.rv.adapters.ContentAdapter
 import kotlinx.coroutines.launch

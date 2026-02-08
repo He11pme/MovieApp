@@ -3,12 +3,14 @@ package io.github.he11pme.movieapp.data.repository
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.data.local.room.dao.FavoriteMoviesDao
 import io.github.he11pme.movieapp.data.local.room.entity.FavoriteMovieEntity
-import io.github.he11pme.movieapp.data.network.dto.Genre
-import io.github.he11pme.movieapp.data.network.dto.Movie
-import io.github.he11pme.movieapp.data.network.dto.MovieDetails
-import io.github.he11pme.movieapp.data.local.assets.dto.Selection
-import io.github.he11pme.movieapp.data.local.assets.dto.SelectionType
+import io.github.he11pme.movieapp.data.network.dto.GenreDTO
+import io.github.he11pme.movieapp.data.network.dto.MovieDTO
+import io.github.he11pme.movieapp.data.mappers.toDomain
 import io.github.he11pme.movieapp.data.network.TMDbApi
+import io.github.he11pme.movieapp.domain.models.Movie
+import io.github.he11pme.movieapp.domain.models.MovieDetails
+import io.github.he11pme.movieapp.domain.models.Selection
+import io.github.he11pme.movieapp.domain.models.SelectionType
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -19,7 +21,7 @@ class AppRepository @Inject constructor(
 ) {
 
     private val api = TMDbApi.retrofitService
-    private var genres: List<Genre>? = null
+    private var genres: List<GenreDTO>? = null
 
     suspend fun isFavoriteMovie(id: Int) = favoriteMoviesDao.isFavorite(id)
 
@@ -37,8 +39,7 @@ class AppRepository @Inject constructor(
         if (favoriteMoviesDao.isFavorite(id)) {
             favoriteMoviesDao.removeFavorite(favorite)
             return false
-        }
-        else {
+        } else {
             favoriteMoviesDao.addFavorite(favorite)
             return true
         }
@@ -52,13 +53,13 @@ class AppRepository @Inject constructor(
         favoriteMoviesDao.removeFavorite(FavoriteMovieEntity(movieId))
     }
 
-    suspend fun getGenres(): Result<List<Genre>> {
+    suspend fun getGenres(): Result<List<GenreDTO>> {
         return safeApiCall { genres ?: api.getGenres().genres.also { genres = it } }
     }
 
     fun getCollections(): Result<List<Selection>> {
         return try {
-            Result.success(collectionsDataSource.getCollections())
+            Result.success(collectionsDataSource.getCollections().map { it.toDomain() })
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -69,17 +70,17 @@ class AppRepository @Inject constructor(
             when (type) {
                 SelectionType.NowPlaying -> getNowPlayingMovies()
                 SelectionType.Popular -> getPopularMovies()
-                is SelectionType.OfGenres -> getMoviesByGenres(type.genres)
-            }
+                is SelectionType.OfGenres -> getMoviesByGenres(type.genresIds)
+            }.map { it.toDomain() }
         }
     }
 
     suspend fun getMovieById(movieId: Int): Result<MovieDetails> {
-        return safeApiCall { api.getMovieById(movieId).apply { isFavorite = isFavoriteMovie(id) } }
+        return safeApiCall { api.getMovieById(movieId).toDomain(isFavoriteMovie(movieId)) }
     }
 
-    private suspend fun getMoviesByGenres(genres: List<Genre>): List<Movie> {
-        return api.getMoviesByGenres(genres.map { it.id }.joinToString(",")).movies
+    private suspend fun getMoviesByGenres(genres: List<Int>): List<MovieDTO> {
+        return api.getMoviesByGenres(genres.joinToString(",")).movies
     }
 
     private suspend fun getPopularMovies() = api.getPopularMovies().movies

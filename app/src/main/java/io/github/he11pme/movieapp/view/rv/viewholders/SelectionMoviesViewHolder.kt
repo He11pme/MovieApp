@@ -2,13 +2,12 @@ package io.github.he11pme.movieapp.view.rv.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.SelectionMoviesBinding
-import io.github.he11pme.movieapp.view.model.Identifiable
-import io.github.he11pme.movieapp.data.local.assets.dto.Selection
-import io.github.he11pme.movieapp.data.local.assets.dto.SelectionState
-import io.github.he11pme.movieapp.view.model.ShowAllMoviesButton
+import io.github.he11pme.movieapp.domain.models.Selection
+import io.github.he11pme.movieapp.domain.models.SelectionState
 import io.github.he11pme.movieapp.utils.extensions.dp
+import io.github.he11pme.movieapp.view.model.Identifiable
+import io.github.he11pme.movieapp.view.model.ShowAllMoviesButton
 import io.github.he11pme.movieapp.view.rv.adapters.CarouselAdapter
 import io.github.he11pme.movieapp.view.rv.utils.ItemOffsetsDecoration
 import io.github.he11pme.movieapp.view.rv.utils.StartLinearSnapHelper
@@ -24,12 +23,13 @@ class SelectionMoviesViewHolder(
         if (!::adapter.isInitialized) adapter =
             CarouselAdapter(selection.id, toMovieDetails, toSelections)
 
-        try {
-            binding.titleSelection.text = selection.getLocaleTitle()
-        } catch (e: Exception) {
-            binding.titleSelection.text =
-                binding.titleSelection.context.getString(R.string.title_not_found)
-        }
+        binding.titleSelection.text = selection.title
+//        try {
+//            binding.titleSelection.text = selection.getLocaleTitle()
+//        } catch (e: Exception) {
+//            binding.titleSelection.text =
+//                binding.titleSelection.context.getString(R.string.title_not_found)
+//        }
 
         binding.showAll.setOnClickListener { toSelections(selection.id) }
 

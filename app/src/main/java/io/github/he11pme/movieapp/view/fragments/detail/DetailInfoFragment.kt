@@ -24,10 +24,11 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.FragmentDetailInfoBinding
+import io.github.he11pme.movieapp.domain.models.MovieDetails
 import io.github.he11pme.movieapp.managers.AppBarManager
-import io.github.he11pme.movieapp.data.network.dto.MovieDetails
-import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 import io.github.he11pme.movieapp.utils.EmptyRequestListener
+import io.github.he11pme.movieapp.view.mappers.toUi
+import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 import io.github.he11pme.movieapp.view.rv.utils.enums.Source
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -167,10 +168,9 @@ class DetailInfoFragment : Fragment() {
     private fun handleState(state: DetailInfoViewModel.State) {
 
         if (state is DetailInfoViewModel.State.Loaded) {
-            val movieDetails = state.movieDetails
+            val movieDetails = state.movieDetails.toUi(requireContext())
             binding.movie = movieDetails
 
-            setDataAboutMovie(movieDetails)
             loadPoster(
                 movieDetails.posterUrl(PosterSizes.MEDIUM),
                 movieDetails.posterUrl(PosterSizes.ORIGINAL)
@@ -270,22 +270,6 @@ class DetailInfoFragment : Fragment() {
         binding.backBtn.setOnClickListener { navigateBack() }
 
         handleAppBarScroll()
-    }
-
-    private fun setDataAboutMovie(movie: MovieDetails) {
-
-        fun compoundParameters(): String {
-            val separator = " • "
-            val year = movie.releaseDate.take(4)
-            val genres = movie.genres.take(3).joinToString(separator) { genre -> genre.name }
-            val country = movie.countries.first().name
-            val runtime = getString(R.string.runtime, movie.runtime)
-
-            return "$year$separator$genres\n$country$separator$runtime"
-        }
-
-        binding.parametersText.text = compoundParameters()
-
     }
 
     private fun loadPoster(sharedPosterUrl: String, originalPosterUrl: String) {

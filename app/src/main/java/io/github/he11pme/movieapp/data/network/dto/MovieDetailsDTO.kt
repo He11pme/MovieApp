@@ -1,12 +1,10 @@
 package io.github.he11pme.movieapp.data.network.dto
 
-import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Locale
 
 @Serializable
-data class MovieDetails(
+data class MovieDetailsDTO(
     val id: Int,
     val title: String,
     val tagline: String,
@@ -17,23 +15,14 @@ data class MovieDetails(
     val releaseDate: String,
     val runtime: Int,
     @SerialName("vote_average")
-    val _vote: Double,
-    val genres: List<Genre>,
+    val vote: Double,
+    val genres: List<GenreDTO>,
     @SerialName("production_countries")
-    val countries: List<Country>
-) {
-    val vote: Double
-        get() = "%.1f".format(Locale.US, _vote).toDouble()
-
-    val posterUrl: (PosterSizes) -> String = {
-        "https://image.tmdb.org/t/p/${it.size}$posterPath"
-    }
-
-    var isFavorite: Boolean = false
-}
+    val countries: List<CountryDTO>
+)
 
 @Serializable
-data class Country(
+data class CountryDTO(
     @SerialName("iso_3166_1")
     val iso: String,
     val name: String

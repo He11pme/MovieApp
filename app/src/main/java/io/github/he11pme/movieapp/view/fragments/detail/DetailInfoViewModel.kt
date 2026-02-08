@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.managers.AppBarManager
-import io.github.he11pme.movieapp.data.network.dto.MovieDetails
+import io.github.he11pme.movieapp.domain.models.MovieDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch

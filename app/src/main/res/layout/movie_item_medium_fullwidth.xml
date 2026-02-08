@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="io.github.he11pme.movieapp.data.network.dto.MovieDetails" />
+            type="io.github.he11pme.movieapp.view.model.MovieDetailsUi" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,6 +46,7 @@
             style="@style/Widget.MovieApp.Parameters.Fullwidth"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{movie.shortParameters}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/titleMovieItem"
             app:layout_constraintTop_toBottomOf="@+id/titleMovieItem"

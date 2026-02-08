@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.data.repository.SearchRepository
-import io.github.he11pme.movieapp.data.network.dto.Movie
-import io.github.he11pme.movieapp.data.local.assets.dto.SelectionType
+import io.github.he11pme.movieapp.domain.models.Movie
+import io.github.he11pme.movieapp.domain.models.SelectionType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow

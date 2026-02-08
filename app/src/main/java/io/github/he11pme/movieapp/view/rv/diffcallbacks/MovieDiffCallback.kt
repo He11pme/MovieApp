@@ -1,7 +1,7 @@
 package io.github.he11pme.movieapp.view.rv.diffcallbacks
 
 import androidx.recyclerview.widget.DiffUtil
-import io.github.he11pme.movieapp.data.network.dto.Movie
+import io.github.he11pme.movieapp.domain.models.Movie
 
 class MovieDiffCallback: DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(

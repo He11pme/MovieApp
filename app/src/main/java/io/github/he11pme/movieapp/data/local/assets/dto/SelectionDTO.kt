@@ -1,21 +1,17 @@
 package io.github.he11pme.movieapp.data.local.assets.dto
 
 import android.util.Log
-import io.github.he11pme.movieapp.data.network.dto.Genre
-import io.github.he11pme.movieapp.data.network.dto.Movie
+import io.github.he11pme.movieapp.data.network.dto.GenreDTO
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import java.util.Locale
 
 @Serializable
-data class Selection(
+data class SelectionDTO(
     val id: String,
     val priority: Int = Int.MAX_VALUE,
     private val titles: Map<String, String>,
-    val type: SelectionType,
-    @Transient
-    val state: SelectionState = SelectionState.Loading
+    val type: SelectionTypeDTO,
 ) {
     fun getLocaleTitle(locale: Locale = Locale.getDefault()): String {
         val language = locale.language
@@ -42,25 +38,17 @@ data class Selection(
 }
 
 @Serializable
-sealed interface SelectionState {
-    object Loading : SelectionState
-    data class Loaded(val movies: List<Movie>) : SelectionState
-    data class Error(val message: String) : SelectionState
-
-}
-
-@Serializable
-sealed interface SelectionType {
+sealed interface SelectionTypeDTO {
     @Serializable
     @SerialName("popular")
-    object Popular : SelectionType
+    object Popular : SelectionTypeDTO
 
     @Serializable
     @SerialName("now_playing")
-    object NowPlaying : SelectionType
+    object NowPlaying : SelectionTypeDTO
 
     @Serializable
     @SerialName("by_genres")
-    data class OfGenres(val genres: List<Genre>) : SelectionType
+    data class OfGenres(val genres: List<GenreDTO>) : SelectionTypeDTO
 
 }

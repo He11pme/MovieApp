@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.data.repository.AppRepository
-import io.github.he11pme.movieapp.data.network.dto.MovieDetails
+import io.github.he11pme.movieapp.domain.models.MovieDetails
+import io.github.he11pme.movieapp.view.model.MovieDetailsUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +57,7 @@ class FavoritesViewModel @Inject constructor(
         }
     }
 
-    fun movieSwiped(movie: MovieDetails) = removeFavoriteMovieById(movie.id)
+    fun movieSwiped(movie: MovieDetailsUi) = removeFavoriteMovieById(movie.id)
 
     private fun removeFavoriteMovieById(movieId: Int) {
         viewModelScope.launch {
