@@ -251,11 +251,11 @@ class DetailInfoFragment : Fragment() {
                 binding.titleText,
                 binding.taglineText,
                 binding.parametersText,
-                binding.voteText,
                 binding.downloadBtn,
                 binding.favoriteBtn,
                 binding.shareBtn,
-                binding.bottomBackground
+                binding.bottomBackground,
+                binding.starRating
             )
         )
         if (source != Source.SEARCH) foregroundItems.add(binding.backBtn)
@@ -299,7 +299,7 @@ class DetailInfoFragment : Fragment() {
         setupTagline()
         binding.parametersText.text = compoundParameters()
         binding.overviewText.text = movie.overview
-        binding.voteText.text = movie.vote.toString()
+        binding.starRating.rate = movie.vote.toFloat()
         setIconFavoriteBtn(movie.isFavorite)
 
     }
