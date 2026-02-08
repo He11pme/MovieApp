@@ -8,7 +8,7 @@ data class MovieDetailsUi(
     val tagline: String,
     val overview: String,
     val posterPath: String,
-    val vote: Double,
+    val vote: Float,
     val parameters: String,
     val shortParameters: String
 ) {

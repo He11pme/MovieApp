@@ -29,7 +29,7 @@ fun MovieDetails.toUi(context: Context, separator: String = " • "): MovieDetai
         tagline = tagline,
         overview = overview,
         posterPath = posterPath,
-        vote = vote,
+        vote = vote.toFloat(),
         parameters = compoundParameters(),
         shortParameters = compoundShortParameters()
     ).apply {
