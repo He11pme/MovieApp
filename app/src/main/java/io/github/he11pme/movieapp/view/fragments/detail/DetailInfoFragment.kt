@@ -254,11 +254,11 @@ class DetailInfoFragment : Fragment() {
                 binding.titleText,
                 binding.taglineText,
                 binding.parametersText,
-                binding.voteText,
                 binding.downloadBtn,
                 binding.favoriteBtn,
                 binding.shareBtn,
-                binding.bottomBackground
+                binding.bottomBackground,
+                binding.starRating
             )
         )
         if (source != Source.SEARCH) foregroundItems.add(binding.backBtn)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StarRating">
+        <attr name="sizeStar" format="dimension" />
+        <attr name="paddingStar" format="dimension" />
+        <attr name="paddingRate" format="dimension"/>
+        <attr name="countStar" format="integer" />
+        <attr name="rate" format="float" />
+        <attr name="emptyStarColor" format="color"/>
+        <attr name="emptyStarAlpha" format="float"/>
+        <attr name="fillStarColor" format="color"/>
+        <attr name="ratingColor" format="color"/>
+    </declare-styleable>
+
+</resources>
