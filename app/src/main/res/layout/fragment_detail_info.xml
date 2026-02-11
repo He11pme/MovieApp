@@ -6,9 +6,21 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="io.github.he11pme.movieapp.view.rv.utils.enums.Source" />
+
         <variable
             name="viewModel"
-            type="io.github.he11pme.movieapp.fragments.detail.DetailInfoViewModel" />
+            type="io.github.he11pme.movieapp.view.fragments.detail.DetailInfoViewModel" />
+
+        <variable
+            name="movie"
+            type="io.github.he11pme.movieapp.view.model.MovieDetailsUi" />
+
+        <variable
+            name="source"
+            type="io.github.he11pme.movieapp.view.rv.utils.enums.Source" />
 
     </data>
 
@@ -16,7 +28,7 @@
         android:id="@+id/detailInfoMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.detail.DetailInfoFragment">
+        tools:context=".view.fragments.detail.DetailInfoFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarDetail"
@@ -51,13 +63,14 @@
                         style="@style/Widget.MovieApp.IconButton.Filled.Medium.Elevated"
                         android:layout_marginBottom="10dp"
                         android:onClickListener="@{() -> viewModel.onFavoriteBtnClicked()}"
-                        app:icon="@drawable/ic_favorite"
+                        app:icon="@{movie.isFavorite ? @drawable/ic_favorite : @drawable/ic_favorite_outline}"
                         app:layout_collapseMode="parallax"
                         app:layout_constraintBottom_toBottomOf="@+id/posterDetail"
                         app:layout_constraintEnd_toStartOf="@+id/downloadBtn"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:icon="@drawable/ic_favorite" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/downloadBtn"
@@ -91,11 +104,11 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="75dp"
                         android:elevation="8dp"
+                        android:visibility='@{source == Source.SEARCH ? View.INVISIBLE : View.VISIBLE}'
                         app:icon="@drawable/ic_arrow_back"
                         app:layout_collapseMode="parallax"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:alpha="1" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/bottom_background"
@@ -113,6 +126,7 @@
                         android:layout_width="0dp"
                         android:layout_height="75dp"
                         android:src="@drawable/top_background_gradient_poster"
+                        android:visibility='@{source == Source.SEARCH ? View.INVISIBLE : View.VISIBLE}'
                         app:layout_collapseMode="parallax"
                         app:layout_collapseParallaxMultiplier="0.9"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -126,6 +140,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:text="@{movie.title}"
                         app:layout_collapseMode="parallax"
                         app:layout_collapseParallaxMultiplier="0.8"
                         app:layout_constraintBottom_toTopOf="@+id/taglineText"
@@ -141,6 +156,8 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="8dp"
+                        android:text="@{movie.tagline}"
+                        android:visibility='@{movie.tagline.empty ? View.GONE : View.VISIBLE}'
                         app:layout_collapseMode="parallax"
                         app:layout_constraintBottom_toTopOf="@+id/starRating"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -153,6 +170,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
+                        android:text="@{movie.parameters}"
                         app:layout_collapseMode="parallax"
                         app:layout_constraintBottom_toTopOf="@+id/downloadBtn"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -165,6 +183,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="12dp"
+                        app:rate="@{movie.vote}"
                         app:emptyStarAlpha="0.5"
                         app:emptyStarColor="@color/on_background"
                         app:layout_constraintBottom_toTopOf="@+id/parametersText"
@@ -180,7 +199,7 @@
                     android:id="@+id/toolbarDetail"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:visibility="invisible"
+                    android:visibility='@{source == Source.SEARCH ? View.GONE : View.INVISIBLE}'
                     app:layout_collapseMode="pin" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -199,6 +218,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:text="@{movie.overview}"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:textColor="@color/on_background"
                 app:layout_constraintEnd_toEndOf="parent"

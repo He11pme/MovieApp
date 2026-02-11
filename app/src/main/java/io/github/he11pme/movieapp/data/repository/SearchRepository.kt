@@ -1,8 +1,10 @@
 package io.github.he11pme.movieapp.data.repository
 
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import io.github.he11pme.movieapp.data.mappers.toDomain
 import io.github.he11pme.movieapp.data.network.TMDbApi
-import io.github.he11pme.movieapp.model.Movie
+import io.github.he11pme.movieapp.data.network.dto.MovieDTO
+import io.github.he11pme.movieapp.domain.models.Movie
 import javax.inject.Inject
 
 @ActivityRetainedScoped
@@ -14,7 +16,7 @@ class SearchRepository @Inject constructor() {
     ): Result<List<Movie>> {
 
         return safeApiCall {
-            val movies: MutableList<Movie> = mutableListOf()
+            val movies: MutableList<MovieDTO> = mutableListOf()
             var totalPages: Int = -1
             var currentPage = 1
 
@@ -27,7 +29,7 @@ class SearchRepository @Inject constructor() {
                 currentPage += 1
             } while (currentPage < totalPages && movies.size < 12)
 
-            movies.sortedByDescending { it.vote }.take(12)
+            movies.sortedByDescending { it.vote }.take(12).map { it.toDomain() }
         }
 
     }

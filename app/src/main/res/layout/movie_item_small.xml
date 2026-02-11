@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="75dp"
-    android:background="@color/background"
-    android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingTop="2dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="2dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/smallPoster"
-        style="@style/Widget.MovieApp.Poster"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/tools_poster" />
+    <data>
 
-    <TextView
-        android:id="@+id/titleMovie"
-        style="@style/Widget.MovieApp.TitleCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/voteMovie"
-        app:layout_constraintStart_toEndOf="@+id/smallPoster"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Fight Club" />
+        <variable
+            name="movie"
+            type="io.github.he11pme.movieapp.view.model.MovieUi" />
+    </data>
 
-    <TextView
-        android:id="@+id/voteMovie"
-        style="@style/Widget.MovieApp.Vote.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="8.43" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/background"
+        android:paddingStart="10dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="2dp">
+
+        <ImageView
+            android:id="@+id/smallPoster"
+            style="@style/Widget.MovieApp.Poster"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/tools_poster" />
+
+        <TextView
+            style="@style/Widget.MovieApp.TitleCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@{movie.title}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/voteMovie"
+            app:layout_constraintStart_toEndOf="@+id/smallPoster"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Fight Club" />
+
+        <TextView
+            android:id="@+id/voteMovie"
+            style="@style/Widget.MovieApp.Vote.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{String.format("%.1f", movie.vote)}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="8.43" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

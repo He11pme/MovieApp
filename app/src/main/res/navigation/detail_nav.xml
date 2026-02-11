@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/detailInfoFragment"
-        android:name="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.detail.DetailInfoFragment"
         android:label=""
         tools:layout="@layout/fragment_detail_info">
 
@@ -21,7 +21,7 @@
             app:argType="string" />
         <argument
             android:name="source"
-            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source"
+            app:argType="io.github.he11pme.movieapp.view.rv.utils.enums.Source"
             android:defaultValue="CONTENT" />
 
     </fragment>

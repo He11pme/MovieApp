@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="io.github.he11pme.movieapp.fragments.search.SearchFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -23,7 +23,7 @@
                 app:argType="string" />
             <argument
                 android:name="source"
-                app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source"
+                app:argType="io.github.he11pme.movieapp.view.rv.utils.enums.Source"
                 android:defaultValue="CONTENT" />
         </action>
     </fragment>

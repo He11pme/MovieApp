@@ -20,40 +20,40 @@
         <argument
             android:name="source"
             android:defaultValue="CONTENT"
-            app:argType="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment$Companion$Source" />
+            app:argType="io.github.he11pme.movieapp.view.rv.utils.enums.Source" />
 
     </action>
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="io.github.he11pme.movieapp.fragments.home.HomeFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.home.HomeFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="io.github.he11pme.movieapp.fragments.favorites.FavoritesFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.favorites.FavoritesFragment"
         android:label="@string/favorites"
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/randomFragment"
-        android:name="io.github.he11pme.movieapp.fragments.random.RandomFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.random.RandomFragment"
         android:label="@string/surprise_me"
         tools:layout="@layout/fragment_random" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="io.github.he11pme.movieapp.fragments.settings.SettingsFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="io.github.he11pme.movieapp.fragments.profile.ProfileFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 
     <include app:graph="@navigation/detail_nav" />
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="io.github.he11pme.movieapp.fragments.splash.SplashScreenFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.splash.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen">
         <action
