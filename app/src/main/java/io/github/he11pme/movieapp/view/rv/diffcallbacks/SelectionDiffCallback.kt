@@ -1,19 +1,19 @@
 package io.github.he11pme.movieapp.view.rv.diffcallbacks
 
 import androidx.recyclerview.widget.DiffUtil
-import io.github.he11pme.movieapp.domain.models.Selection
+import io.github.he11pme.movieapp.view.model.SelectionUi
 
-class SelectionDiffCallback: DiffUtil.ItemCallback<Selection>() {
+class SelectionDiffCallback: DiffUtil.ItemCallback<SelectionUi>() {
     override fun areItemsTheSame(
-        oldItem: Selection,
-        newItem: Selection
+        oldItem: SelectionUi,
+        newItem: SelectionUi
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: Selection,
-        newItem: Selection
+        oldItem: SelectionUi,
+        newItem: SelectionUi
     ): Boolean {
         return oldItem == newItem
     }

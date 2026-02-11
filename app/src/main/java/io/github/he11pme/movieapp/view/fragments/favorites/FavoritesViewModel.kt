@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.favorites
+package io.github.he11pme.movieapp.view.fragments.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

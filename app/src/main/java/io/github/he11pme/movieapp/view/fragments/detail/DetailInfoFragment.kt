@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.detail
+package io.github.he11pme.movieapp.view.fragments.detail
 
 import android.annotation.SuppressLint
 import android.content.Intent

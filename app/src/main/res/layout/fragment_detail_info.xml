@@ -12,7 +12,7 @@
 
         <variable
             name="viewModel"
-            type="io.github.he11pme.movieapp.fragments.detail.DetailInfoViewModel" />
+            type="io.github.he11pme.movieapp.view.fragments.detail.DetailInfoViewModel" />
 
         <variable
             name="movie"
@@ -28,7 +28,7 @@
         android:id="@+id/detailInfoMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.detail.DetailInfoFragment">
+        tools:context=".view.fragments.detail.DetailInfoFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarDetail"

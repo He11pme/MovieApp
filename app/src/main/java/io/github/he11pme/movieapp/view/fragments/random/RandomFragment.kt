@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.random
+package io.github.he11pme.movieapp.view.fragments.random
 
 import android.os.Bundle
 import android.view.LayoutInflater

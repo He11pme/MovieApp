@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.home
+package io.github.he11pme.movieapp.view.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,9 +14,9 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.FragmentHomeBinding
-import io.github.he11pme.movieapp.domain.models.Selection
-import io.github.he11pme.movieapp.domain.models.SelectionState
 import io.github.he11pme.movieapp.utils.AnimationHelper
+import io.github.he11pme.movieapp.view.model.SelectionState
+import io.github.he11pme.movieapp.view.model.SelectionUi
 import io.github.he11pme.movieapp.view.rv.adapters.ContentAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
         viewModel.selectionsState.collect(::handleSelectionState)
     }
 
-    private fun handleSelectionState(selections: List<Selection>) {
+    private fun handleSelectionState(selections: List<SelectionUi>) {
         adapter.submitList(selections)
 
         if (isAllItemLoaded(selections)) {
@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
         animationHelper.currentAnimation?.invoke(binding.root, requireActivity())
     }
 
-    private fun isAllItemLoaded(selections: List<Selection>): Boolean =
+    private fun isAllItemLoaded(selections: List<SelectionUi>): Boolean =
         selections.all { selection -> selection.state is SelectionState.Loaded || selection.state is SelectionState.Error }
 
     private fun toMovieDetails(sharedPoster: View, movieId: Int) {

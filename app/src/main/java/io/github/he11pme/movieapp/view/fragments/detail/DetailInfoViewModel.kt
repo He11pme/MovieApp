@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.detail
+package io.github.he11pme.movieapp.view.fragments.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

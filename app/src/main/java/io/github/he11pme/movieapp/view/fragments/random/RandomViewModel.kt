@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.random
+package io.github.he11pme.movieapp.view.fragments.random
 
 import androidx.lifecycle.ViewModel
 

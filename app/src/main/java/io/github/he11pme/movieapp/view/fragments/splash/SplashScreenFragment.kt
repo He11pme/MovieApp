@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.splash
+package io.github.he11pme.movieapp.view.fragments.splash
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,12 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.he11pme.movieapp.view.fragments.splash.SplashViewModel
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import kotlinx.coroutines.launch

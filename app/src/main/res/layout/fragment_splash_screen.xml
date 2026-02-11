@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.splash.SplashScreenFragment">
+    tools:context=".view.fragments.splash.SplashScreenFragment">
 
     <!--    Width and height parameters are moved to a style
             to ensure consistent sizing between both LottieAnimationView instances  -->

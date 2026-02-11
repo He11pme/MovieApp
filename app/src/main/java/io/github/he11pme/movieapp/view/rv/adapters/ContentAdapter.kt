@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import io.github.he11pme.movieapp.databinding.SelectionMoviesBinding
-import io.github.he11pme.movieapp.domain.models.Selection
+import io.github.he11pme.movieapp.view.model.SelectionUi
 import io.github.he11pme.movieapp.view.rv.diffcallbacks.SelectionDiffCallback
 import io.github.he11pme.movieapp.view.rv.viewholders.SelectionMoviesViewHolder
 
@@ -13,7 +13,7 @@ class ContentAdapter(
     private val toMovieDetails: (sharedView: View, movieId: Int) -> Unit,
     private val toSelections: (selectionId: String) -> Unit
 ) :
-    ListAdapter<Selection, SelectionMoviesViewHolder>(SelectionDiffCallback()) {
+    ListAdapter<SelectionUi, SelectionMoviesViewHolder>(SelectionDiffCallback()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

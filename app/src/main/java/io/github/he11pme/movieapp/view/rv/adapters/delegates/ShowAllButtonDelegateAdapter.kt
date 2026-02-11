@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.home.carousel
+package io.github.he11pme.movieapp.view.rv.adapters.delegates
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

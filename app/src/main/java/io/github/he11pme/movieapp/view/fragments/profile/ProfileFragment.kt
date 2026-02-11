@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.profile
+package io.github.he11pme.movieapp.view.fragments.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater

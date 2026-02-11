@@ -1,12 +1,13 @@
-package io.github.he11pme.movieapp.fragments.home
+package io.github.he11pme.movieapp.view.fragments.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.data.repository.AppRepository
-import io.github.he11pme.movieapp.domain.models.Movie
-import io.github.he11pme.movieapp.domain.models.Selection
-import io.github.he11pme.movieapp.domain.models.SelectionState
+import io.github.he11pme.movieapp.view.mappers.toUi
+import io.github.he11pme.movieapp.view.model.MovieUi
+import io.github.he11pme.movieapp.view.model.SelectionState
+import io.github.he11pme.movieapp.view.model.SelectionUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,9 +18,9 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val repository: AppRepository
 ) : ViewModel() {
-    private var availableSelection: List<Selection> = emptyList()
+    private var availableSelection: List<SelectionUi> = emptyList()
 
-    private val _selectionsState = MutableStateFlow<List<Selection>>(emptyList())
+    private val _selectionsState = MutableStateFlow<List<SelectionUi>>(emptyList())
     val selectionsState = _selectionsState.asStateFlow()
 
     fun initHomeScreen() {
@@ -37,7 +38,7 @@ class HomeViewModel @Inject constructor(
      */
     private fun fetchAvailableSelections(): Boolean {
         repository.getCollections().apply {
-            onSuccess { availableSelection = it }
+            onSuccess { availableSelection = it.map { selection -> selection.toUi() } }
             onFailure { return false }
         }
         return true
@@ -57,24 +58,24 @@ class HomeViewModel @Inject constructor(
         availableSelection.forEach { loadMoviesForSelection(it) }
     }
 
-    private fun loadMoviesForSelection(selection: Selection) {
+    private fun loadMoviesForSelection(selection: SelectionUi) {
         viewModelScope.launch {
             val result = repository.getSelectionMovies(selection.type)
 
-            updateSelectionStateById(selection.id) {
+            updateSelectionStateById(selection.id) { selection ->
                 result.fold(
                     onSuccess = { movies ->
-                        markSelectionAsLoaded(it, movies)
+                        markSelectionAsLoaded(selection, movies.map { it.toUi() })
                     },
                     onFailure = { e ->
-                        markSelectionAsError(it, e.message.toString())
+                        markSelectionAsError(selection, e.message.toString())
                     }
                 )
             }
         }
     }
 
-    private fun updateSelectionStateById(id: String, doUpdate: (Selection) -> Selection) {
+    private fun updateSelectionStateById(id: String, doUpdate: (SelectionUi) -> SelectionUi) {
         _selectionsState.update { selections ->
             selections.map {
                 if (it.id == id) doUpdate(it)
@@ -83,11 +84,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun markSelectionAsLoaded(selection: Selection, movies: List<Movie>): Selection {
+    private fun markSelectionAsLoaded(selection: SelectionUi, movies: List<MovieUi>): SelectionUi {
         return selection.copy(state = SelectionState.Loaded(movies))
     }
 
-    private fun markSelectionAsError(selection: Selection, message: String): Selection {
+    private fun markSelectionAsError(selection: SelectionUi, message: String): SelectionUi {
         return selection.copy(state = SelectionState.Error(message))
     }
 

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/detailInfoFragment"
-        android:name="io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment"
+        android:name="io.github.he11pme.movieapp.view.fragments.detail.DetailInfoFragment"
         android:label=""
         tools:layout="@layout/fragment_detail_info">
 

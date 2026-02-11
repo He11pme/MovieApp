@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import io.github.he11pme.movieapp.databinding.MovieItemSmallBinding
-import io.github.he11pme.movieapp.domain.models.Movie
+import io.github.he11pme.movieapp.view.model.MovieUi
 import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 
 class MovieItemSmallViewHolder(
@@ -13,7 +13,7 @@ class MovieItemSmallViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(movie: Movie) {
+    fun bind(movie: MovieUi) {
         binding.movie = movie
 
         binding.smallPoster.transitionName = "poster_${movie.id}"

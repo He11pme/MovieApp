@@ -2,8 +2,8 @@ package io.github.he11pme.movieapp.view.rv.adapters
 
 import android.view.View
 import io.github.he11pme.movieapp.view.rv.diffcallbacks.IdentifiableDiffCallback
-import io.github.he11pme.movieapp.fragments.home.carousel.MovieCardDelegateAdapter
-import io.github.he11pme.movieapp.fragments.home.carousel.ShowAllButtonDelegateAdapter
+import io.github.he11pme.movieapp.view.rv.adapters.delegates.MovieCardDelegateAdapter
+import io.github.he11pme.movieapp.view.rv.adapters.delegates.ShowAllButtonDelegateAdapter
 import io.github.he11pme.movieapp.view.model.Identifiable
 import io.github.he11pme.movieapp.view.rv.diffcallbacks.ListDelegationAdapterDiff
 

@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.search
+package io.github.he11pme.movieapp.view.fragments.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
 import io.github.he11pme.movieapp.view.rv.utils.enums.Source
-import io.github.he11pme.movieapp.domain.models.Movie
 import io.github.he11pme.movieapp.utils.extensions.dp
 import io.github.he11pme.movieapp.utils.extensions.hideKeyboard
+import io.github.he11pme.movieapp.view.model.MovieUi
 import io.github.he11pme.movieapp.view.rv.adapters.SearchAdapter
 import io.github.he11pme.movieapp.view.rv.utils.ItemOffsetsDecoration
 import kotlinx.coroutines.launch
@@ -58,7 +58,7 @@ class SearchFragment : Fragment() {
         viewModel.searchState.collect(::handleSearchState)
     }
 
-    private fun handleSearchState(movies: List<Movie>) {
+    private fun handleSearchState(movies: List<MovieUi>) {
         searchAdapter.submitList(movies)
     }
 

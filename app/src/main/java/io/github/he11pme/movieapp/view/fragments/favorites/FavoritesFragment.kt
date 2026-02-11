@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.favorites
+package io.github.he11pme.movieapp.view.fragments.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.databinding.FragmentFavoritesBinding
-import io.github.he11pme.movieapp.fragments.home.HomeFragmentDirections
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.extensions.dp
+import io.github.he11pme.movieapp.view.fragments.home.HomeFragmentDirections
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.rv.adapters.FavoritesAdapter
 import io.github.he11pme.movieapp.view.rv.utils.FavoritesTouchHelperCallback

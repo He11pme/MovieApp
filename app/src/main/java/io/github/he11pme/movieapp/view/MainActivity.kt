@@ -28,8 +28,8 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
-import io.github.he11pme.movieapp.fragments.detail.DetailInfoFragment
-import io.github.he11pme.movieapp.fragments.search.SearchViewModel
+import io.github.he11pme.movieapp.view.fragments.detail.DetailInfoFragment
+import io.github.he11pme.movieapp.view.fragments.search.SearchViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets

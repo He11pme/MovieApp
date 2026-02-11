@@ -1,4 +1,4 @@
-package io.github.he11pme.movieapp.fragments.profile
+package io.github.he11pme.movieapp.view.fragments.profile
 
 import androidx.lifecycle.ViewModel
 
