@@ -29,6 +29,8 @@ glide = "5.0.5"
 
 roomRuntime = "2.8.4"
 
+androidxPaging = "3.4.0"
+
 hiltAndroid = "2.57.2"
 
 navigation = "2.9.6"
@@ -68,6 +70,9 @@ glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", versi
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomRuntime" }
 androidx-room-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+
+androidx-paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "androidxPaging" }
+androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "androidxPaging" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltAndroid" }
