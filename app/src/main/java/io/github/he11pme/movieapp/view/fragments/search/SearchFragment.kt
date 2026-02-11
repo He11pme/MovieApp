@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
 import io.github.he11pme.movieapp.view.rv.utils.enums.Source
@@ -20,6 +21,7 @@ import io.github.he11pme.movieapp.utils.extensions.hideKeyboard
 import io.github.he11pme.movieapp.view.model.MovieUi
 import io.github.he11pme.movieapp.view.rv.adapters.SearchAdapter
 import io.github.he11pme.movieapp.view.rv.utils.ItemOffsetsDecoration
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
@@ -55,11 +57,11 @@ class SearchFragment : Fragment() {
     }
 
     private suspend fun bindSearchState() {
-        viewModel.searchState.collect(::handleSearchState)
+        viewModel.searchResult.collectLatest(::handleSearchState)
     }
 
-    private fun handleSearchState(movies: List<MovieUi>) {
-        searchAdapter.submitList(movies)
+    private suspend fun handleSearchState(movies: PagingData<MovieUi>) {
+        searchAdapter.submitData(movies)
     }
 
     private fun setupViews() {
