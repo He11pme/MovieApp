@@ -43,7 +43,9 @@ interface TMDbApiService {
      * Return a list of movies ordered by popularity.
      */
     @GET(POPULAR_MOVIE)
-    suspend fun getPopularMovies(): MovieResponse
+    suspend fun getPopularMovies(
+        @Query("page") page: Int = 1,
+    ): MovieResponse
 
     /**
      * Returns a list of movies that are currently in theatres
