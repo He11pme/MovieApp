@@ -6,8 +6,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import io.github.he11pme.movieapp.App
-import io.github.he11pme.movieapp.data.repository.SearchRepository
 import io.github.he11pme.movieapp.domain.models.Movie
+import io.github.he11pme.movieapp.domain.repository.SearchRepository
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.model.MovieUi
 import kotlinx.coroutines.ExperimentalCoroutinesApi

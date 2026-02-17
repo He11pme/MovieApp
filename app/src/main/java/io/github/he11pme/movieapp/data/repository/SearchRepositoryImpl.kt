@@ -7,12 +7,13 @@ import io.github.he11pme.movieapp.data.network.TMDbApi
 import io.github.he11pme.movieapp.data.repository.paging_sources.MoviePopularPagingSource
 import io.github.he11pme.movieapp.data.repository.paging_sources.MovieSearchPagingSource
 import io.github.he11pme.movieapp.domain.models.Movie
+import io.github.he11pme.movieapp.domain.repository.SearchRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SearchRepository @Inject constructor() {
+class SearchRepositoryImpl @Inject constructor() : SearchRepository {
     private val api = TMDbApi.retrofitService
-    fun findMovie(title: String): Flow<PagingData<Movie>> {
+    override fun findMovie(title: String): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = TMDB_PAGE_SIZE,
@@ -22,7 +23,7 @@ class SearchRepository @Inject constructor() {
         ).flow
     }
 
-    fun getPopularMoviesPaging(): Flow<PagingData<Movie>> {
+    override fun getPopularMoviesPaging(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(
                 pageSize = TMDB_PAGE_SIZE,
