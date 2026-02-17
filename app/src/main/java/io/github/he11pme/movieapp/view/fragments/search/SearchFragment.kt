@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -12,14 +13,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import io.github.he11pme.movieapp.databinding.FragmentSearchBinding
-import io.github.he11pme.movieapp.view.rv.utils.enums.Source
 import io.github.he11pme.movieapp.utils.extensions.dp
 import io.github.he11pme.movieapp.utils.extensions.hideKeyboard
 import io.github.he11pme.movieapp.view.model.MovieUi
 import io.github.he11pme.movieapp.view.rv.adapters.SearchAdapter
 import io.github.he11pme.movieapp.view.rv.utils.ItemOffsetsDecoration
+import io.github.he11pme.movieapp.view.rv.utils.enums.Source
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
@@ -36,6 +40,7 @@ class SearchFragment : Fragment() {
 
         setupViews()
         bindToViewModel()
+        bindPagingLoadState()
         postponeEnterTransition()
         binding.searchRv.doOnPreDraw { startPostponedEnterTransition() }
 
@@ -55,11 +60,20 @@ class SearchFragment : Fragment() {
     }
 
     private suspend fun bindSearchState() {
-        viewModel.searchState.collect(::handleSearchState)
+        viewModel.searchResult.collectLatest(::handleSearchState)
     }
 
-    private fun handleSearchState(movies: List<MovieUi>) {
-        searchAdapter.submitList(movies)
+    private suspend fun handleSearchState(movies: PagingData<MovieUi>) {
+        binding.searchRv.scrollToPosition(0)
+        searchAdapter.submitData(movies)
+    }
+
+    private fun bindPagingLoadState() {
+        lifecycleScope.launch {
+            searchAdapter.loadStateFlow.collect {
+                binding.progressIndicator.isVisible = it.source.append is LoadState.Loading
+            }
+        }
     }
 
     private fun setupViews() {
