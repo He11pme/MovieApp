@@ -25,7 +25,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.ActivityMainBinding
 import io.github.he11pme.movieapp.view.fragments.detail.DetailInfoFragment
@@ -36,7 +36,6 @@ import io.github.he11pme.movieapp.utils.extensions.doOnApplyWindowInsets
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -45,6 +44,10 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var animationHelper: AnimationHelper
+
+    init {
+        App.instance.dagger.inject(this)
+    }
 
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.contentContainer) as NavHostFragment).navController

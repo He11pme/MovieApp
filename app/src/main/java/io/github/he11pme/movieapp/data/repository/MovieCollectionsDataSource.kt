@@ -1,16 +1,12 @@
 package io.github.he11pme.movieapp.data.repository
 
 import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.data.local.assets.dto.SelectionDTO
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
-@ActivityRetainedScoped
-class MovieCollectionsDataSource @Inject constructor(
-    @param:ApplicationContext private val context: Context
-) {
+
+class MovieCollectionsDataSource @Inject constructor(val context: Context) {
     fun getCollections(): List<SelectionDTO> {
         val movieCollectionsString = context.assets.open("movie_collections.json")
             .bufferedReader()

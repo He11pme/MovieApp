@@ -2,7 +2,7 @@ package io.github.he11pme.movieapp.view.fragments.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.domain.models.MovieDetails
 import io.github.he11pme.movieapp.view.model.MovieDetailsUi
@@ -13,10 +13,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    private val appRepository: AppRepository
+//    private val appRepository: AppRepository
 ) : ViewModel() {
+
+    @Inject
+    lateinit var appRepository: AppRepository
+
+//    @Inject
+//    lateinit var appBarManager: AppBarManager
+
+    init {
+        App.instance.dagger.inject(this)
+    }
 
     private val _state = MutableStateFlow<State>(State.Loading)
     val state = _state.asStateFlow()

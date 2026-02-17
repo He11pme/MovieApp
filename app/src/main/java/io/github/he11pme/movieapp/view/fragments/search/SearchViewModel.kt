@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.data.repository.SearchRepository
 import io.github.he11pme.movieapp.domain.models.Movie
 import io.github.he11pme.movieapp.view.mappers.toUi
@@ -21,10 +21,16 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-@HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchRepository: SearchRepository
+//    val searchRepository: SearchRepository
 ) : ViewModel() {
+
+    @Inject
+    lateinit var searchRepository: SearchRepository
+
+    init {
+        App.instance.dagger.inject(this)
+    }
     private val query = MutableStateFlow("")
 
     val searchResult: Flow<PagingData<MovieUi>> =

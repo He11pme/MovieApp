@@ -2,7 +2,7 @@ package io.github.he11pme.movieapp.view.fragments.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.model.MovieUi
@@ -14,10 +14,19 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: AppRepository
+//    private val repository: AppRepository
 ) : ViewModel() {
+
+    @Inject
+    lateinit var repository: AppRepository
+
+//    @Inject
+//    lateinit var appBarManager: AppBarManager
+
+    init {
+        App.instance.dagger.inject(this)
+    }
     private var availableSelection: List<SelectionUi> = emptyList()
 
     private val _selectionsState = MutableStateFlow<List<SelectionUi>>(emptyList())

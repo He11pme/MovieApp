@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.databinding.FragmentHomeBinding
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.view.model.SelectionState
@@ -21,11 +21,14 @@ import io.github.he11pme.movieapp.view.rv.adapters.ContentAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     @Inject
     lateinit var animationHelper: AnimationHelper
+
+    init {
+        App.instance.dagger.inject(this)
+    }
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
     private val adapter = ContentAdapter(::toMovieDetails, ::toSelection)

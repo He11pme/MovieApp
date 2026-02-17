@@ -9,18 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
-@AndroidEntryPoint
 class SplashScreenFragment : Fragment() {
 
     @Inject
     lateinit var animationHelper: AnimationHelper
+
+    init {
+        App.instance.dagger.inject(this)
+    }
     private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreateView(

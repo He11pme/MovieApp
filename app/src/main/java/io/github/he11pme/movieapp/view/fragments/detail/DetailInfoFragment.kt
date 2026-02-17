@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransform
-import dagger.hilt.android.AndroidEntryPoint
 import io.github.he11pme.movieapp.R
 import io.github.he11pme.movieapp.databinding.FragmentDetailInfoBinding
 import io.github.he11pme.movieapp.domain.models.MovieDetails
@@ -34,7 +33,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.pow
 
-@AndroidEntryPoint
 class DetailInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailInfoBinding

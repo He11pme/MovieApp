@@ -3,7 +3,6 @@ package io.github.he11pme.movieapp.managers
 import android.util.Log
 import android.view.View
 import com.google.android.material.appbar.AppBarLayout
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,8 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityRetainedScoped
+@Singleton
 class AppBarManager @Inject constructor() {
 
     private val _appBarState = MutableStateFlow(AppBarState())

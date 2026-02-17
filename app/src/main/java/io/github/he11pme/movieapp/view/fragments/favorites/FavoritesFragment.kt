@@ -13,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import dagger.hilt.android.AndroidEntryPoint
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.databinding.FragmentFavoritesBinding
 import io.github.he11pme.movieapp.utils.AnimationHelper
 import io.github.he11pme.movieapp.utils.extensions.dp
@@ -25,10 +25,13 @@ import io.github.he11pme.movieapp.view.rv.utils.ItemOffsetsDecoration
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class FavoritesFragment : Fragment() {
     @Inject
     lateinit var animationHelper: AnimationHelper
+
+    init {
+        App.instance.dagger.inject(this)
+    }
     private lateinit var binding: FragmentFavoritesBinding
     private val viewModel: FavoritesViewModel by viewModels()
     private val adapter = FavoritesAdapter(::toMovieDetails)
