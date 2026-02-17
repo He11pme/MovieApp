@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.he11pme.movieapp.App
 import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.domain.models.MovieDetails
@@ -13,11 +13,20 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class DetailInfoViewModel @Inject constructor(
-    private val repository: AppRepository,
-    val appBarManager: AppBarManager
+//    private val repository: AppRepository,
+//    val appBarManager: AppBarManager
 ) : ViewModel() {
+
+    @Inject
+    lateinit var repository: AppRepository
+
+    @Inject
+    lateinit var appBarManager: AppBarManager
+
+    init {
+        App.instance.dagger.inject(this)
+    }
 
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> get() = _state

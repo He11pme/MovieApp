@@ -1,22 +1,19 @@
-package io.github.he11pme.movieapp.data.local.room
+package io.github.he11pme.movieapp.di.modules
 
 import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import io.github.he11pme.movieapp.data.local.room.AppDatabase
 import io.github.he11pme.movieapp.data.local.room.dao.FavoriteMoviesDao
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
-object AppDatabaseModule {
+class AppDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun provideDatabase(context: Context): AppDatabase {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
@@ -28,5 +25,6 @@ object AppDatabaseModule {
     fun provideFavoriteMovieDao(database: AppDatabase): FavoriteMoviesDao {
         return database.favoriteMoviesDao
     }
+
 
 }

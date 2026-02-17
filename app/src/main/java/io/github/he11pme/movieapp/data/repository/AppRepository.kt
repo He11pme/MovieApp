@@ -1,6 +1,5 @@
 package io.github.he11pme.movieapp.data.repository
 
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.data.local.room.dao.FavoriteMoviesDao
 import io.github.he11pme.movieapp.data.local.room.entity.FavoriteMovieEntity
 import io.github.he11pme.movieapp.data.network.dto.GenreDTO
@@ -14,7 +13,6 @@ import io.github.he11pme.movieapp.domain.models.SelectionType
 import java.lang.Exception
 import javax.inject.Inject
 
-@ActivityRetainedScoped
 class AppRepository @Inject constructor(
     private val collectionsDataSource: MovieCollectionsDataSource,
     private val favoriteMoviesDao: FavoriteMoviesDao

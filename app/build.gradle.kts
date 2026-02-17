@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.dagger.hilt)
+//    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.devtoolsKsp)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.safe.args)
@@ -101,8 +101,10 @@ dependencies {
     implementation(libs.androidx.paging.common.ktx)
     implementation(libs.androidx.paging.runtime.ktx)
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+//    implementation(libs.hilt.android)
+    implementation(libs.dagger.android)
+//    kapt(libs.hilt.compiler)
+    kapt(libs.dagger.compiler)
 
     implementation(libs.lottie)
 

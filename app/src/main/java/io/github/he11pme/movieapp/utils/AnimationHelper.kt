@@ -4,13 +4,13 @@ import android.app.Activity
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateDecelerateInterpolator
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-@ActivityRetainedScoped
+@Singleton
 class AnimationHelper @Inject constructor() {
     private val menuItems = 4
     var source: NavigationSource? = null
