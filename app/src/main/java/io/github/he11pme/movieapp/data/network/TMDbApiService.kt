@@ -9,6 +9,7 @@ import io.github.he11pme.movieapp.utils.extensions.getFormatLocale
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -94,18 +95,25 @@ object TMDbApi {
     }
 
     private fun createClient(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor { chain ->
-            chain.request().let { original ->
-                val url = original.url.newBuilder()
-                    .addQueryParameter("language", Locale.getDefault().getFormatLocale())
-                    .build()
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                chain.request().let { original ->
+                    val url = original.url.newBuilder()
+                        .addQueryParameter("language", Locale.getDefault().getFormatLocale())
+                        .build()
 
-                val req = original.newBuilder()
-                    .url(url)
-                    .addHeader("Authorization", BuildConfig.TMDB_API_KEY)
-                    .build()
-                chain.proceed(req)
+                    val req = original.newBuilder()
+                        .url(url)
+                        .addHeader("Authorization", BuildConfig.TMDB_API_KEY)
+                        .build()
+                    chain.proceed(req)
+                }
             }
-        }.build()
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BASIC
+                }
+            )
+            .build()
     }
 }
