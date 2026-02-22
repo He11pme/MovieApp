@@ -24,6 +24,7 @@
         <item name="android:textColor">@color/primary_item</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="TextAppearance.MovieApp.AccentText.Colorless">
         <item name="android:textColor">@color/on_background</item>
     </style>
@@ -35,6 +36,11 @@
 
     <style name="TextAppearance.MovieApp.Tagline" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/on_background</item>
+    </style>
+
+    <style name="TextAppearance.MovieApp.Settings.Headline" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/on_foreground</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.MovieApp.Parameters" parent="TextAppearance.Material3.BodyMedium">
