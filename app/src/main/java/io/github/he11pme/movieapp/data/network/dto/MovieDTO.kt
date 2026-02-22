@@ -20,5 +20,7 @@ data class MovieDTO(
     val posterPath: String = "",
     val overview: String,
     @SerialName("vote_average")
-    val vote: Double = 0.0
+    val vote: Double = 0.0,
+    @SerialName("genre_ids")
+    val genreIds: List<Int> = emptyList()
 )
