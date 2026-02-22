@@ -110,6 +110,9 @@ class AppRepository @Inject constructor(
         isPopular: Boolean = false,
         isNowPlaying: Boolean = false
     ) {
+        if (isPopular) localMoviesDao.removePopularMovies()
+        if (isNowPlaying) localMoviesDao.removeNowPlayingMovies()
+
         localMoviesDao.addMovies(movies.map { it.toEntity(isPopular, isNowPlaying) })
     }
 

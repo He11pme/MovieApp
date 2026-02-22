@@ -46,6 +46,14 @@ class MoviesDaoImpl @Inject constructor(databaseHelper: DatabaseHelper) : Movies
         sqlDb.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper.COLUMN_ID + "=" + "$id", null)
     }
 
+    override fun removePopularMovies() {
+        sqlDb.delete(DatabaseHelper.TABLE_NAME, "${DatabaseHelper.COLUMN_IS_POPULAR}=?", arrayOf("1"))
+    }
+
+    override fun removeNowPlayingMovies() {
+        sqlDb.delete(DatabaseHelper.TABLE_NAME, "${DatabaseHelper.COLUMN_IS_NOW_PLAYING}=?", arrayOf("1"))
+    }
+
     private fun createContentValues(
         movie: MovieEntity,
         oldValuePopular: Boolean,
