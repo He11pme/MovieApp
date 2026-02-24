@@ -25,4 +25,5 @@
     <string name="double_tap_for_exit">Нажмите еще раз, чтобы выйти</string>
     <string name="runtime">%1$d мин</string>
     <string name="unknown_country">Неизвестная страна</string>
+    <string name="application_theme">Тема приложения</string>
 </resources>

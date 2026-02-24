@@ -7,7 +7,9 @@
     <color name="on_background">@color/gray_900</color>
     <color name="foreground">@color/gray_100</color>
     <color name="foreground_variant">@color/blue_gray_50</color>
+    <color name="foreground_variant_50">@color/blue_gray_50_alpha_50</color>
     <color name="on_foreground">@color/gray_900</color>
+    <color name="on_foreground_50">@color/gray_900_alpha_50</color>
     <color name="container_on_foreground_variant">@color/blue_gray_100</color>
     <color name="primary_item">@color/blue_700</color>
     <color name="primary_container">@color/blue_400</color>
