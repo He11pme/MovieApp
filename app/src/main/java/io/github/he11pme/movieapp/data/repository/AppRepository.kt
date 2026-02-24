@@ -1,12 +1,14 @@
 package io.github.he11pme.movieapp.data.repository
 
+import android.util.Log
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.data.local.room.dao.FavoriteMoviesDao
 import io.github.he11pme.movieapp.data.local.room.entity.FavoriteMovieEntity
-import io.github.he11pme.movieapp.data.local.sqlite.MoviesDao
+import io.github.he11pme.movieapp.data.local.room.dao.MoviesDao
 import io.github.he11pme.movieapp.data.network.dto.GenreDTO
 import io.github.he11pme.movieapp.data.network.dto.MovieDTO
 import io.github.he11pme.movieapp.data.mappers.toDomain
+import io.github.he11pme.movieapp.data.mappers.toDto
 import io.github.he11pme.movieapp.data.mappers.toEntity
 import io.github.he11pme.movieapp.data.network.TMDbApi
 import io.github.he11pme.movieapp.domain.models.Movie
@@ -91,21 +93,21 @@ class AppRepository @Inject constructor(
         fromCache: Boolean = false
     ): List<MovieDTO> {
         return if (!fromCache) getMoviesAndSaveToCache { api.getMoviesByGenres(genres.joinToString(",")).movies }
-        else localMoviesDao.getMoviesByGenres(genres)
+        else localMoviesDao.getMoviesByGenres(genres).map { it.toDto() }
     }
 
     private suspend fun getPopularMovies(fromCache: Boolean = false): List<MovieDTO> {
         return if (!fromCache) getMoviesAndSaveToCache(isPopular = true) { api.getPopularMovies().movies }
-        else localMoviesDao.getPopularMovies()
+        else localMoviesDao.getPopularMovies().map { it.toDto() }
     }
 
 
     private suspend fun getNowPlayingMovies(fromCache: Boolean = false): List<MovieDTO> {
         return if (!fromCache) getMoviesAndSaveToCache(isNowPlaying = true) { api.getNowPlayingMovies().movies }
-        else localMoviesDao.getNowPlayingMovies()
+        else localMoviesDao.getNowPlayingMovies().map { it.toDto() }
     }
 
-    private fun saveToCache(
+    private suspend fun saveToCache(
         movies: List<MovieDTO>,
         isPopular: Boolean = false,
         isNowPlaying: Boolean = false
@@ -121,7 +123,13 @@ class AppRepository @Inject constructor(
         isNowPlaying: Boolean = false,
         getMovies: suspend () -> List<MovieDTO>
     ): List<MovieDTO> {
-        return getMovies().also { saveToCache(it, isPopular, isNowPlaying) }
+        return getMovies().also {
+            try {
+                saveToCache(it, isPopular, isNowPlaying)
+            } catch (e: Exception) {
+                Log.e("SAVE TO CACHE", e.message.toString())
+            }
+        }
     }
 
     private suspend fun <T> safeApiCall(onSuccess: suspend () -> T): Result<T> {
