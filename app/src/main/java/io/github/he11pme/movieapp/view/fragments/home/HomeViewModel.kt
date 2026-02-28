@@ -3,8 +3,8 @@ package io.github.he11pme.movieapp.view.fragments.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.he11pme.movieapp.domain.repository.MoviesRepository
-import io.github.he11pme.movieapp.domain.repository.SelectionRepository
+import io.github.he11pme.movieapp.domain.use_cases.GetMoviesBySelectionUseCase
+import io.github.he11pme.movieapp.domain.use_cases.GetSelectionUseCase
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.model.MovieUi
 import io.github.he11pme.movieapp.view.model.SelectionState
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val selectionRepository: SelectionRepository,
-    private val moviesRepository: MoviesRepository
+    private val getSelection: GetSelectionUseCase,
+    private val getMoviesBySelection: GetMoviesBySelectionUseCase
 ) : ViewModel() {
     private var availableSelection: List<SelectionUi> = emptyList()
 
@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(
      * @return true if successful or false on failure
      */
     private fun fetchAvailableSelections(): Boolean {
-        selectionRepository.getCollections().apply {
+        getSelection().apply {
             onSuccess { availableSelection = it.map { selection -> selection.toUi() } }
             onFailure { return false }
         }
@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(
 
     private fun loadMoviesForSelection(selection: SelectionUi) {
         viewModelScope.launch {
-            val result = moviesRepository.getMoviesBySelection(selection.type)
+            val result = getMoviesBySelection(selection.type)
 
             updateSelectionStateById(selection.id) { selection ->
                 result.fold(

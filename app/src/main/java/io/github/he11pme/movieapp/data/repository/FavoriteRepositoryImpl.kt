@@ -2,16 +2,13 @@ package io.github.he11pme.movieapp.data.repository
 
 import io.github.he11pme.movieapp.data.local.room.dao.FavoriteMoviesDao
 import io.github.he11pme.movieapp.data.local.room.entity.FavoriteMovieEntity
-import io.github.he11pme.movieapp.domain.models.MovieDetails
 import io.github.he11pme.movieapp.domain.repository.FavoriteRepository
-import io.github.he11pme.movieapp.domain.repository.MovieDetailRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class FavoriteRepositoryImpl @Inject constructor(
-    private val favoriteMoviesDao: FavoriteMoviesDao,
-    private val movieDetailRepository: MovieDetailRepository
+    private val favoriteMoviesDao: FavoriteMoviesDao
 ) : FavoriteRepository {
 
     override suspend fun isFavoriteMovie(id: Int) = favoriteMoviesDao.isFavorite(id)
@@ -36,10 +33,7 @@ class FavoriteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllFavorites(): List<Result<MovieDetails>> {
-        return favoriteMoviesDao.getAllFavorites()
-            .map { movieDetailRepository.getMovieById(it.id, true) }
-    }
+    override suspend fun getAllFavoriteIds() = favoriteMoviesDao.getAllFavorites().map { it.id }
 
     override suspend fun removeFavoriteById(movieId: Int) {
         favoriteMoviesDao.removeFavorite(FavoriteMovieEntity(movieId))

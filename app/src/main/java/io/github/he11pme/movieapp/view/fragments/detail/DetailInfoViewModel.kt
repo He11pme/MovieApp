@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.domain.models.MovieDetails
-import io.github.he11pme.movieapp.domain.repository.FavoriteRepository
-import io.github.he11pme.movieapp.domain.repository.MovieDetailRepository
+import io.github.he11pme.movieapp.domain.use_cases.GetMovieDetailUseCase
+import io.github.he11pme.movieapp.domain.use_cases.ToggleFavoriteUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailInfoViewModel @Inject constructor(
-    private val favoriteRepository: FavoriteRepository,
-    private val movieDetailRepository: MovieDetailRepository,
+    private val getMovieDetail: GetMovieDetailUseCase,
+    private val toggleFavorite: ToggleFavoriteUseCase,
     val appBarManager: AppBarManager
 ) : ViewModel() {
 
@@ -34,7 +34,7 @@ class DetailInfoViewModel @Inject constructor(
         viewModelScope.launch {
             tryLoadDetails(movieId).apply {
                 onSuccess { handleSuccessLoadMovie(it) }
-                onFailure {  }
+                onFailure { }
             }
         }
     }
@@ -45,8 +45,7 @@ class DetailInfoViewModel @Inject constructor(
         _state.value = State.Loaded(details)
     }
 
-    private suspend fun tryLoadDetails(movieId: Int): Result<MovieDetails> =
-        movieDetailRepository.getMovieById(movieId, favoriteRepository.isFavoriteMovie(movieId))
+    private suspend fun tryLoadDetails(movieId: Int) = getMovieDetail(movieId)
 
     fun onAppBarScrolled(collapseRatio: Float) {
         if (collapseRatio > 0.25f) appBarManager.showAppBar() else appBarManager.hideAppBar()
@@ -59,7 +58,7 @@ class DetailInfoViewModel @Inject constructor(
     private fun toggleFavorite() {
         movie?.let {
             viewModelScope.launch {
-                if (favoriteRepository.toggleFavorite(it.id)) addFavorite()
+                if (toggleFavorite(it.id)) addFavorite()
                 else removeFavorite()
 
                 appBarManager.updateFavoriteState(it.isFavorite)
@@ -100,15 +99,15 @@ class DetailInfoViewModel @Inject constructor(
     sealed interface State {
         object Loading : State
         data class Error(val error: Int) : State
-        data class Loaded(val movieDetails: MovieDetails): State
+        data class Loaded(val movieDetails: MovieDetails) : State
     }
 
     sealed interface Action {
-        data class ShareMovie(val movie: MovieDetails): Action
-        data class DownloadMovie(val movie: MovieDetails): Action
+        data class ShareMovie(val movie: MovieDetails) : Action
+        data class DownloadMovie(val movie: MovieDetails) : Action
 
-        object RemoveFavorite: Action
-        object AddFavorite: Action
+        object RemoveFavorite : Action
+        object AddFavorite : Action
     }
 
 }

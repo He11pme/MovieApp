@@ -1,13 +1,13 @@
 package io.github.he11pme.movieapp.domain.repository
 
-import io.github.he11pme.movieapp.domain.models.MovieDetails
 import javax.inject.Singleton
 
 @Singleton
 interface FavoriteRepository {
 
     suspend fun isFavoriteMovie(id: Int): Boolean
-    suspend fun getAllFavorites(): List<Result<MovieDetails>>
+
+    suspend fun getAllFavoriteIds(): List<Int>
 
     suspend fun removeFavoriteById(movieId: Int)
 

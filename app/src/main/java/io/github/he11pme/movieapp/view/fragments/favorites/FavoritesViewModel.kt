@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.domain.models.MovieDetails
-import io.github.he11pme.movieapp.domain.repository.FavoriteRepository
+import io.github.he11pme.movieapp.domain.use_cases.GetAllFavoriteMoviesUseCase
+import io.github.he11pme.movieapp.domain.use_cases.ToggleFavoriteUseCase
 import io.github.he11pme.movieapp.view.model.MovieDetailsUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    private val repository: FavoriteRepository
+    private val toggleFavorite: ToggleFavoriteUseCase,
+    private val getAllFavoriteMovies: GetAllFavoriteMoviesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<State>(State.Loading)
@@ -34,7 +36,7 @@ class FavoritesViewModel @Inject constructor(
     private suspend fun getFavoriteMovies() {
         val loadedMovies: MutableList<MovieDetails> = mutableListOf()
 
-        repository.getAllFavorites().let { allResults ->
+        getAllFavoriteMovies().let { allResults ->
             if (allResults.isEmpty()) {
                 _state.emit(State.Empty)
                 return
@@ -61,7 +63,8 @@ class FavoritesViewModel @Inject constructor(
 
     private fun removeFavoriteMovieById(movieId: Int) {
         viewModelScope.launch {
-            repository.removeFavoriteById(movieId)
+            // Так как фильм 100% "isFavorite" произойдет его удаление
+            toggleFavorite(movieId)
 
             (_state.value as? State.Loaded)?.let {
                 val updatedList = it.moviesDetails.filterNot { movie ->
