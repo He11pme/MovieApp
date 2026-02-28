@@ -4,18 +4,18 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import dagger.hilt.android.HiltAndroidApp
-import io.github.he11pme.movieapp.data.local.preference.PreferenceProvider
+import io.github.he11pme.movieapp.domain.repository.PreferenceRepository
 import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
 
     @Inject
-    lateinit var preferenceProvider: PreferenceProvider
+    lateinit var preferenceRepository: PreferenceRepository
 
     private val shared by lazy { this.getSharedPreferences("app_settings", MODE_PRIVATE) }
 
-    private val defaultTheme get() = preferenceProvider.getDefaultTheme()
+    private val defaultTheme get() = preferenceRepository.getDefaultTheme()
 
     private val listener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->

@@ -7,9 +7,9 @@ data class Selection(
     val type: SelectionType,
 )
 
-sealed interface SelectionType {
-    object Popular : SelectionType
-    object NowPlaying : SelectionType
-    data class OfGenres(val genresIds: List<Int>) : SelectionType
+sealed class SelectionType(val name: String) {
+    object Popular : SelectionType("popular")
+    object NowPlaying : SelectionType("now_playing")
+    data class OfGenres(val genresIds: List<Int>) : SelectionType("of_genres")
 
 }

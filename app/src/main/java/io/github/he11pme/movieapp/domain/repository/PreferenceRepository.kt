@@ -8,4 +8,8 @@ interface PreferenceRepository {
     fun saveDefaultTheme(theme: Int)
     fun getDefaultTheme(): Int
 
+    fun saveLastLoadTimeToCache(time: Long)
+
+    fun getDefaultLastLoadTimeToCache(): Long
+
 }

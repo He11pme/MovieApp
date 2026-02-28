@@ -10,6 +10,7 @@ fun MovieDTO.toDomain(): Movie {
         title = title,
         posterPath = posterPath,
         overview = overview,
-        vote = "%.1f".format(Locale.US, vote).toDouble()
+        vote = "%.1f".format(Locale.US, vote).toDouble(),
+        genreIds = genreIds
     )
 }

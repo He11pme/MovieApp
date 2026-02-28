@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.he11pme.movieapp.data.repository.AppRepository
+import io.github.he11pme.movieapp.domain.repository.MoviesRepository
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.model.MovieUi
 import io.github.he11pme.movieapp.view.model.SelectionState
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: AppRepository
+    private val repository: AppRepository,
+    private val moviesRepository: MoviesRepository
 ) : ViewModel() {
     private var availableSelection: List<SelectionUi> = emptyList()
 
@@ -60,7 +62,7 @@ class HomeViewModel @Inject constructor(
 
     private fun loadMoviesForSelection(selection: SelectionUi) {
         viewModelScope.launch {
-            val result = repository.getSelectionMovies(selection.type)
+            val result = moviesRepository.getMoviesBySelection(selection.type)
 
             updateSelectionStateById(selection.id) { selection ->
                 result.fold(

@@ -4,10 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 
 @Entity(tableName = "movies_table")
-@TypeConverters(Converters::class)
 data class MovieEntity(
     @PrimaryKey val id: Int,
     val title: String,
