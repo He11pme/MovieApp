@@ -3,8 +3,8 @@ package io.github.he11pme.movieapp.view.fragments.favorites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.domain.models.MovieDetails
+import io.github.he11pme.movieapp.domain.repository.FavoriteRepository
 import io.github.he11pme.movieapp.view.model.MovieDetailsUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    private val appRepository: AppRepository
+    private val repository: FavoriteRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<State>(State.Loading)
@@ -34,7 +34,7 @@ class FavoritesViewModel @Inject constructor(
     private suspend fun getFavoriteMovies() {
         val loadedMovies: MutableList<MovieDetails> = mutableListOf()
 
-        appRepository.getAllFavorites().let { allResults ->
+        repository.getAllFavorites().let { allResults ->
             if (allResults.isEmpty()) {
                 _state.emit(State.Empty)
                 return
@@ -61,7 +61,7 @@ class FavoritesViewModel @Inject constructor(
 
     private fun removeFavoriteMovieById(movieId: Int) {
         viewModelScope.launch {
-            appRepository.removeFavoriteById(movieId)
+            repository.removeFavoriteById(movieId)
 
             (_state.value as? State.Loaded)?.let {
                 val updatedList = it.moviesDetails.filterNot { movie ->

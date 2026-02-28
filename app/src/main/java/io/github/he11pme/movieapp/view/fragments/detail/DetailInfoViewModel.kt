@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.he11pme.movieapp.data.repository.AppRepository
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.domain.models.MovieDetails
+import io.github.he11pme.movieapp.domain.repository.FavoriteRepository
+import io.github.he11pme.movieapp.domain.repository.MovieDetailRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailInfoViewModel @Inject constructor(
-    private val repository: AppRepository,
+    private val favoriteRepository: FavoriteRepository,
+    private val movieDetailRepository: MovieDetailRepository,
     val appBarManager: AppBarManager
 ) : ViewModel() {
 
@@ -44,7 +46,7 @@ class DetailInfoViewModel @Inject constructor(
     }
 
     private suspend fun tryLoadDetails(movieId: Int): Result<MovieDetails> =
-        repository.getMovieById(movieId)
+        movieDetailRepository.getMovieById(movieId, favoriteRepository.isFavoriteMovie(movieId))
 
     fun onAppBarScrolled(collapseRatio: Float) {
         if (collapseRatio > 0.25f) appBarManager.showAppBar() else appBarManager.hideAppBar()
@@ -57,7 +59,7 @@ class DetailInfoViewModel @Inject constructor(
     private fun toggleFavorite() {
         movie?.let {
             viewModelScope.launch {
-                if (repository.toggleFavorite(it.id)) addFavorite()
+                if (favoriteRepository.toggleFavorite(it.id)) addFavorite()
                 else removeFavorite()
 
                 appBarManager.updateFavoriteState(it.isFavorite)
