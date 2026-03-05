@@ -1,7 +1,6 @@
 package io.github.he11pme.movieapp.view.fragments.detail
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,9 +8,13 @@ import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.domain.models.MovieDetails
 import io.github.he11pme.movieapp.domain.use_cases.GetMovieDetailUseCase
 import io.github.he11pme.movieapp.domain.use_cases.ToggleFavoriteUseCase
+import io.github.he11pme.movieapp.utils.SingleLiveEvent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import okio.IOException
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +24,7 @@ class DetailInfoViewModel @Inject constructor(
     val appBarManager: AppBarManager
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<State>()
+    private val _state = SingleLiveEvent<State>()
     val state: LiveData<State> get() = _state
 
     private val _actions = MutableSharedFlow<Action>()
@@ -29,12 +32,23 @@ class DetailInfoViewModel @Inject constructor(
 
     private var movie: MovieDetails? = null
 
+    init {
+        scheduleTransitionTimeout()
+    }
+
+    private fun scheduleTransitionTimeout() {
+        viewModelScope.launch {
+            delay(200)
+            if (_state.value == State.Loading) _actions.emit(Action.Release)
+        }
+    }
+
     fun loadDetails(movieId: Int) {
         _state.value = State.Loading
         viewModelScope.launch {
             tryLoadDetails(movieId).apply {
                 onSuccess { handleSuccessLoadMovie(it) }
-                onFailure { }
+                onFailure { handleErrorLoadMovie(it) }
             }
         }
     }
@@ -43,6 +57,30 @@ class DetailInfoViewModel @Inject constructor(
         movie = details.also { appBarManager.updateFavoriteState(it.isFavorite) }
 
         _state.value = State.Loaded(details)
+    }
+
+    private fun handleErrorLoadMovie(e: Throwable) {
+        when (e) {
+            is IOException -> handleIOException()
+            is HttpException -> handleHttpException(e)
+            else -> handleUnexpectedError()
+        }
+    }
+
+    private fun handleIOException() {
+        _state.value = State.Error(TypeError.InternetConnectionError)
+    }
+
+    private fun handleHttpException(e: HttpException) {
+        when (e.code()) {
+            403 -> _state.value = State.Error(TypeError.RequestLimitError)
+            404 -> _state.value = State.Error(TypeError.NotFoundError)
+            else -> _state.value = State.Error(TypeError.ServerConnectionError)
+        }
+    }
+
+    private fun handleUnexpectedError() {
+        _state.value = State.Error(TypeError.UnexpectedError)
     }
 
     private suspend fun tryLoadDetails(movieId: Int) = getMovieDetail(movieId)
@@ -98,16 +136,26 @@ class DetailInfoViewModel @Inject constructor(
 
     sealed interface State {
         object Loading : State
-        data class Error(val error: Int) : State
+        data class Error(val error: TypeError) : State
         data class Loaded(val movieDetails: MovieDetails) : State
     }
 
     sealed interface Action {
         data class ShareMovie(val movie: MovieDetails) : Action
         data class DownloadMovie(val movie: MovieDetails) : Action
-
         object RemoveFavorite : Action
         object AddFavorite : Action
+
+        object Release: Action
+    }
+
+    sealed interface TypeError {
+        object ServerConnectionError : TypeError
+        object NotFoundError : TypeError
+        object RequestLimitError : TypeError
+        object InternetConnectionError : TypeError
+
+        object UnexpectedError: TypeError
     }
 
 }

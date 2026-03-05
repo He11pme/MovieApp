@@ -167,6 +167,9 @@ class DetailInfoFragment : Fragment() {
 
     private fun handleState(state: DetailInfoViewModel.State) {
 
+        binding.progressBar.visibility =
+            if (state is DetailInfoViewModel.State.Loading) View.VISIBLE else View.GONE
+
         if (state is DetailInfoViewModel.State.Loaded) {
             val movieDetails = state.movieDetails.toUi(requireContext())
             binding.movie = movieDetails
@@ -177,6 +180,36 @@ class DetailInfoFragment : Fragment() {
             )
         }
 
+        if (state is DetailInfoViewModel.State.Error) {
+            startPostponedEnterTransition()
+            handleStaterError(state)
+//            navigateBack()
+        }
+
+    }
+
+    private fun handleStaterError(state: DetailInfoViewModel.State.Error) {
+        val textSnackBar = when (state.error) {
+            DetailInfoViewModel.TypeError.InternetConnectionError -> getString(R.string.no_internet_connection)
+
+            DetailInfoViewModel.TypeError.NotFoundError -> getString(R.string.movie_not_found)
+
+            DetailInfoViewModel.TypeError.RequestLimitError -> getString(R.string.request_limit)
+
+            DetailInfoViewModel.TypeError.ServerConnectionError -> getString(R.string.server_connection_error)
+
+            DetailInfoViewModel.TypeError.UnexpectedError -> getString(R.string.unexpected_error)
+        }
+
+        showActivitySnackBar(textSnackBar)
+    }
+
+    private fun showActivitySnackBar(text: String) {
+        Snackbar.make(
+            requireActivity().findViewById(R.id.main),
+            text,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun bindAction() {
@@ -193,6 +226,7 @@ class DetailInfoFragment : Fragment() {
             is DetailInfoViewModel.Action.DownloadMovie -> downloadMovie()
             DetailInfoViewModel.Action.AddFavorite -> addFavorite()
             DetailInfoViewModel.Action.RemoveFavorite -> removeFavorite()
+            DetailInfoViewModel.Action.Release -> startPostponedEnterTransition()
         }
     }
 
@@ -276,18 +310,20 @@ class DetailInfoFragment : Fragment() {
         Glide.with(binding.posterDetail)
             .load(originalPosterUrl)
             .thumbnail(preloadPosterBuilder(sharedPosterUrl))
-            .listener(EmptyRequestListener<Drawable>().apply {
-                doSimpleResourceReady = {
-                    startPostponedEnterTransition()
-                }
-            })
+            .listener(startTransitionOnImageReadyListener)
             .into(binding.posterDetail)
     }
 
     private fun preloadPosterBuilder(sharedPosterUrl: String): RequestBuilder<Drawable?> {
         return Glide.with(binding.posterDetail)
             .load(sharedPosterUrl)
+            .listener(startTransitionOnImageReadyListener)
     }
+
+    private val startTransitionOnImageReadyListener =
+        EmptyRequestListener<Drawable>().apply {
+            doSimpleResourceReady = { startPostponedEnterTransition() }
+        }
 
     private fun prepareViewForAnimation(v: View) {
         v.visibility = View.GONE

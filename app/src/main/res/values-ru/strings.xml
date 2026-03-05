@@ -26,4 +26,9 @@
     <string name="runtime">%1$d мин</string>
     <string name="unknown_country">Неизвестная страна</string>
     <string name="application_theme">Тема приложения</string>
+    <string name="no_internet_connection">Нет интернет соединения</string>
+    <string name="movie_not_found">Фильм не найден</string>
+    <string name="request_limit">Превышен лимит запросов или недостаточно прав доступа</string>
+    <string name="server_connection_error">Ошибка соединения с сервером</string>
+    <string name="unexpected_error">Непредвиденная ошибка</string>
 </resources>

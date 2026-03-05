@@ -16,6 +16,7 @@ import kotlin.math.min
 import androidx.core.graphics.withSave
 import io.github.he11pme.movieapp.R
 import androidx.core.graphics.withTranslation
+import androidx.core.graphics.createBitmap
 
 class StarRating @JvmOverloads constructor(
     context: Context,
@@ -158,7 +159,9 @@ class StarRating @JvmOverloads constructor(
     }
 
     private fun drawStaticPicture() {
-        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        if (width <= 0 || height <= 0) return
+
+        bitmap = createBitmap(width, height)
         staticCanvas = Canvas(bitmap)
 
         staticCanvas.drawText(rate.toString(), 0f, -textPaint.fontMetrics.ascent, textPaint)
