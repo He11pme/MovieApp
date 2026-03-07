@@ -1,8 +1,8 @@
-package io.github.he11pme.movieapp.view.fragments.detail
+package io.github.he11pme.movieapp.domain.models
 
 import android.graphics.Bitmap
 
-data class MovieSave(
+data class DownloadMovie(
     val filename: String,
     val poster: Bitmap,
     val mimeType: String,

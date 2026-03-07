@@ -5,7 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.provider.MediaStore
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.github.he11pme.movieapp.view.fragments.detail.MovieSave
+import io.github.he11pme.movieapp.domain.models.DownloadMovie
+import io.github.he11pme.movieapp.domain.repository.StorageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -14,9 +15,9 @@ import javax.inject.Singleton
 @Singleton
 class StorageRepositoryImpl @Inject constructor(
     @param:ApplicationContext private val context: Context
-) {
+): StorageRepository {
 
-    suspend fun saveMovieScopedStorage(movie: MovieSave): Result<Unit> {
+    override suspend fun saveMovieScopedStorage(movie: DownloadMovie): Result<Unit> {
 
         return saveMovieToStorage {
             val values = ContentValues().apply {
@@ -43,7 +44,7 @@ class StorageRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun saveMovieLegacyStorage(movie: MovieSave): Result<Unit> {
+    override suspend fun saveMovieLegacyStorage(movie: DownloadMovie): Result<Unit> {
 
         return saveMovieToStorage {
             @Suppress("DEPRECATION")

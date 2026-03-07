@@ -6,8 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.he11pme.movieapp.data.repository.StorageRepositoryImpl
+import io.github.he11pme.movieapp.domain.models.DownloadMovie
 import io.github.he11pme.movieapp.domain.models.MovieDetails
+import io.github.he11pme.movieapp.domain.use_cases.DownloadMovieUseCase
 import io.github.he11pme.movieapp.domain.use_cases.GetMovieDetailUseCase
 import io.github.he11pme.movieapp.domain.use_cases.ToggleFavoriteUseCase
 import io.github.he11pme.movieapp.managers.AppBarManager
@@ -32,7 +33,7 @@ import javax.inject.Inject
 class DetailInfoViewModel @Inject constructor(
     private val getMovieDetail: GetMovieDetailUseCase,
     private val toggleFavorite: ToggleFavoriteUseCase,
-    private val storageRepository: StorageRepositoryImpl,
+    private val downloadMovieUseCase: DownloadMovieUseCase,
     val appBarManager: AppBarManager
 ) : ViewModel() {
 
@@ -146,18 +147,14 @@ class DetailInfoViewModel @Inject constructor(
     }
 
     fun saveMovieScopedStorage() {
-        fetchAndSaveMovie {
-            storageRepository.saveMovieScopedStorage(it)
-        }
+        fetchAndSaveMovie { downloadMovieUseCase(it) }
     }
 
     fun saveMovieLegacyStorage() {
-        fetchAndSaveMovie {
-            storageRepository.saveMovieLegacyStorage(it)
-        }
+        fetchAndSaveMovie { downloadMovieUseCase(it, true) }
     }
 
-    private fun fetchAndSaveMovie(saveMovieBlock: suspend (MovieSave) -> Result<Unit>) {
+    private fun fetchAndSaveMovie(saveMovieBlock: suspend (DownloadMovie) -> Result<Unit>) {
         viewModelScope.launch {
             _downloadMovieState.emit(DownloadMovieState.Loading)
             movie?.let { movie ->
@@ -175,8 +172,8 @@ class DetailInfoViewModel @Inject constructor(
     }
 
     private suspend fun handleSuccessFetchMovie(
-        saveMovieBlock: suspend (MovieSave) -> Result<Unit>,
-        data: MovieSave
+        saveMovieBlock: suspend (DownloadMovie) -> Result<Unit>,
+        data: DownloadMovie
     ) {
         saveMovieBlock(data).apply {
             onSuccess {
@@ -192,13 +189,13 @@ class DetailInfoViewModel @Inject constructor(
         _actions.emit(Action.DownloadMovieError(e))
     }
 
-    private suspend fun fetchMovie(movie: MovieDetails): Result<MovieSave> {
+    private suspend fun fetchMovie(movie: MovieDetails): Result<DownloadMovie> {
         return withContext(Dispatchers.IO) {
             try {
                 val url = URL(movie.posterUrl(PosterSizes.ORIGINAL))
 
                 Result.success(
-                    MovieSave(
+                    DownloadMovie(
                         filename = "poster_${movie.title}".toValidPath(),
                         poster = BitmapFactory.decodeStream(url.openConnection().getInputStream()),
                         mimeType = "image/jpeg",
