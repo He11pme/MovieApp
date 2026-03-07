@@ -32,4 +32,9 @@
     <string name="request_limit">Request limit exceeded or insufficient permissions</string>
     <string name="server_connection_error">Server connection error</string>
     <string name="unexpected_error">Unexpected error</string>
+    <string name="download_movie_error">Download movie error</string>
+    <string name="save_movie_error">Save movie error</string>
+    <string name="download_is_success">Download is success</string>
+    <string name="open">Open</string>
+    <string name="permission_is_required_for_download_movie">Permission is required for download movie</string>
 </resources>

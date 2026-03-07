@@ -86,6 +86,22 @@
                         app:layout_constraintStart_toEndOf="@+id/favoriteBtn"
                         app:layout_constraintTop_toTopOf="@+id/favoriteBtn" />
 
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progressIndicatorDownload"
+                        style="@style/Widget.Material3.CircularProgressIndicator"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:elevation="4dp"
+                        android:indeterminate="true"
+                        android:scaleX="1.25"
+                        android:scaleY="1.25"
+                        app:indicatorColor="@color/toggle_button_icon"
+                        app:layout_constraintBottom_toBottomOf="@+id/downloadBtn"
+                        app:layout_constraintEnd_toEndOf="@+id/downloadBtn"
+                        app:layout_constraintStart_toStartOf="@+id/downloadBtn"
+                        app:layout_constraintTop_toTopOf="@+id/downloadBtn"
+                        app:trackThickness="2dp" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/shareBtn"
                         style="@style/Widget.MovieApp.IconButton.Filled.Medium.Elevated"
@@ -183,13 +199,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="12dp"
-                        app:rate="@{movie.vote}"
                         app:emptyStarAlpha="0.5"
                         app:emptyStarColor="@color/on_background"
                         app:layout_constraintBottom_toTopOf="@+id/parametersText"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:paddingRate="12dp"
+                        app:rate="@{movie.vote}"
                         app:ratingColor="@color/on_background"
                         app:sizeStar="16dp" />
 
@@ -233,8 +249,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

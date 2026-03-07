@@ -1,14 +1,17 @@
 package io.github.he11pme.movieapp.view.fragments.detail
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.transition.doOnEnd
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,6 +33,7 @@ import io.github.he11pme.movieapp.utils.EmptyRequestListener
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 import io.github.he11pme.movieapp.view.rv.utils.enums.Source
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.pow
@@ -158,6 +162,7 @@ class DetailInfoFragment : Fragment() {
 
     private fun bindToViewModel() {
         bindState()
+        bindDownloadMovieState()
         bindAction()
     }
 
@@ -183,7 +188,6 @@ class DetailInfoFragment : Fragment() {
         if (state is DetailInfoViewModel.State.Error) {
             startPostponedEnterTransition()
             handleStaterError(state)
-//            navigateBack()
         }
 
     }
@@ -212,6 +216,21 @@ class DetailInfoFragment : Fragment() {
         ).show()
     }
 
+    private fun bindDownloadMovieState() {
+        viewModel.downloadMovieState.collectWithLifecycle(::handleDownloadMovieState)
+    }
+
+    private fun handleDownloadMovieState(state: DetailInfoViewModel.DownloadMovieState) {
+        binding.progressIndicatorDownload.apply {
+            visibility =
+                if (state == DetailInfoViewModel.DownloadMovieState.Loading) View.VISIBLE else View.GONE
+        }
+
+        binding.downloadBtn.apply {
+            isEnabled = state == DetailInfoViewModel.DownloadMovieState.Idle
+        }
+    }
+
     private fun bindAction() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -223,11 +242,41 @@ class DetailInfoFragment : Fragment() {
     private fun handleAction(action: DetailInfoViewModel.Action) {
         when (action) {
             is DetailInfoViewModel.Action.ShareMovie -> shareMovie(action.movie)
-            is DetailInfoViewModel.Action.DownloadMovie -> downloadMovie()
+            DetailInfoViewModel.Action.DownloadMovie -> downloadMovie()
             DetailInfoViewModel.Action.AddFavorite -> addFavorite()
             DetailInfoViewModel.Action.RemoveFavorite -> removeFavorite()
             DetailInfoViewModel.Action.Release -> startPostponedEnterTransition()
+            is DetailInfoViewModel.Action.DownloadMovieError ->
+                showSnackBarDownloadMovieError(action.e)
+
+            DetailInfoViewModel.Action.DownloadMovieSuccess -> showSnackBarDownloadMovieSuccess()
         }
+    }
+
+    private fun showSnackBarDownloadMovieError(e: DetailInfoViewModel.DownloadMovieErrorType) {
+
+        val text = when (e) {
+            DetailInfoViewModel.DownloadMovieErrorType.FetchError -> getString(R.string.download_movie_error)
+            DetailInfoViewModel.DownloadMovieErrorType.SaveError -> getString(R.string.save_movie_error)
+        }
+
+        Snackbar
+            .make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun showSnackBarDownloadMovieSuccess() {
+        Snackbar.make(
+            binding.root,
+            getString(R.string.download_is_success),
+            Snackbar.LENGTH_LONG
+        ).setAction(getString(R.string.open)) {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.type = "image/*"
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }.show()
     }
 
     private fun addFavorite() {
@@ -273,12 +322,27 @@ class DetailInfoFragment : Fragment() {
     }
 
     private fun downloadMovie() {
-        Snackbar.make(
-            binding.detailInfoMain,
-            getString(R.string.functionality_will_be_added_later),
-            Snackbar.LENGTH_SHORT
-        ).show()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            viewModel.saveMovieScopedStorage()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                viewModel.saveMovieLegacyStorage()
+            } else {
+                Snackbar.make(
+                    binding.detailInfoMain,
+                    getString(R.string.permission_is_required_for_download_movie),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
 
     private fun navigateBack() = findNavController().navigateUp()
 
@@ -367,6 +431,26 @@ class DetailInfoFragment : Fragment() {
         val ID_DRAWABLE_FAVORITE = R.drawable.ic_favorite
         val ID_DRAWABLE_UNFAVORITE = R.drawable.ic_favorite_outline
 
+    }
+
+    /**
+     * Extension for StateFlow that safely collects values respecting the Fragment lifecycle.
+     *
+     * The collection starts when the viewLifecycleOwner lifecycle
+     * is at least in the STARTED state and automatically stops
+     * when the lifecycle falls below STARTED.
+     *
+     * @param collector a function that is called every time
+     * the StateFlow emits a new value.
+     */
+    private fun <T> StateFlow<T>.collectWithLifecycle(collector: (T) -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                this@collectWithLifecycle.collect {
+                    collector(it)
+                }
+            }
+        }
     }
 
 }

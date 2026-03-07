@@ -31,4 +31,9 @@
     <string name="request_limit">Превышен лимит запросов или недостаточно прав доступа</string>
     <string name="server_connection_error">Ошибка соединения с сервером</string>
     <string name="unexpected_error">Непредвиденная ошибка</string>
+    <string name="download_movie_error">Ошибка загрузки фильма</string>
+    <string name="save_movie_error">Не удалось сохранить фильм</string>
+    <string name="download_is_success">Загрузка выполнена успешно</string>
+    <string name="open">Открыть</string>
+    <string name="permission_is_required_for_download_movie">Необходимо разрешение для загрузки фильма</string>
 </resources>
