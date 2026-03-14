@@ -5,9 +5,9 @@ import android.view.View
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import io.github.he11pme.movieapp.R
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class AppBarManager @Inject constructor() {
     val menuAppBarState = _menuAppBarState.asStateFlow()
 
     private val _menuActions = MutableSharedFlow<MenuAction>()
-    val menuActions: Flow<MenuAction> get() = _menuActions
+    val menuActions: SharedFlow<MenuAction> get() = _menuActions
 
     var isLockAppBar = false
     var bufferBarState: MutableList<(() -> Unit)> = mutableListOf()

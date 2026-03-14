@@ -2,7 +2,6 @@ package io.github.he11pme.movieapp.view.fragments.detail
 
 import android.graphics.BitmapFactory
 import android.os.Environment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,15 +11,15 @@ import io.github.he11pme.movieapp.domain.use_cases.DownloadMovieUseCase
 import io.github.he11pme.movieapp.domain.use_cases.GetMovieDetailUseCase
 import io.github.he11pme.movieapp.domain.use_cases.ToggleFavoriteUseCase
 import io.github.he11pme.movieapp.managers.AppBarManager
-import io.github.he11pme.movieapp.utils.SingleLiveEvent
 import io.github.he11pme.movieapp.utils.extensions.posterUrl
 import io.github.he11pme.movieapp.utils.extensions.toValidPath
 import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,11 +36,11 @@ class DetailInfoViewModel @Inject constructor(
     val appBarManager: AppBarManager
 ) : ViewModel() {
 
-    private val _state = SingleLiveEvent<State>()
-    val state: LiveData<State> get() = _state
+    private val _state = MutableStateFlow<State>(State.Loading)
+    val state: StateFlow<State> get() = _state
 
     private val _actions = MutableSharedFlow<Action>()
-    val actions: Flow<Action> get() = _actions
+    val actions: SharedFlow<Action> get() = _actions
 
     private val _downloadMovieState = MutableStateFlow<DownloadMovieState>(DownloadMovieState.Idle)
     val downloadMovieState get() = _downloadMovieState.asStateFlow()
@@ -60,8 +59,9 @@ class DetailInfoViewModel @Inject constructor(
     }
 
     fun loadDetails(movieId: Int) {
-        _state.value = State.Loading
         viewModelScope.launch {
+            _state.emit(State.Loading)
+
             tryLoadDetails(movieId).apply {
                 onSuccess { handleSuccessLoadMovie(it) }
                 onFailure { handleErrorLoadMovie(it) }
@@ -69,13 +69,13 @@ class DetailInfoViewModel @Inject constructor(
         }
     }
 
-    private fun handleSuccessLoadMovie(details: MovieDetails) {
+    private suspend fun handleSuccessLoadMovie(details: MovieDetails) {
         movie = details.also { appBarManager.updateFavoriteState(it.isFavorite) }
 
-        _state.value = State.Loaded(details)
+        _state.emit(State.Loaded(details))
     }
 
-    private fun handleErrorLoadMovie(e: Throwable) {
+    private suspend fun handleErrorLoadMovie(e: Throwable) {
         when (e) {
             is IOException -> handleIOException()
             is HttpException -> handleHttpException(e)
@@ -83,20 +83,20 @@ class DetailInfoViewModel @Inject constructor(
         }
     }
 
-    private fun handleIOException() {
-        _state.value = State.Error(TypeError.InternetConnectionError)
+    private suspend fun handleIOException() {
+        _state.emit(State.Error(TypeError.InternetConnectionError))
     }
 
-    private fun handleHttpException(e: HttpException) {
+    private suspend fun handleHttpException(e: HttpException) {
         when (e.code()) {
-            403 -> _state.value = State.Error(TypeError.RequestLimitError)
-            404 -> _state.value = State.Error(TypeError.NotFoundError)
-            else -> _state.value = State.Error(TypeError.ServerConnectionError)
+            403 -> _state.emit(State.Error(TypeError.RequestLimitError))
+            404 -> _state.emit(State.Error(TypeError.NotFoundError))
+            else -> _state.emit(State.Error(TypeError.ServerConnectionError))
         }
     }
 
-    private fun handleUnexpectedError() {
-        _state.value = State.Error(TypeError.UnexpectedError)
+    private suspend fun handleUnexpectedError() {
+        _state.emit(State.Error(TypeError.UnexpectedError))
     }
 
     private suspend fun tryLoadDetails(movieId: Int) = getMovieDetail(movieId)
@@ -134,9 +134,7 @@ class DetailInfoViewModel @Inject constructor(
 
     private fun shareMovie() {
         movie?.let {
-            viewModelScope.launch {
-                _actions.emit(Action.ShareMovie(it))
-            }
+            viewModelScope.launch { _actions.emit(Action.ShareMovie(it)) }
         }
     }
 
@@ -171,24 +169,6 @@ class DetailInfoViewModel @Inject constructor(
         }
     }
 
-    private suspend fun handleSuccessFetchMovie(
-        saveMovieBlock: suspend (DownloadMovie) -> Result<Unit>,
-        data: DownloadMovie
-    ) {
-        saveMovieBlock(data).apply {
-            onSuccess {
-                _actions.emit(Action.DownloadMovieSuccess)
-            }
-            onFailure {
-                handleErrorDownloadMovie(DownloadMovieErrorType.FetchError)
-            }
-        }
-    }
-
-    private suspend fun handleErrorDownloadMovie(e: DownloadMovieErrorType) {
-        _actions.emit(Action.DownloadMovieError(e))
-    }
-
     private suspend fun fetchMovie(movie: MovieDetails): Result<DownloadMovie> {
         return withContext(Dispatchers.IO) {
             try {
@@ -208,6 +188,24 @@ class DetailInfoViewModel @Inject constructor(
             }
         }
 
+    }
+
+    private suspend fun handleSuccessFetchMovie(
+        saveMovieBlock: suspend (DownloadMovie) -> Result<Unit>,
+        data: DownloadMovie
+    ) {
+        saveMovieBlock(data).apply {
+            onSuccess {
+                _actions.emit(Action.DownloadMovieSuccess)
+            }
+            onFailure {
+                handleErrorDownloadMovie(DownloadMovieErrorType.FetchError)
+            }
+        }
+    }
+
+    private suspend fun handleErrorDownloadMovie(e: DownloadMovieErrorType) {
+        _actions.emit(Action.DownloadMovieError(e))
     }
 
 

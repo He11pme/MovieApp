@@ -13,11 +13,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.transition.doOnEnd
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -30,16 +26,15 @@ import io.github.he11pme.movieapp.databinding.FragmentDetailInfoBinding
 import io.github.he11pme.movieapp.domain.models.MovieDetails
 import io.github.he11pme.movieapp.managers.AppBarManager
 import io.github.he11pme.movieapp.utils.EmptyRequestListener
+import io.github.he11pme.movieapp.view.fragments.DefaultFragment
 import io.github.he11pme.movieapp.view.mappers.toUi
 import io.github.he11pme.movieapp.view.rv.utils.enums.PosterSizes
 import io.github.he11pme.movieapp.view.rv.utils.enums.Source
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class DetailInfoFragment : Fragment() {
+class DetailInfoFragment : DefaultFragment() {
 
     private lateinit var binding: FragmentDetailInfoBinding
     private var movieId = -1
@@ -127,12 +122,16 @@ class DetailInfoFragment : Fragment() {
         bindMenuActions()
     }
 
+    private fun bindAppBarState() {
+        viewModel.appBarManager.appBarState.collectWithLifecycle(::handleAppBarState)
+    }
+
+    private fun handleAppBarState(appBarState: AppBarManager.AppBarState) {
+        appBarState.heightToolbar?.let { binding.toolbarDetail.layoutParams.height = it }
+    }
+
     private fun bindMenuActions() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.appBarManager.menuActions.collect(::handleMenuActions)
-            }
-        }
+        viewModel.appBarManager.menuActions.collectWithLifecycle(::handleMenuActions)
     }
 
     private fun handleMenuActions(action: AppBarManager.MenuAction) {
@@ -142,18 +141,6 @@ class DetailInfoFragment : Fragment() {
             AppBarManager.MenuAction.ShareBtnClicked -> viewModel.onShareBtnClicked()
             else -> {}
         }
-    }
-
-    private fun bindAppBarState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.appBarManager.appBarState.collect(::handleAppBarState)
-            }
-        }
-    }
-
-    private fun handleAppBarState(appBarState: AppBarManager.AppBarState) {
-        appBarState.heightToolbar?.let { binding.toolbarDetail.layoutParams.height = it }
     }
 
     private fun setTransitionNames() {
@@ -167,10 +154,11 @@ class DetailInfoFragment : Fragment() {
     }
 
     private fun bindState() {
-        viewModel.state.observe(viewLifecycleOwner, ::handleState)
+        viewModel.state.collectWithLifecycle(::handleState)
     }
 
     private fun handleState(state: DetailInfoViewModel.State) {
+        binding.state = state
 
         binding.progressBar.visibility =
             if (state is DetailInfoViewModel.State.Loading) View.VISIBLE else View.GONE
@@ -185,40 +173,31 @@ class DetailInfoFragment : Fragment() {
             )
         }
 
-        if (state is DetailInfoViewModel.State.Error) {
-            startPostponedEnterTransition()
-            handleStaterError(state)
-        }
+
+        binding.errorView.root.visibility =
+            if (state is DetailInfoViewModel.State.Error) View.VISIBLE else View.GONE
+
+        binding.errorView.textError.text = if (state is DetailInfoViewModel.State.Error) state.toUi() else ""
+
+        if (state is DetailInfoViewModel.State.Error) startPostponedEnterTransition()
+
 
     }
 
-    private fun handleStaterError(state: DetailInfoViewModel.State.Error) {
-        val textSnackBar = when (state.error) {
-            DetailInfoViewModel.TypeError.InternetConnectionError -> getString(R.string.no_internet_connection)
+    private fun DetailInfoViewModel.State.Error.toUi() = when (this.error) {
+        DetailInfoViewModel.TypeError.InternetConnectionError -> getString(R.string.no_internet_connection_ui)
 
-            DetailInfoViewModel.TypeError.NotFoundError -> getString(R.string.movie_not_found)
+        DetailInfoViewModel.TypeError.NotFoundError -> getString(R.string.movie_not_found_ui)
 
-            DetailInfoViewModel.TypeError.RequestLimitError -> getString(R.string.request_limit)
+        DetailInfoViewModel.TypeError.RequestLimitError -> getString(R.string.request_limit_ui)
 
-            DetailInfoViewModel.TypeError.ServerConnectionError -> getString(R.string.server_connection_error)
+        DetailInfoViewModel.TypeError.ServerConnectionError -> getString(R.string.server_connection_error_ui)
 
-            DetailInfoViewModel.TypeError.UnexpectedError -> getString(R.string.unexpected_error)
-        }
-
-        showActivitySnackBar(textSnackBar)
+        DetailInfoViewModel.TypeError.UnexpectedError -> getString(R.string.unexpected_error_ui)
     }
 
-    private fun showActivitySnackBar(text: String) {
-        Snackbar.make(
-            requireActivity().findViewById(R.id.main),
-            text,
-            Snackbar.LENGTH_SHORT
-        ).show()
-    }
-
-    private fun bindDownloadMovieState() {
+    private fun bindDownloadMovieState() =
         viewModel.downloadMovieState.collectWithLifecycle(::handleDownloadMovieState)
-    }
 
     private fun handleDownloadMovieState(state: DetailInfoViewModel.DownloadMovieState) {
         binding.progressIndicatorDownload.apply {
@@ -231,13 +210,7 @@ class DetailInfoFragment : Fragment() {
         }
     }
 
-    private fun bindAction() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.actions.collect(::handleAction)
-            }
-        }
-    }
+    private fun bindAction() = viewModel.actions.collectWithLifecycle(::handleAction)
 
     private fun handleAction(action: DetailInfoViewModel.Action) {
         when (action) {
@@ -363,10 +336,8 @@ class DetailInfoFragment : Fragment() {
     }
 
     private fun setupViews() {
-        foregroundItems.forEach { prepareViewForAnimation(it) }
-
         binding.backBtn.setOnClickListener { navigateBack() }
-
+        binding.errorView.reloadBtn.setOnClickListener { viewModel.loadDetails(movieId) }
         handleAppBarScroll()
     }
 
@@ -389,16 +360,9 @@ class DetailInfoFragment : Fragment() {
             doSimpleResourceReady = { startPostponedEnterTransition() }
         }
 
-    private fun prepareViewForAnimation(v: View) {
-        v.visibility = View.GONE
-        v.alpha = 0f
-    }
-
     private fun enterAnimationForView(v: View) {
         v.translationY = 50f
-        v.visibility = View.VISIBLE
         v.animate()
-            .alpha(1f)
             .translationY(0f)
             .setDuration(300L)
             .start()
@@ -431,26 +395,6 @@ class DetailInfoFragment : Fragment() {
         val ID_DRAWABLE_FAVORITE = R.drawable.ic_favorite
         val ID_DRAWABLE_UNFAVORITE = R.drawable.ic_favorite_outline
 
-    }
-
-    /**
-     * Extension for StateFlow that safely collects values respecting the Fragment lifecycle.
-     *
-     * The collection starts when the viewLifecycleOwner lifecycle
-     * is at least in the STARTED state and automatically stops
-     * when the lifecycle falls below STARTED.
-     *
-     * @param collector a function that is called every time
-     * the StateFlow emits a new value.
-     */
-    private fun <T> StateFlow<T>.collectWithLifecycle(collector: (T) -> Unit) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                this@collectWithLifecycle.collect {
-                    collector(it)
-                }
-            }
-        }
     }
 
 }

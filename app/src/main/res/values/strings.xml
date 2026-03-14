@@ -28,11 +28,17 @@
     <string name="unknown_country">Unknown country</string>
     <string name="application_theme">Application theme</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="no_internet_connection_ui">No internet connection. Please check your connection and try again.</string>
     <string name="movie_not_found">Movie not found</string>
+    <string name="movie_not_found_ui">We couldn\'t find this movie. Try searching for another title or refresh the screen.</string>
     <string name="request_limit">Request limit exceeded or insufficient permissions</string>
+    <string name="request_limit_ui">Too many requests now. Please wait a moment and try again.</string>
     <string name="server_connection_error">Server connection error</string>
+    <string name="server_connection_error_ui">We couldn\'t connect to the server. Please try again.</string>
     <string name="unexpected_error">Unexpected error</string>
+    <string name="unexpected_error_ui">Something went wrong. Please try again.</string>
     <string name="download_movie_error">Download movie error</string>
+    <string name="try_again">Try again</string>
     <string name="save_movie_error">Save movie error</string>
     <string name="download_is_success">Download is success</string>
     <string name="open">Open</string>

@@ -151,6 +151,7 @@ class StarRating @JvmOverloads constructor(
 
         if (!isStaticPictureDrawn) drawStaticPicture()
 
+        canvas.drawText(rate.toString(), 0f, -textPaint.fontMetrics.ascent, textPaint)
         canvas.drawBitmap(bitmap, 0f, 0f, null)
 
         drawStarsAfterRating(canvas, fillPaint) {
@@ -163,8 +164,6 @@ class StarRating @JvmOverloads constructor(
 
         bitmap = createBitmap(width, height)
         staticCanvas = Canvas(bitmap)
-
-        staticCanvas.drawText(rate.toString(), 0f, -textPaint.fontMetrics.ascent, textPaint)
 
         drawStarsAfterRating(staticCanvas, emptyPaint)
 

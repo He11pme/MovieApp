@@ -27,11 +27,17 @@
     <string name="unknown_country">Неизвестная страна</string>
     <string name="application_theme">Тема приложения</string>
     <string name="no_internet_connection">Нет интернет соединения</string>
+    <string name="no_internet_connection_ui">Нет подключения к интернету. Проверьте соединение и попробуйте снова.</string>
     <string name="movie_not_found">Фильм не найден</string>
+    <string name="movie_not_found_ui">Фильм не найден. Попробуйте выполнить поиск по другому названию или обновите экран.</string>
     <string name="request_limit">Превышен лимит запросов или недостаточно прав доступа</string>
+    <string name="request_limit_ui">Слишком много запросов. Пожалуйста, подождите немного и попробуйте снова.</string>
     <string name="server_connection_error">Ошибка соединения с сервером</string>
+    <string name="server_connection_error_ui">Не удалось подключиться к серверу. Попробуйте снова.</string>
     <string name="unexpected_error">Непредвиденная ошибка</string>
+    <string name="unexpected_error_ui">Что-то пошло не так. Попробуйте снова.</string>
     <string name="download_movie_error">Ошибка загрузки фильма</string>
+    <string name="try_again">Попробовать снова</string>
     <string name="save_movie_error">Не удалось сохранить фильм</string>
     <string name="download_is_success">Загрузка выполнена успешно</string>
     <string name="open">Открыть</string>
